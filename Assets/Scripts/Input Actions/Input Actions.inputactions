@@ -1,0 +1,71 @@
+{
+    "name": "Input Actions",
+    "maps": [
+        {
+            "name": "Mouse",
+            "id": "1d1d39bd-bea9-4696-9157-a8802b48795f",
+            "actions": [
+                {
+                    "name": "Left Button",
+                    "type": "Button",
+                    "id": "481c773f-f498-423b-bc82-f35c19023e01",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Right Button",
+                    "type": "Button",
+                    "id": "30326b04-49a0-40eb-a3c4-49d39b3ba8f5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Mouse Pos",
+                    "type": "Value",
+                    "id": "f4517747-17e1-437a-983a-4d99171efafc",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6d4329ee-954c-4943-be8e-fb32bfd42335",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0d6382f1-b3cd-4a6c-b119-44ec62443e9a",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2013c903-4466-4658-8d84-5c8a9e2bce47",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse Pos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
