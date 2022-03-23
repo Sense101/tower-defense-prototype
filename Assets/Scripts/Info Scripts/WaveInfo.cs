@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -11,5 +10,9 @@ public class WaveInfo
     // needs to store more info about the wave @TODO
 
     [Tooltip("the different groups of enemies to spawn in the wave")]
-    public List<SpawnGroup> spawnGroups = new List<SpawnGroup>();
+    [SerializeField] List<SpawnGroup> _spawnGroups = new List<SpawnGroup>();
+    public List<SpawnGroup> SpawnGroups
+    {
+        get => _spawnGroups;
+    }
 }

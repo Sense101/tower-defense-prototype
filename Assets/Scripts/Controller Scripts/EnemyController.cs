@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -158,7 +157,7 @@ public class EnemyController : Singleton<EnemyController>
         var tilePos = Vector2Int.RoundToInt(currentPos + tileOffset);
         var tile = _map.TryGetTileWorldSpace(tilePos);
 
-        if (tile != null && tile.path == isPath) return true;
+        if (tile != null && tile.Path == isPath) return true;
 
         return false;
     }

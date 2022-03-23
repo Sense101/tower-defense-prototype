@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 
+/// <summary>
+/// controls the firing and turning of all turrets
+/// </summary>
 public class TurretController : Singleton<TurretController>
 {
     public readonly List<Turret> _turrets = new List<Turret>();

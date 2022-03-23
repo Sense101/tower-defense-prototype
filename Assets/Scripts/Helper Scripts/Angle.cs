@@ -127,6 +127,7 @@ public class Angle
         return degreeVector;
 
     }
+
     /// <summary>
     /// converts a vector direction to an angle
     /// </summary>
@@ -134,6 +135,7 @@ public class Angle
     {
         return new Angle(VectorToDegrees(vector));
     }
+
     /// <summary>
     /// converts a vector direction to degrees
     /// </summary>
@@ -148,7 +150,6 @@ public class Angle
 
         return degrees;
     }
-
 
     public static Angle Towards(Vector2 pos, Vector2 targetPos)
     {

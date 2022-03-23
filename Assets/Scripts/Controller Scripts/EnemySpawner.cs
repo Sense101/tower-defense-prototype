@@ -40,15 +40,15 @@ public class EnemySpawner : Singleton<EnemySpawner>
         {
             var wave = waves[w];
 
-            for (int g = 0; g < wave.spawnGroups.Count; g++)
+            for (int g = 0; g < wave.SpawnGroups.Count; g++)
             {
-                var group = wave.spawnGroups[g];
+                var group = wave.SpawnGroups[g];
 
-                for (int i = 0; i < group.spawnAmount; i++)
+                for (int i = 0; i < group.SpawnAmount; i++)
                 {
                     var spawnPos = transform.position + new Vector3(side * (0.5f - gapFromEdge), 0);
 
-                    var newEnemy = Instantiate(group.enemyPrefab, spawnPos, Quaternion.identity).GetComponent<Enemy>();
+                    var newEnemy = Instantiate(group.EnemyPrefab, spawnPos, Quaternion.identity).GetComponent<Enemy>();
                     var pathSide = EnemyInfo.PathSide.left;
                     if (side == 1) pathSide = EnemyInfo.PathSide.right;
 

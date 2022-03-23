@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// all the info about a given enemy type
@@ -16,11 +14,23 @@ public class EnemyInfo : ScriptableObject
     public enum TurnProgress { none, starting, turning, ending }
 
     [Tooltip("move speed in tiles/sec")]
-    public float moveSpeed = 1;
+    [SerializeField] float _moveSpeed = 1.5f;
+    public float MoveSpeed
+    {
+        get => _moveSpeed;
+    }
 
     [Tooltip("health in ???")]
-    public int health = 50;
+    [SerializeField] int _health = 30;
+    public int Health
+    {
+        get => _health;
+    }
 
-    [Tooltip("armor in ???")]
-    public int armor = 0;
+    [Tooltip("damage reduction per hit")]
+    [SerializeField] int _armor = 0;
+    public int Armor
+    {
+        get => _armor;
+    }
 }

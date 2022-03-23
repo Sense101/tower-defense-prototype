@@ -346,7 +346,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.0639687
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -550,7 +550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &835291664
 RectTransform:
   m_ObjectHideFlags: 0
@@ -567,8 +567,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 100.5, y: 0}
-  m_SizeDelta: {x: 200.96292, y: 1080}
+  m_AnchoredPosition: {x: 45.200012, y: 0}
+  m_SizeDelta: {x: 90.36, y: 431}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &835291665
 MonoBehaviour:
@@ -638,9 +638,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - spawnGroups:
-    - spawnAmount: 20
-      enemyPrefab: {fileID: 6874577422874171364, guid: 23a8c14388510ab4a9e0d622c1cf3d20, type: 3}
+  - _spawnGroups: []
+  - _spawnGroups:
+    - _spawnAmount: 30
+      _enemyPrefab: {fileID: 6874577422874171364, guid: 23a8c14388510ab4a9e0d622c1cf3d20, type: 3}
 --- !u!4 &1033247353
 Transform:
   m_ObjectHideFlags: 0

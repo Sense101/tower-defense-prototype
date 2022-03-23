@@ -1,16 +1,15 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// script for each individual gun on a turret
 /// </summary>
 public class Gun : MonoBehaviour
 {
-    static readonly string fireTrigger = "fire";
-    static readonly string reloadFloat = "reload_multiplier";
+    static readonly string FIRE_TRIGGER = "fire";
+    static readonly string RELOAD_MULTIPLIER = "reload_multiplier";
 
-    Animator animator;
-    Turret turret;
+    Animator _animator;
+    Turret _turret;
 
     bool canFire = true;
 
@@ -20,9 +19,9 @@ public class Gun : MonoBehaviour
     /// <param name="reloadTime">the reload time in seconds</param>
     public void Initialize(Turret turret, float reloadTime)
     {
-        this.turret = turret;
-        animator = GetComponent<Animator>();
-        animator.SetFloat(reloadFloat, 1 / reloadTime);
+        _turret = turret;
+        _animator = GetComponent<Animator>();
+        _animator.SetFloat(RELOAD_MULTIPLIER, 1 / reloadTime);
     }
 
     /// <summary>
@@ -35,7 +34,7 @@ public class Gun : MonoBehaviour
         {
             canFire = false;
             // fire
-            animator.SetTrigger(fireTrigger);
+            _animator.SetTrigger(FIRE_TRIGGER);
             return true;
         }
         return false;
@@ -44,7 +43,7 @@ public class Gun : MonoBehaviour
     // called by the animator
     public void OnAnimatorFire()
     {
-        turret.HitEnemy();
+        _turret.HitEnemy();
     }
     public void OnAnimatorReload()
     {

@@ -1,13 +1,18 @@
 ﻿[System.Serializable]
 public class TileInfo
 {
-    public bool path { get; private set; }
-    public bool placeable { get; private set; }
-    public Turret turret = null;
+    public bool Path { get; private set; }
+    public bool Placeable { get; private set; }
+    private Turret _turret = null;
+    public Turret Turret
+    {
+        get => _turret;
+        set => _turret = value;
+    }
 
     public TileInfo(bool path, bool placeable)
     {
-        this.path = path;
-        this.placeable = placeable;
+        Path = path;
+        Placeable = placeable;
     }
 }

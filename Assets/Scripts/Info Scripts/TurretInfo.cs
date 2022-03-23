@@ -6,16 +6,44 @@ public class TurretInfo : ScriptableObject
 {
     public enum FiringState { none, aiming, firing }
 
-    // WIP @TODO
-    public int damage = 0;
+    //@TODO maybe put damage/reload on the gun?
+
+    // Damage
+    [Tooltip("the damage the turret does")]
+    [SerializeField] int _damage = 10;
+    public int Damage
+    {
+        get => _damage;
+    }
 
 
+    // Range
     [Tooltip("the range of the turret in tiles")]
-    public float range = 0;
+    [SerializeField] float _range = 1;
+    public float Range
+    {
+        get
+        {
+            // add on 0.5 to exclude the tile the turret is on
+            return _range + 0.5f;
+        }
+    }
 
+    // Reload Speed
     [Tooltip("the time it takes for a gun to reload in seconds")]
-    [Range(0.1f, 10)] public float reloadTime = 1;
+    [Range(0.1f, 10)]
+    [SerializeField] float _reloadSpeed = 1;
+    public float ReloadSpeed
+    {
+        get => _reloadSpeed;
+    }
 
+    // Spin Speed
     [Tooltip("the time it takes to turn a full 360 degrees in seconds")]
-    [Range(1, 360)] public int spinSpeed = 90;
+    [Range(1, 360)]
+    [SerializeField] int _spinSpeed = 90;
+    public int SpinSpeed
+    {
+        get => _spinSpeed;
+    }
 }

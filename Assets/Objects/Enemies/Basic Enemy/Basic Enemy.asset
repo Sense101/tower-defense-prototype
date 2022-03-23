@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7845ae887eaba8b48bf8d454b95898f2, type: 3}
   m_Name: Basic Enemy
   m_EditorClassIdentifier: 
-  moveSpeed: 1.5
-  health: 30
-  armor: 0
+  _moveSpeed: 1.5
+  _health: 31
+  _armor: 0

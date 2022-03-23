@@ -32,7 +32,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
                 return;
             }
 
-            if (tileInfo.placeable && !tileInfo.turret)
+            if (tileInfo.Placeable && !tileInfo.Turret)
             {
                 Debug.Log("can place");
 
@@ -47,7 +47,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
                 newTurret.Initialize(_enemyController);
                 // add to the controller
                 _turretController._turrets.Add(newTurret);
-                tileInfo.turret = newTurret;
+                tileInfo.Turret = newTurret;
             }
             else
             {
@@ -66,11 +66,11 @@ public class TurretPlacer : Singleton<TurretPlacer>
             // check to see if tile exists
             if (tileInfo == null) return;
 
-            if (tileInfo.turret)
+            if (tileInfo.Turret)
             {
                 Debug.Log("can destroy");
-                Destroy(tileInfo.turret.gameObject);
-                tileInfo.turret = null;
+                Destroy(tileInfo.Turret.gameObject);
+                tileInfo.Turret = null;
             }
             else
             {

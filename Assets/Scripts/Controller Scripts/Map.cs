@@ -11,7 +11,7 @@ public class Map : Singleton<Map>
     Tilemap _mainTilemap;
 
     // holds all the information about the map tiles
-    private readonly Dictionary<Vector2Int, TileInfo> tiles = new Dictionary<Vector2Int, TileInfo>();
+    private Dictionary<Vector2Int, TileInfo> _tiles = new Dictionary<Vector2Int, TileInfo>();
 
     private void OnEnable()
     {
@@ -29,7 +29,7 @@ public class Map : Singleton<Map>
             if (tile is MapTile)
             {
                 var mapTile = tile as MapTile;
-                tiles.Add((Vector2Int)tilePos, new TileInfo(mapTile.path, mapTile.placeable));
+                _tiles.Add((Vector2Int)tilePos, new TileInfo(mapTile.path, mapTile.placeable));
             }
         }
     }
@@ -50,7 +50,7 @@ public class Map : Singleton<Map>
     /// </summary>
     public TileInfo TryGetTile(Vector2Int mapSpace)
     {
-        if (tiles.TryGetValue(mapSpace, out TileInfo tileInfo))
+        if (_tiles.TryGetValue(mapSpace, out TileInfo tileInfo))
         {
             return tileInfo;
         }
@@ -65,7 +65,7 @@ public class Map : Singleton<Map>
     {
         var mapSpace = WorldToMapSpace(worldSpace);
 
-        if (tiles.TryGetValue(mapSpace, out TileInfo tileInfo))
+        if (_tiles.TryGetValue(mapSpace, out TileInfo tileInfo))
         {
             return tileInfo;
         }
@@ -77,7 +77,7 @@ public class Map : Singleton<Map>
 
     public void SetTile(Vector2Int mapSpace, Turret turret)
     {
-        tiles[mapSpace].turret = turret;
+        _tiles[mapSpace].Turret = turret;
     }
 
 

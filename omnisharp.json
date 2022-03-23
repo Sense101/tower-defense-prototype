@@ -1,6 +1,6 @@
 {
     "FormattingOptions": {
-        "NewLinesForBracesInLambdaExpressionBody": true,
+        "NewLinesForBracesInLambdaExpressionBody": false,
         "NewLinesForBracesInAnonymousMethods": true,
         "NewLinesForBracesInAnonymousTypes": true,
         "NewLinesForBracesInControlBlocks": true,

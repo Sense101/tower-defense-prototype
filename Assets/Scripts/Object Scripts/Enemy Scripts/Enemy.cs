@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
         this._pathSide = pathSide;
         this._directionAngle = directionAngle;
 
-        _currentHealth = Info.health;
+        _currentHealth = Info.Health;
 
         _nextTile = (Vector2)transform.position + directionAngle.ToVector();
 
@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void MoveForwards(Vector2 currentPos)
     {
-        var moveSpeedDelta = Info.moveSpeed * Time.deltaTime;
+        var moveSpeedDelta = Info.MoveSpeed * Time.deltaTime;
 
         transform.position = Vector2.MoveTowards(currentPos, _nextTile, moveSpeedDelta);
     }
@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
         var turningDistance = Mathf.PI * gapFromEdge;
 
         // how much we need to turn per second
-        var degreesPerSecond = (Info.moveSpeed * 90) / turningDistance;
+        var degreesPerSecond = (Info.MoveSpeed * 90) / turningDistance;
 
         var degreesDelta = degreesPerSecond * Time.deltaTime;
         turnAmount += degreesDelta;
@@ -96,12 +96,12 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void TakeHit(int damage, int armorPiercing)
     {
-        var armor = Mathf.Max(0, Info.armor - armorPiercing);
+        var armor = Mathf.Max(0, Info.Armor - armorPiercing);
         var finalDamage = damage - armor;
 
         _currentHealth -= finalDamage;
 
-        HealthBar.SetFill((float)_currentHealth / Info.health);
+        HealthBar.SetFill((float)_currentHealth / Info.Health);
 
         if (_currentHealth <= 0) Destroy(gameObject);
     }

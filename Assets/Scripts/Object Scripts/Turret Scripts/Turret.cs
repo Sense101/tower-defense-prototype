@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Turret : MonoBehaviour
 {
+    const float TURN_LEEWAY = 0.5f;
+
     // set in inspector
     public TurretInfo Info;
     [SerializeField] Transform Top = default; // the part of the turret that rotates
     public List<Gun> Guns = new List<Gun>();
 
 
-    private Enemy _currentEnemy = null;
+    private Enemy _currentTarget = null;
+    private int _currentGunIndex = 0;
     private bool _facingTarget = false;
     public TurretInfo.FiringState _firingState = TurretInfo.FiringState.none;
 
@@ -24,11 +28,13 @@ public class Turret : MonoBehaviour
     /// </summary>
     public void Initialize(EnemyController enemyController)
     {
+        // set the reference to the enemies
         _enemyController = enemyController;
+
         for (int i = 0; i < Guns.Count; i++)
         {
             var gun = Guns[i];
-            gun.Initialize(this, Info.reloadTime);
+            gun.Initialize(this, Info.ReloadSpeed);
         }
 
         StartCoroutine(FireGuns());
@@ -42,8 +48,11 @@ public class Turret : MonoBehaviour
         Enemy newTarget = null;
         float newTargetDistance = 0;
 
-        // check through all the targets and get the closest one
-        List<Enemy> targets = _enemyController._enemies;
+        // find all the targets in range
+        List<Enemy> targets = _enemyController._enemies.FindAll(x => {
+            return Vector2.Distance(transform.position, x.Body.position) <= Info.Range;
+        });
+
         for (int i = 0; i < targets.Count; i++)
         {
             var target = targets[i];
@@ -65,7 +74,7 @@ public class Turret : MonoBehaviour
 
         if (newTarget != null)
         {
-            _currentEnemy = newTarget;
+            _currentTarget = newTarget;
             _facingTarget = false;
             _firingState = TurretInfo.FiringState.aiming;
         }
@@ -75,7 +84,7 @@ public class Turret : MonoBehaviour
     public virtual IEnumerator FireGuns()
     {
         var gunCount = Guns.Count;
-        var reloadTime = Info.reloadTime;
+        var reloadSpeed = Info.ReloadSpeed;
         int i = 0;
         while (true)
         {
@@ -86,7 +95,7 @@ public class Turret : MonoBehaviour
                 _firingState = TurretInfo.FiringState.firing;
                 i = gunCount % (i + 1);
 
-                yield return new WaitForSeconds(reloadTime);
+                yield return new WaitForSeconds(reloadSpeed);
             }
             else
             {
@@ -99,9 +108,9 @@ public class Turret : MonoBehaviour
     public void HitEnemy()
     {
         ResetTurret();
-        if (_currentEnemy)
+        if (_currentTarget)
         {
-            _currentEnemy.TakeHit(Info.damage, 0);
+            _currentTarget.TakeHit(Info.Damage, 0);
         }
     }
 
@@ -115,19 +124,19 @@ public class Turret : MonoBehaviour
     // code for turning the turret towards the target ----- handle by controller
     public void Turn()
     {
-        if (!_currentEnemy)
+        if (!_currentTarget)
         {
             ResetTurret();
             return;
         }
 
-        Vector2 targetPos = _currentEnemy.Body.position;
+        Vector2 targetPos = _currentTarget.Body.position;
 
         if (_firingState != TurretInfo.FiringState.firing)
         {
             // do not attempt to turn towards something out of the range
             var targetDistance = Vector2.Distance(transform.position, targetPos);
-            var totalRange = Info.range + 0.5f; // add a bit of range to exclude the tile the turret is on
+            var totalRange = Info.Range;
             if (targetDistance > totalRange)
             {
                 ResetTurret();
@@ -138,14 +147,14 @@ public class Turret : MonoBehaviour
         // find the desired angle to be facing the target @TODO factor in gun position on turret
         var desiredAngle = Angle.Towards(transform.position, targetPos);
 
-        // leeway of 1 degree
+        // slight leeway - we can't expect it be be exact
         var currentDiff = Top.rotation.eulerAngles.z - desiredAngle.degrees;
-        _facingTarget = -1 <= currentDiff && currentDiff <= 1;
+        _facingTarget = -TURN_LEEWAY <= currentDiff && currentDiff <= TURN_LEEWAY;
 
         // rotate towards the target by the spin speed
         if (!_facingTarget)
         {
-            Top.rotation = Quaternion.RotateTowards(Top.rotation, desiredAngle.AsQuaternion(), Info.spinSpeed * Time.deltaTime);
+            Top.rotation = Quaternion.RotateTowards(Top.rotation, desiredAngle.AsQuaternion(), Info.SpinSpeed * Time.deltaTime);
         }
     }
 
