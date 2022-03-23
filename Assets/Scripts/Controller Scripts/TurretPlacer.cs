@@ -28,7 +28,6 @@ public class TurretPlacer : Singleton<TurretPlacer>
             // check to see if tile exists
             if (tileInfo == null)
             {
-                Debug.LogWarning($"got input where there is no tile: {mousePos}");
                 return;
             }
 
