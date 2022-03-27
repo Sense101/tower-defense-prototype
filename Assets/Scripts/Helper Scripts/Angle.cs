@@ -10,15 +10,15 @@ using UnityEngine;
 public class Angle
 {
     // cached conversions
-    private static readonly Dictionary<int, Vector2> cachedAngleToVectors = new Dictionary<int, Vector2>();
-    private static readonly Dictionary<Vector2, int> cachedVectorToDegrees = new Dictionary<Vector2, int>();
+    private static readonly Dictionary<float, Vector2> cachedAngleToVectors = new Dictionary<float, Vector2>();
+    private static readonly Dictionary<Vector2, float> cachedVectorToDegrees = new Dictionary<Vector2, float>();
 
     /// <summary>
     /// degrees of the angle between 0 and 360
     /// </summary>
-    public int degrees;
+    public float degrees;
 
-    public Angle(int degrees)
+    public Angle(float degrees)
     {
         this.degrees = ClampDegrees(degrees);
     }
@@ -42,7 +42,7 @@ public class Angle
     /// </summary>
     /// <param name="rotDegrees">The degrees to rotate by</param>
     /// <returns>The angle object</returns>
-    public Angle Rotate(int rotDegrees)
+    public Angle Rotate(float rotDegrees)
     {
         degrees = ClampDegrees(degrees + rotDegrees);
         //Debug.Log("new angle before clamp: " + (degrees + rotDegrees) + ". After clamp: " + degrees);
@@ -93,7 +93,7 @@ public class Angle
     /// converts any integer to the degree of an angle
     /// </summary>
     /// <returns>The degrees of the angle between 0 and 360</returns>
-    public static int ClampDegrees(int degrees)
+    public static float ClampDegrees(float degrees)
     {
         while (degrees < 0)
         {
@@ -113,7 +113,7 @@ public class Angle
     /// <summary>
     /// converts an angle to a vector direction
     /// </summary>
-    public static Vector2 AngleToVector(int degrees)
+    public static Vector2 AngleToVector(float degrees)
     {
         if (cachedAngleToVectors.TryGetValue(degrees, out Vector2 degreeVector))
         {
@@ -139,9 +139,9 @@ public class Angle
     /// <summary>
     /// converts a vector direction to degrees
     /// </summary>
-    public static int VectorToDegrees(Vector2 vector)
+    public static float VectorToDegrees(Vector2 vector)
     {
-        if (cachedVectorToDegrees.TryGetValue(vector, out int degrees))
+        if (cachedVectorToDegrees.TryGetValue(vector, out float degrees))
         {
             return degrees;
         }
@@ -157,6 +157,21 @@ public class Angle
         int degrees = Mathf.RoundToInt(Mathf.Atan2(targetOffset.y, targetOffset.x) * Mathf.Rad2Deg - 90);
 
         return new Angle(degrees);
+    }
+
+    public static Angle Between(Angle angle1, Angle angle2)
+    {
+        var difference = angle2.degrees - angle1.degrees;
+        float newDegrees = angle1.degrees + (difference / 2);
+
+        return new Angle(newDegrees);
+    }
+    public static Angle Between(float degrees1, float degrees2)
+    {
+        float difference = degrees2 - degrees1;
+        float newDegrees = degrees1 + (difference / 2);
+
+        return new Angle(newDegrees);
     }
 
 

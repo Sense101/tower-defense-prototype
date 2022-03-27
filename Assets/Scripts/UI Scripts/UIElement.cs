@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // checks for a "button" in the editor which sets the width and height
@@ -9,32 +10,39 @@ public class UIElement : MonoBehaviour
     [Tooltip("the rect transform that the scale is based off (defaults to the main canvas)")]
     public RectTransform BaseTransform = null;
 
-    [Space(5)]
-    [Tooltip("the desired width if the ratio is 16:9")]
-    public float BaseWidth = 1;
-    public bool ScaleWidth = false;
-
-    [Space(5)]
-    [Tooltip("the desired height if the ratio is 16:9")]
-    public float BaseHeight = 1;
-    public bool ScaleHeight = false;
 
     [Space(5)]
     [Tooltip("sets the base width/height to the current size")]
     [SerializeField] bool DetectSize = false; // custom button
 
-    // references
+    private Vector2 _cachedBaseSize = Vector2.zero;
 
-    // set by scaling controller
-    [HideInInspector] public RectTransform _rectTransform;
-
-    private void Awake()
+    public Vector2 CachedBaseSize
     {
-        // @TODO work out if this ever needs to be set still
-        _rectTransform = GetComponent<RectTransform>();
+        get
+        {
+            //@TODO got to fix this back to what it was
+            return _cachedBaseSize;
+        }
+    }
 
-        // add the element to the controller, let it do the rest
-        UIController.Instance?._elements.Add(this);
+    [Space(5)]
+    public ElementScale Scale;
+
+    public List<ElementPart> Parts = new List<ElementPart>();
+
+    // references
+    private RectTransform _rectTransform;
+    public RectTransform RectTransform
+    {
+        get
+        {
+            if (!_rectTransform)
+            {
+                _rectTransform = GetComponent<RectTransform>();
+            }
+            return _rectTransform;
+        }
     }
 
     private void Update()
@@ -42,8 +50,7 @@ public class UIElement : MonoBehaviour
         if (DetectSize)
         {
             DetectSize = false;
-            BaseWidth = _rectTransform.sizeDelta.x;
-            BaseHeight = _rectTransform.sizeDelta.y;
+            Scale.DefaultSize = _rectTransform.sizeDelta;
         }
     }
 

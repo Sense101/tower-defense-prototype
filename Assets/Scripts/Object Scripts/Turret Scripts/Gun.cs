@@ -11,7 +11,7 @@ public class Gun : MonoBehaviour
     Animator _animator;
     Turret _turret;
 
-    bool canFire = true;
+    public bool canFire = true;
 
     /// <summary>
     /// initializes the gun with all the needed info

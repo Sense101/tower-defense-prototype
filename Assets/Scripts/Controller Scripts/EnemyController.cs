@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class EnemyController : Singleton<EnemyController>
 {
-    public readonly List<Enemy> _enemies = new List<Enemy>();
+    public readonly List<Enemy> enemies = new List<Enemy>();
     Map _map;
     TurretController _turretController;
     float gapFromEdge;
@@ -20,12 +20,12 @@ public class EnemyController : Singleton<EnemyController>
 
     private void Update()
     {
-        for (int i = 0; i < _enemies.Count; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            var enemy = _enemies[i];
+            var enemy = enemies[i];
             if (!enemy)
             {
-                _enemies.RemoveAt(i);
+                enemies.RemoveAt(i);
                 continue;
             }
 
@@ -37,7 +37,7 @@ public class EnemyController : Singleton<EnemyController>
     {
         if (enemy.turnProgress == EnemyInfo.TurnProgress.none)
         {
-            if (currentPos == enemy._nextTile && !CheckForCorner(enemy, currentPos))
+            if (currentPos == enemy.nextTile && !CheckForCorner(enemy, currentPos))
             {
                 SetNextTile(enemy, currentPos);
             }
@@ -45,14 +45,14 @@ public class EnemyController : Singleton<EnemyController>
         }
         else
         {
-            if (currentPos == enemy._nextTile)
+            if (currentPos == enemy.nextTile)
             {
                 if (enemy.turnProgress == EnemyInfo.TurnProgress.starting)
                 {
                     enemy.turnProgress = EnemyInfo.TurnProgress.turning;
 
-                    var endOffset = (enemy._directionAngle.ToVector() + enemy.turnDirectionAngle.ToVector()) * gapFromEdge;
-                    enemy._nextTile = currentPos + endOffset;
+                    var endOffset = (enemy.directionAngle.ToVector() + enemy.turnDirectionAngle.ToVector()) * gapFromEdge;
+                    enemy.nextTile = currentPos + endOffset;
 
                     enemy.StartTurn(gapFromEdge);
 
@@ -85,7 +85,7 @@ public class EnemyController : Singleton<EnemyController>
     /// </summary>
     public void Add(Enemy enemy)
     {
-        _enemies.Add(enemy);
+        enemies.Add(enemy);
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ public class EnemyController : Singleton<EnemyController>
 
         // find the vector to the tile we are checking
         var turnDirection = new Vector2Int();
-        switch (enemy._pathSide)
+        switch (enemy.pathSide)
         {
             case EnemyInfo.PathSide.left:
                 turnDirection = new Vector2Int(-1, 0);
@@ -111,7 +111,7 @@ public class EnemyController : Singleton<EnemyController>
         }
 
         // the angle relative to the enemy
-        var turnAngle = new Angle(turnDirection).Rotate(enemy._directionAngle.degrees);
+        var turnAngle = new Angle(turnDirection).Rotate(enemy.directionAngle.degrees);
 
         // if the tile is a path - we are on a corner
         if (CheckTile(currentPos, turnAngle.ToVector(), true))
@@ -130,7 +130,7 @@ public class EnemyController : Singleton<EnemyController>
         /*  --- now check for ground two ahead --- */
 
         // if the tile two ahead is ground - we are approaching a bend
-        if (CheckTile(currentPos, enemy._directionAngle.ToVector() * 2, false))
+        if (CheckTile(currentPos, enemy.directionAngle.ToVector() * 2, false))
         {
             // set the distances for the turn
             enemy.turnPadding = 1 - (gapFromEdge * 2);
@@ -167,7 +167,7 @@ public class EnemyController : Singleton<EnemyController>
     /// </summary>
     private void SetNextTile(Enemy enemy, Vector2 currentPos, float distanceMultiplier = 1)
     {
-        enemy._nextTile = currentPos + (enemy._directionAngle.ToVector() * distanceMultiplier);
+        enemy.nextTile = currentPos + (enemy.directionAngle.ToVector() * distanceMultiplier);
     }
 
 

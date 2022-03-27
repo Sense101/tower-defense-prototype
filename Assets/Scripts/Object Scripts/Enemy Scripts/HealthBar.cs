@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    static readonly string fadeInTrigger = "healthBarFadeIn";
+    const string FADE_IN_TRIGGER = "healthBarFadeIn";
 
     [SerializeField] Canvas canvas = default;
     [SerializeField] Image innerHealthBar = default;
@@ -30,7 +30,7 @@ public class HealthBar : MonoBehaviour
         if (!visible)
         {
             visible = true;
-            animator.SetTrigger(fadeInTrigger);
+            animator.SetTrigger(FADE_IN_TRIGGER);
         }
 
         innerHealthBar.fillAmount = fillAmount;

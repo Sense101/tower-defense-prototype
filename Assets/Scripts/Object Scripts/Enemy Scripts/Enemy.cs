@@ -11,14 +11,15 @@ public class Enemy : MonoBehaviour
     public HealthBar HealthBar;
 
     // the side of the path the enemy is on
-    public EnemyInfo.PathSide _pathSide;
+    public EnemyInfo.PathSide pathSide;
 
     // location info
-    public Angle _directionAngle;
-    public Vector2 _nextTile;
+    public Angle directionAngle;
+    public Vector2 nextTile;
 
     // health
-    public int _currentHealth = 0;
+    public int previewHealth = 0; // damage that hasn't taken effect yet
+    public int currentHealth = 0; // actual health
 
     // TURN INFO
     public EnemyInfo.TurnProgress turnProgress = EnemyInfo.TurnProgress.none;
@@ -32,12 +33,12 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void Initialize(EnemyInfo.PathSide pathSide, Angle directionAngle, Camera camera)
     {
-        this._pathSide = pathSide;
-        this._directionAngle = directionAngle;
+        this.pathSide = pathSide;
+        this.directionAngle = directionAngle;
 
-        _currentHealth = Info.Health;
+        currentHealth = Info.Health;
 
-        _nextTile = (Vector2)transform.position + directionAngle.ToVector();
+        nextTile = (Vector2)transform.position + directionAngle.ToVector();
 
         HealthBar.Initialize(camera);
     }
@@ -49,7 +50,7 @@ public class Enemy : MonoBehaviour
     {
         var moveSpeedDelta = Info.MoveSpeed * Time.deltaTime;
 
-        transform.position = Vector2.MoveTowards(currentPos, _nextTile, moveSpeedDelta);
+        transform.position = Vector2.MoveTowards(currentPos, nextTile, moveSpeedDelta);
     }
 
     // puts everything in position to pivot around the parent
@@ -82,9 +83,9 @@ public class Enemy : MonoBehaviour
         if (turnAmount >= 90f)
         {
             // this should result in the next frame no longer turning
-            _directionAngle.degrees = turnDirectionAngle.degrees;
+            directionAngle.degrees = turnDirectionAngle.degrees;
             transform.rotation = turnDirectionAngle.AsQuaternion();
-            transform.position = _nextTile;
+            transform.position = nextTile;
             Body.localPosition = Vector2.zero;
             HealthBar.transform.localPosition = Vector2.zero;
             HealthBar.transform.rotation = Quaternion.Euler(Vector3.zero);
@@ -99,10 +100,13 @@ public class Enemy : MonoBehaviour
         var armor = Mathf.Max(0, Info.Armor - armorPiercing);
         var finalDamage = damage - armor;
 
-        _currentHealth -= finalDamage;
+        currentHealth -= finalDamage;
 
-        HealthBar.SetFill((float)_currentHealth / Info.Health);
+        HealthBar.SetFill((float)currentHealth / Info.Health);
 
-        if (_currentHealth <= 0) Destroy(gameObject);
+        if (currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

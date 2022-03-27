@@ -9,8 +9,8 @@ public class ScalingController : Singleton<ScalingController>
 
     // more than ideal ratio = wider, less = taller
     const float IDEAL_RATIO = 16f / 9f;
-    const float DESIRED_CAMERA_SIZE = 5f;
-    const float DESIRED_CANVAS_WIDTH = 18f;
+    const float DESIRED_CAMERA_HEIGHT = 10;
+    const float DESIRED_CAMERA_WIDTH = DESIRED_CAMERA_HEIGHT * IDEAL_RATIO;
 
     float _currentRatio = 0;
 
@@ -35,50 +35,61 @@ public class ScalingController : Singleton<ScalingController>
         // scale the camera
         if (_currentRatio > IDEAL_RATIO || Mathf.Approximately(_currentRatio, IDEAL_RATIO))
         {
-            _camera.orthographicSize = DESIRED_CAMERA_SIZE;
+            _camera.orthographicSize = DESIRED_CAMERA_HEIGHT / 2;
         }
         else
         {
-            float unitsPerPixel = 17.77f / Screen.width;
-            float desiredHalfHeight = 0.5f * unitsPerPixel * Screen.height;
+            float unitsPerPixel = DESIRED_CAMERA_WIDTH / Screen.width;
+            float desiredHeight = unitsPerPixel * Screen.height;
 
-            _camera.orthographicSize = Mathf.Max(desiredHalfHeight, DESIRED_CAMERA_SIZE);
+            _camera.orthographicSize = Mathf.Max(desiredHeight, DESIRED_CAMERA_HEIGHT) / 2;
         }
 
         // scale the canvas
         float cameraHeight = _camera.orthographicSize * 2;
         _canvasTransform.sizeDelta = new Vector2(cameraHeight * _currentRatio, cameraHeight);
 
-        // scale the UI
-        // NOTE: we can't use the UI controller cache as this is not during runtime
+        // scale the UI parts
         foreach (UIElement e in FindObjectsOfType<UIElement>())
         {
-            e._rectTransform = e.GetComponent<RectTransform>();
-            Vector2 oldSize = e._rectTransform.sizeDelta;
+            //----
+            // SCALE
+            //----
+
+            Vector2 defaultSize = e.Scale.DefaultSize;
 
             // find the rect transform to scale from, default is canvas
-            Vector2 baseSize = e.RelativeTransform
-                ? e.RelativeTransform.sizeDelta
+            Vector2 baseSize = e.BaseTransform
+                ? e.BaseTransform.sizeDelta
                 : _canvasTransform.sizeDelta;
 
-            // scale width
-            float newWidth = oldSize.x;
-            if (e.ScaleWidth)
+            Vector2 baseDefaultSize = new Vector2(DESIRED_CAMERA_WIDTH, DESIRED_CAMERA_HEIGHT);
+
+            // difference in world units
+            Vector2 baseSizeDiff = baseSize - baseDefaultSize;
+
+            // start by figuring out the changed
+            // increase by that chnage
+
+            // scale size
+            float newWidth = defaultSize.x + (baseSizeDiff.x * e.Scale.WidthIncrease);
+            float newHeight = defaultSize.y + (baseSizeDiff.y * e.Scale.HeightIncrease);
+
+            e.RectTransform.sizeDelta = new Vector2(newWidth, newHeight);
+
+            //----
+            // POSITION
+            //----
+
+            ElementPosition position = e.Parts.Find(x => x is ElementPosition) as ElementPosition;
+            if (position)
             {
-                newWidth = e.BaseWidth * _currentRatio / IDEAL_RATIO;
+                e.RectTransform.anchoredPosition = new Vector2
+                (
+                    position.DefaultPosition.x + (baseSizeDiff.x * position.XMovement),
+                    position.DefaultPosition.y + (baseSizeDiff.y * position.YMovement)
+                );
             }
-
-            // scale height
-            float newHeight = oldSize.y;
-            if (e.ScaleHeight)
-            {
-                newHeight = e.BaseHeight * _camera.orthographicSize / DESIRED_CAMERA_SIZE;
-            }
-
-            e._rectTransform.sizeDelta = new Vector2(newWidth, newHeight);
-
-            // call custom scaling code
-            e.UpdateCustomScaling(baseSize);
         }
     }
 

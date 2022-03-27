@@ -4,8 +4,6 @@
 [CreateAssetMenu]
 public class TurretInfo : ScriptableObject
 {
-    public enum FiringState { none, aiming, firing }
-
     //@TODO maybe put damage/reload on the gun?
 
     // Damage

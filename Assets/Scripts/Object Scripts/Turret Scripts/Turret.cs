@@ -5,31 +5,26 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    const float TURN_LEEWAY = 0.5f;
+    public enum TurretState { none, aiming, locked, firing }
 
     // set in inspector
     public TurretInfo Info;
-    [SerializeField] Transform Top = default; // the part of the turret that rotates
+    public Transform Top = default; // the part of the turret that rotates
     public List<Gun> Guns = new List<Gun>();
 
 
-    private Enemy _currentTarget = null;
-    private int _currentGunIndex = 0;
-    private bool _facingTarget = false;
-    public TurretInfo.FiringState _firingState = TurretInfo.FiringState.none;
-
-    EnemyController _enemyController;
-
+    // info unique to this turret
+    public Enemy currentTarget = null;
+    public int currentGunIndex = 0;
+    public TurretState turretState = TurretState.none;
 
     // reload time / number of guns = wait time between shots - UNLESS OVERRIDEN
 
     /// <summary>
     /// initialize the turret
     /// </summary>
-    public void Initialize(EnemyController enemyController)
+    public void Initialize()
     {
-        // set the reference to the enemies
-        _enemyController = enemyController;
 
         for (int i = 0; i < Guns.Count; i++)
         {
@@ -40,127 +35,110 @@ public class Turret : MonoBehaviour
         StartCoroutine(FireGuns());
     }
 
-    /// <summary>
-    /// choose a new target - currently the nearest one possible
-    /// </summary>
-    public void ChooseNewTarget()
-    {
-        Enemy newTarget = null;
-        float newTargetDistance = 0;
-
-        // find all the targets in range
-        List<Enemy> targets = _enemyController._enemies.FindAll(x => {
-            return Vector2.Distance(transform.position, x.Body.position) <= Info.Range;
-        });
-
-        for (int i = 0; i < targets.Count; i++)
-        {
-            var target = targets[i];
-            // make sure the target still exists
-            if (!target)
-            {
-                Debug.Log("not there as a target");
-                continue;
-            }
-
-            var targetDistance = Vector2.Distance(transform.position, target.Body.position);
-            if (newTargetDistance == 0 || targetDistance < newTargetDistance)
-            {
-                // this is the closest target now
-                newTarget = target;
-                newTargetDistance = targetDistance;
-            }
-        }
-
-        if (newTarget != null)
-        {
-            _currentTarget = newTarget;
-            _facingTarget = false;
-            _firingState = TurretInfo.FiringState.aiming;
-        }
-    }
-
     // @TODO currently only handles one gun correctly
     public virtual IEnumerator FireGuns()
     {
         var gunCount = Guns.Count;
         var reloadSpeed = Info.ReloadSpeed;
-        int i = 0;
         while (true)
         {
-            yield return new WaitUntil(() => _facingTarget);
+            // wait till we are locked onto 
+            yield return new WaitUntil(() => turretState == TurretState.locked);
 
-            if (Guns[i].TryFire())
+            if (Guns[currentGunIndex].TryFire())
             {
-                _firingState = TurretInfo.FiringState.firing;
-                i = gunCount % (i + 1);
+                turretState = TurretState.firing;
 
-                yield return new WaitForSeconds(reloadSpeed);
-            }
-            else
-            {
-                continue;
-            }
+                // wait till we are done firing the current gun
+                yield return new WaitUntil(() => turretState != TurretState.firing);
 
+                // @TODO on't just cycle through, find the most eligible gun
+                // will have to calculate closest target to each?
+                // move to the next gun
+                //currentGunIndex = (currentGunIndex + 1) % gunCount;
+
+
+                // prevent firing of next gun till we hit a nicer ratio
+                yield return new WaitForSeconds(reloadSpeed / gunCount);
+            }
         }
     }
 
+    // called by gun
     public void HitEnemy()
     {
-        ResetTurret();
-        if (_currentTarget)
+        // reset the turret
+        turretState = TurretState.none;
+
+        // the enemy may have been destroyed while we were firing
+        if (currentTarget)
         {
-            _currentTarget.TakeHit(Info.Damage, 0);
+            currentTarget.TakeHit(Info.Damage, 0);
         }
     }
 
-    /*
-    ---------------------------------------------
-    ALL TEMP
-    ---------------------------------------------
-     */
-
-
-    // code for turning the turret towards the target ----- handle by controller
-    public void Turn()
+    /// <summary>
+    /// chooses a new gun and a target from a list of targets
+    /// </summary>
+    public void ChooseNewTarget(List<Enemy> targets)
     {
-        if (!_currentTarget)
+        bool allowReloadingGuns = false;
+        if (!Guns.Find(x => x.canFire))
         {
-            ResetTurret();
-            return;
+            // if no guns are ready to fire we can default to any gun
+            allowReloadingGuns = true;
         }
 
-        Vector2 targetPos = _currentTarget.Body.position;
+        // find all the targets in range
+        List<Enemy> targetsInRange = targets.FindAll(x => {
+            return Vector2.Distance(transform.position, x.Body.position) <= Info.Range;
+        });
 
-        if (_firingState != TurretInfo.FiringState.firing)
+        Enemy newTarget = null;
+        int newGunIndex = 0;
+
+        // cycle through available targets and find the most eligible (currently just closest!)
+        float newTargetDistance = 0;
+        for (int i = 0; i < targetsInRange.Count; i++)
         {
-            // do not attempt to turn towards something out of the range
-            var targetDistance = Vector2.Distance(transform.position, targetPos);
-            var totalRange = Info.Range;
-            if (targetDistance > totalRange)
+            Enemy target = targetsInRange[i];
+
+            // find the closest gun to the enemy
+            float distanceToGun = 0;
+            int gunIndex = 0;
+            for (int g = 0; g < Guns.Count; g++)
             {
-                ResetTurret();
-                return;
+                Gun gun = Guns[g];
+                if (!gun.canFire && !allowReloadingGuns)
+                {
+                    continue;
+                }
+
+                float targetDistance = Vector2.Distance(gun.transform.position, target.Body.position);
+                if (distanceToGun == 0 || targetDistance < distanceToGun)
+                {
+                    // it's closer, set it as the gun
+                    distanceToGun = targetDistance;
+                    gunIndex = g;
+                }
+            }
+
+            // if it's closer or we have none set yet, set it as the target
+            if (newTargetDistance == 0 || distanceToGun < newTargetDistance)
+            {
+                newTarget = target;
+                newTargetDistance = distanceToGun;
+                newGunIndex = gunIndex;
             }
         }
 
-        // find the desired angle to be facing the target @TODO factor in gun position on turret
-        var desiredAngle = Angle.Towards(transform.position, targetPos);
-
-        // slight leeway - we can't expect it be be exact
-        var currentDiff = Top.rotation.eulerAngles.z - desiredAngle.degrees;
-        _facingTarget = -TURN_LEEWAY <= currentDiff && currentDiff <= TURN_LEEWAY;
-
-        // rotate towards the target by the spin speed
-        if (!_facingTarget)
+        if (newTarget)
         {
-            Top.rotation = Quaternion.RotateTowards(Top.rotation, desiredAngle.AsQuaternion(), Info.SpinSpeed * Time.deltaTime);
-        }
-    }
+            currentTarget = newTarget;
+            currentGunIndex = newGunIndex;
 
-    private void ResetTurret()
-    {
-        _firingState = TurretInfo.FiringState.none;
-        _facingTarget = false;
+            // start aiming at the target
+            turretState = TurretState.aiming;
+        }
     }
 }

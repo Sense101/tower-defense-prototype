@@ -43,7 +43,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
                     ).GetComponent<Turret>();
 
                 // initialize
-                newTurret.Initialize(_enemyController);
+                newTurret.Initialize();
                 // add to the controller
                 _turretController._turrets.Add(newTurret);
                 tileInfo.Turret = newTurret;
