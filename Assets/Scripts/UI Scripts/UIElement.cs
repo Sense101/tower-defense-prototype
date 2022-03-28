@@ -50,7 +50,7 @@ public class UIElement : MonoBehaviour
         if (DetectSize)
         {
             DetectSize = false;
-            Scale.DefaultSize = _rectTransform.sizeDelta;
+            Scale.DefaultSize = RectTransform.sizeDelta;
         }
     }
 

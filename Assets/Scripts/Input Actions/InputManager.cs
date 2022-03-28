@@ -4,9 +4,11 @@ using UnityEngine.InputSystem;
 public class InputManager : Singleton<InputManager>, InputActions.IMouseActions
 {
     public delegate void InputActionEvent(InputAction.CallbackContext context);
+    public delegate void PositionEvent(Vector2 pos);
 
     public static event InputActionEvent leftButtonEvent;
     public static event InputActionEvent rightButtonEvent;
+    public static event PositionEvent mouseMoveEvent;
 
     public static Vector2 mousePos { get; private set; }
 
@@ -32,7 +34,9 @@ public class InputManager : Singleton<InputManager>, InputActions.IMouseActions
     public void OnRightButton(InputAction.CallbackContext context) => rightButtonEvent(context);
     public void OnMousePos(InputAction.CallbackContext context)
     {
-        var screenPos = context.ReadValue<Vector2>();
-        mousePos = mainCamera.ScreenToWorldPoint(screenPos);
+        Vector2 screenPos = context.ReadValue<Vector2>();
+        Vector2 worldPos = mainCamera.ScreenToWorldPoint(screenPos);
+        mousePos = worldPos;
+        mouseMoveEvent(worldPos);
     }
 }

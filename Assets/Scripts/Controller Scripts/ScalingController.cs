@@ -64,12 +64,18 @@ public class ScalingController : Singleton<ScalingController>
                 : _canvasTransform.sizeDelta;
 
             Vector2 baseDefaultSize = new Vector2(DESIRED_CAMERA_WIDTH, DESIRED_CAMERA_HEIGHT);
+            if (e.BaseTransform)
+            {
+                // check for a UI element with a default size
+                UIElement baseElement = null;
+                e.BaseTransform.TryGetComponent<UIElement>(out baseElement);
+                baseDefaultSize = baseElement
+                    ? baseElement.Scale.DefaultSize
+                    : e.BaseTransform.sizeDelta;
+            }
 
             // difference in world units
             Vector2 baseSizeDiff = baseSize - baseDefaultSize;
-
-            // start by figuring out the changed
-            // increase by that chnage
 
             // scale size
             float newWidth = defaultSize.x + (baseSizeDiff.x * e.Scale.WidthIncrease);

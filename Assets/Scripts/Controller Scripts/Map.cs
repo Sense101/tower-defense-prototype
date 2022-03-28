@@ -63,22 +63,53 @@ public class Map : Singleton<Map>
     /// </summary>
     public TileInfo TryGetTileWorldSpace(Vector2Int worldSpace)
     {
-        var mapSpace = WorldToMapSpace(worldSpace);
+        Vector2Int mapSpace = WorldToMapSpace(worldSpace);
 
-        if (_tiles.TryGetValue(mapSpace, out TileInfo tileInfo))
+        TileInfo tileInfo = null;
+
+        if (!_tiles.TryGetValue(mapSpace, out tileInfo))
         {
-            return tileInfo;
+            Debug.LogWarning("Failed to get tile at: " + mapSpace);
         }
-        Debug.LogWarning("Failed to get tile at: " + mapSpace);
 
-        return null;
+        return tileInfo;
+    }
+
+    /// <summary>
+    /// checks if a turret can be placed at a given tile, in map space
+    /// </summary>
+    public bool CanPlaceAtTile(Vector2Int mapSpace)
+    {
+        TileInfo tileInfo = TryGetTile(mapSpace);
+
+        if (tileInfo == null)
+        {
+            // no tile there, we can't
+            return false;
+        }
+
+        if (tileInfo.Placeable && !tileInfo.Turret)
+        {
+            return true;
+        }
+        return false;
+    }
+    /// <summary>
+    /// checks if a turret can be placed at a given tile, in world space
+    /// </summary>
+    public bool CanPlaceAtTileWorldSpace(Vector2Int worldSpace)
+    {
+        Vector2Int mapSpace = WorldToMapSpace(worldSpace);
+        return CanPlaceAtTile(mapSpace);
     }
 
 
-    public void SetTile(Vector2Int mapSpace, Turret turret)
+    public void SetTurret(Vector2Int mapSpace, Turret turret)
     {
         _tiles[mapSpace].Turret = turret;
     }
-
-
+    public void SetTurretWorldSpace(Vector2Int worldSpace, Turret turret)
+    {
+        _tiles[WorldToMapSpace(worldSpace)].Turret = turret;
+    }
 }

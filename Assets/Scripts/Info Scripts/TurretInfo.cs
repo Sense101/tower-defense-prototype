@@ -37,7 +37,7 @@ public class TurretInfo : ScriptableObject
     }
 
     // Spin Speed
-    [Tooltip("the time it takes to turn a full 360 degrees in seconds")]
+    [Tooltip("spin speed in degrees per second")]
     [Range(1, 360)]
     [SerializeField] int _spinSpeed = 90;
     public int SpinSpeed

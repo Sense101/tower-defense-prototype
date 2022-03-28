@@ -55,6 +55,9 @@ TagManager:
   - name: Heath Bars
     uniqueID: 3997937177
     locked: 0
+  - name: Turret Placer
+    uniqueID: 3358430659
+    locked: 0
   - name: Front
     uniqueID: 3444038309
     locked: 0

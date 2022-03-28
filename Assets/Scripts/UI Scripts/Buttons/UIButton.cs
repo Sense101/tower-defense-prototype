@@ -25,9 +25,9 @@ public class UIButton : Button
 
     Animator _animator;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         TryGetComponent<Animator>(out _animator);
     }
 
