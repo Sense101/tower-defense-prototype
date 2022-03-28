@@ -88,10 +88,17 @@ public class TurretPlacer : Singleton<TurretPlacer>
             // check to see if tile exists
             if (tileInfo == null) return;
 
-            if (tileInfo.Turret)
+            Turret turret = tileInfo.Turret;
+            if (turret)
             {
-                Debug.Log("can destroy");
-                Destroy(tileInfo.Turret.gameObject);
+                Debug.Log("destroying turret");
+                if (turret.turretState == Turret.TurretState.firing)
+                {
+                    // we need to remove the preview damage from its target
+                    // as it will never actually fire
+                    turret.currentTarget.previewDamage -= turret.Info.Damage;
+                }
+                Destroy(turret.gameObject);
                 tileInfo.Turret = null;
             }
             else

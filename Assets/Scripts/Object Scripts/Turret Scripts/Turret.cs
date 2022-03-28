@@ -45,14 +45,18 @@ public class Turret : MonoBehaviour
             // wait till we are locked onto 
             yield return new WaitUntil(() => turretState == TurretState.locked);
 
-            if (Guns[currentGunIndex].TryFire())
+            bool spaceForDamage = currentTarget.currentHealth - currentTarget.previewDamage > 0;
+            if (spaceForDamage && Guns[currentGunIndex].TryFire())
             {
                 turretState = TurretState.firing;
+
+                // add preview
+                currentTarget.previewDamage += Info.Damage;
 
                 // wait till we are done firing the current gun
                 yield return new WaitUntil(() => turretState != TurretState.firing);
 
-                // @TODO on't just cycle through, find the most eligible gun
+                // @TODO don't just cycle through, find the most eligible gun
                 // will have to calculate closest target to each?
                 // move to the next gun
                 //currentGunIndex = (currentGunIndex + 1) % gunCount;
@@ -70,10 +74,14 @@ public class Turret : MonoBehaviour
         // reset the turret
         turretState = TurretState.none;
 
-        // the enemy may have been destroyed while we were firing
+        // make sure the enemy exists
         if (currentTarget)
         {
+            // remove preview
+            currentTarget.previewDamage -= Info.Damage;
+
             currentTarget.TakeHit(Info.Damage, 0);
+
         }
     }
 

@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     public Vector2 nextTile;
 
     // health
-    public int previewHealth = 0; // damage that hasn't taken effect yet
+    public int previewDamage = 0; // damage that hasn't taken effect yet
     public int currentHealth = 0; // actual health
 
     // TURN INFO
