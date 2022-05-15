@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// selects between UI button children
@@ -43,19 +42,35 @@ public class UIButtonSelector : MonoBehaviour
         SelectButton(index);
     }
 
-    private void SelectButton(int index)
+    public void SelectButton(int index)
     {
         for (int i = 0; i < _buttons.Count; i++)
         {
             UIButton button = _buttons[i];
-            if (i == index && !button.Selected)
+            if (i == index)
             {
-                _selectedButton = button;
-                button.Selected = true;
-                button.OnSelect();
-                Debug.Log($"Selected: {i}");
+                if (!button.Selected)
+                {
+                    _selectedButton = button;
+                    button.Selected = true;
+                    button.OnSelect();
+                }
             }
             else if (button.Selected)
+            {
+                button.Selected = false;
+                button.OnDeselect();
+            }
+        }
+    }
+
+
+    public void DeselectAll()
+    {
+        for (int i = 0; i < _buttons.Count; i++)
+        {
+            UIButton button = _buttons[i];
+            if (button.Selected)
             {
                 button.Selected = false;
                 button.OnDeselect();

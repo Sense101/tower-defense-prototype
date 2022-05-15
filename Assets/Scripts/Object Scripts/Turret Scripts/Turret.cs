@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    public enum TurretState { none, aiming, locked, firing }
+    public enum State { none, aiming, locked, firing }
+    public enum TargetType { close, first, strong, weak }
 
     // set in inspector
     public TurretInfo Info;
@@ -16,7 +17,8 @@ public class Turret : MonoBehaviour
     // info unique to this turret
     public Enemy currentTarget = null;
     public int currentGunIndex = 0;
-    public TurretState turretState = TurretState.none;
+    public State state = State.none;
+    public TargetType targetType = TargetType.first;
 
     // reload time / number of guns = wait time between shots - UNLESS OVERRIDEN
 
@@ -35,26 +37,25 @@ public class Turret : MonoBehaviour
         StartCoroutine(FireGuns());
     }
 
-    // @TODO currently only handles one gun correctly
     public virtual IEnumerator FireGuns()
     {
         var gunCount = Guns.Count;
         var reloadSpeed = Info.ReloadSpeed;
         while (true)
         {
-            // wait till we are locked onto 
-            yield return new WaitUntil(() => turretState == TurretState.locked);
+            // wait till we are locked onto the turret
+            yield return new WaitUntil(() => state == State.locked);
 
             bool spaceForDamage = currentTarget.currentHealth - currentTarget.previewDamage > 0;
             if (spaceForDamage && Guns[currentGunIndex].TryFire())
             {
-                turretState = TurretState.firing;
+                state = State.firing;
 
                 // add preview
                 currentTarget.previewDamage += Info.Damage;
 
                 // wait till we are done firing the current gun
-                yield return new WaitUntil(() => turretState != TurretState.firing);
+                yield return new WaitUntil(() => state != State.firing);
 
                 // @TODO don't just cycle through, find the most eligible gun
                 // will have to calculate closest target to each?
@@ -72,7 +73,7 @@ public class Turret : MonoBehaviour
     public void HitEnemy()
     {
         // reset the turret
-        turretState = TurretState.none;
+        state = State.none;
 
         // make sure the enemy exists
         if (currentTarget)
@@ -83,12 +84,13 @@ public class Turret : MonoBehaviour
             currentTarget.TakeHit(Info.Damage, 0);
 
         }
+        currentTarget = null;
     }
 
     /// <summary>
     /// chooses a new gun and a target from a list of targets
     /// </summary>
-    public void ChooseNewTarget(List<Enemy> targets)
+    public void ChooseClosestTarget(Turret t, List<Enemy> targetsInRange, out Enemy newTarget, out int newGun)
     {
         bool allowReloadingGuns = false;
         if (!Guns.Find(x => x.canFire))
@@ -97,15 +99,10 @@ public class Turret : MonoBehaviour
             allowReloadingGuns = true;
         }
 
-        // find all the targets in range
-        List<Enemy> targetsInRange = targets.FindAll(x => {
-            return Vector2.Distance(transform.position, x.Body.position) <= Info.Range;
-        });
+        newTarget = null;
+        newGun = 0;
 
-        Enemy newTarget = null;
-        int newGunIndex = 0;
-
-        // cycle through available targets and find the most eligible (currently just closest!)
+        // cycle through available targets and find the closest to a gun
         float newTargetDistance = 0;
         for (int i = 0; i < targetsInRange.Count; i++)
         {
@@ -114,9 +111,9 @@ public class Turret : MonoBehaviour
             // find the closest gun to the enemy
             float distanceToGun = 0;
             int gunIndex = 0;
-            for (int g = 0; g < Guns.Count; g++)
+            for (int g = 0; g < t.Guns.Count; g++)
             {
-                Gun gun = Guns[g];
+                Gun gun = t.Guns[g];
                 if (!gun.canFire && !allowReloadingGuns)
                 {
                     continue;
@@ -136,17 +133,17 @@ public class Turret : MonoBehaviour
             {
                 newTarget = target;
                 newTargetDistance = distanceToGun;
-                newGunIndex = gunIndex;
+                newGun = gunIndex;
             }
         }
 
         if (newTarget)
         {
             currentTarget = newTarget;
-            currentGunIndex = newGunIndex;
+            currentGunIndex = newGun;
 
             // start aiming at the target
-            turretState = TurretState.aiming;
+
         }
     }
 }

@@ -26,14 +26,14 @@ public class TurretController : Singleton<TurretController>
             }
 
             // the turret is doing nothing
-            if (t.turretState == Turret.TurretState.none)
+            if (t.state == Turret.State.none)
             {
                 // try and find a target
-                t.ChooseNewTarget(_enemyController.enemies);
+                ChooseNewTarget(t, _enemyController.enemies);
             }
 
             // in any other state, we need to be targeting the enemy
-            if (t.turretState != Turret.TurretState.none)
+            if (t.state != Turret.State.none)
             {
                 TurnTurret(t);
             }
@@ -52,9 +52,8 @@ public class TurretController : Singleton<TurretController>
         // from turret to target
         Angle angleFromTurret = Angle.Towards(t.transform.position, targetPos).Rotate(localGunRotation);
 
-        // temp - draw targeting lines
-        //Debug.DrawLine(t.Guns[t.currentGunIndex].transform.position, targetPos);
-        Debug.DrawLine(t.transform.position, targetPos);
+        // temp - draw targeting line
+        Debug.DrawLine(t.Guns[t.currentGunIndex].transform.position, targetPos);
 
         // between the angle from turret and gun
         Angle desiredAngle = angleFromTurret;
@@ -67,11 +66,11 @@ public class TurretController : Singleton<TurretController>
         if (!t.currentTarget)
         {
             // no target, recalculate next frame
-            t.turretState = Turret.TurretState.none;
+            t.state = Turret.State.none;
             return;
         }
 
-        bool firing = t.turretState == Turret.TurretState.firing;
+        bool firing = t.state == Turret.State.firing;
         if (!firing)
         {
             // since we are not already firing, stop targeting enemies that go out of range
@@ -80,7 +79,7 @@ public class TurretController : Singleton<TurretController>
             if (targetDistance > t.Info.Range)
             {
                 // recalculate target next frame
-                t.turretState = Turret.TurretState.none;
+                t.state = Turret.State.none;
                 return;
             }
         }
@@ -103,7 +102,238 @@ public class TurretController : Singleton<TurretController>
             float currentDiff = t.Top.transform.eulerAngles.z - desiredAngle.degrees;
             bool lockedToTarget = currentDiff == 0;
 
-            t.turretState = lockedToTarget ? Turret.TurretState.locked : Turret.TurretState.aiming;
+            t.state = lockedToTarget ? Turret.State.locked : Turret.State.aiming;
         }
+    }
+
+    private void ChooseNewTarget(Turret t, List<Enemy> enemies)
+    {
+        // find all the targets in range
+        List<Enemy> targetsInRange = enemies.FindAll(x => {
+            return Vector2.Distance(t.transform.position, x.Body.position) <= t.Info.Range;
+        });
+
+        List<Enemy> finalTargets = new List<Enemy>();
+
+        switch (t.targetType)
+        {
+            case Turret.TargetType.close:
+            case Turret.TargetType.first: //@TODO this is temporary, not implemented yet
+                {
+                    finalTargets = targetsInRange;
+                    break;
+                }
+            case Turret.TargetType.strong:
+                {
+                    // filter by the most health
+                    int mostHealth = 0;
+                    foreach (Enemy target in targetsInRange)
+                    {
+                        if (target.currentHealth > mostHealth)
+                        {
+                            mostHealth = target.currentHealth;
+                        }
+                    }
+
+                    finalTargets = targetsInRange.FindAll(x => x.currentHealth == mostHealth);
+                    break;
+                }
+            case Turret.TargetType.weak:
+                {
+                    // filter by the least health
+                    int leastHealth = 100;
+                    foreach (Enemy target in targetsInRange)
+                    {
+                        if (target.currentHealth < leastHealth)
+                        {
+                            leastHealth = target.currentHealth;
+                        }
+                    }
+
+                    finalTargets = targetsInRange.FindAll(x => x.currentHealth == leastHealth);
+                    break;
+                }
+            default:
+                {
+                    Debug.LogError("Unknown turret target type: " + t.targetType);
+                    break;
+                }
+        }
+
+        // decide whether we use closest or special
+        // for closest, just do the standard
+        // for strong, find the highest health, and choose closest of all those
+        // for weak, find weakest, and closest
+        Enemy newTarget;
+        int newGun;
+        ChooseClosestTarget(t, finalTargets, out newTarget, out newGun);
+
+        if (newTarget)
+        {
+            // we have a target, set everything
+            t.currentTarget = newTarget;
+            t.currentGunIndex = newGun;
+            t.state = Turret.State.aiming;
+        }
+    }
+
+    /// <summary>
+    /// chooses a new gun and a target from a list of targets
+    /// </summary>
+    public void ChooseClosestTarget(Turret t, List<Enemy> targets, out Enemy newTarget, out int newGun)
+    {
+        bool allowReloadingGuns = false;
+        if (!t.Guns.Find(x => x.canFire))
+        {
+            // if no guns are ready to fire we can default to any gun
+            allowReloadingGuns = true;
+        }
+
+        newTarget = null;
+        newGun = 0;
+
+        // cycle through available targets and find the closest to a gun
+        float newTargetDistance = 0;
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Enemy target = targets[i];
+
+            // find the closest gun to the enemy
+            float distanceToGun = 0;
+            int gunIndex = 0;
+            for (int g = 0; g < t.Guns.Count; g++)
+            {
+                Gun gun = t.Guns[g];
+                if (!gun.canFire && !allowReloadingGuns)
+                {
+                    continue;
+                }
+
+                float targetDistance = Vector2.Distance(gun.transform.position, target.Body.position);
+                if (distanceToGun == 0 || targetDistance < distanceToGun)
+                {
+                    // it's closer, set it as the gun
+                    distanceToGun = targetDistance;
+                    gunIndex = g;
+                }
+            }
+
+            // if it's closer or we have none set yet, set it as the target
+            if (newTargetDistance == 0 || distanceToGun < newTargetDistance)
+            {
+                newTarget = target;
+                newTargetDistance = distanceToGun;
+                newGun = gunIndex;
+            }
+        }
+    }
+
+    // when choosing a special target, we don't factor in the gun we will choose
+    private void ChooseSpecialTarget(Turret t, List<Enemy> targets, out Enemy newTarget, out int newGun)
+    {
+        newTarget = null;
+        newGun = 0;
+
+        // cycle through available targets and find the most eligible
+        float best = 0;
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Enemy target = targets[i];
+
+            // get this enemies score
+            float current = 0;
+            switch (t.targetType)
+            {
+                case Turret.TargetType.first:
+                    {
+                        //@TODO this is temporary, not implemented yet
+                        current = Vector2.Distance(target.Body.position, t.transform.position);
+                        break;
+                    }
+                case Turret.TargetType.strong:
+                case Turret.TargetType.weak:
+                    {
+                        current = target.currentHealth;
+                        break;
+                    }
+                default:
+                    {
+                        Debug.LogError("Unknown special turret target type: " + t.targetType);
+                        break;
+                    }
+            }
+
+            // if we've not yet chosen any target just pick it
+            if (best == 0)
+            {
+                newTarget = target;
+                best = current;
+                continue;
+            }
+
+            // check if this score is better than our current best
+            switch (t.targetType)
+            {
+                case Turret.TargetType.first:
+                case Turret.TargetType.weak:
+                    {
+                        if (current < best)
+                        {
+                            newTarget = target;
+                            best = current;
+                        }
+                        continue;
+                    }
+                case Turret.TargetType.strong:
+                    {
+                        if (current > best)
+                        {
+                            newTarget = target;
+                            best = current;
+                        }
+                        continue;
+                    }
+            }
+        }
+
+        if (newTarget)
+        {
+            // we've chosen our special enemy, so choose a gun for it as well
+            newGun = ChooseNewGun(t, newTarget);
+        }
+    }
+
+    // chooses a new gun for a fixed target
+    private int ChooseNewGun(Turret t, Enemy target)
+    {
+        bool allowReloadingGuns = false;
+        if (!t.Guns.Find(x => x.canFire))
+        {
+            // if no guns are ready to fire we can default to any gun
+            allowReloadingGuns = true;
+        }
+
+        // find the closest gun to the enemy
+        int gunIndex = 0;
+        float distanceToGun = 100;
+        for (int g = 0; g < t.Guns.Count; g++)
+        {
+            Gun gun = t.Guns[g];
+            if (!gun.canFire && !allowReloadingGuns)
+            {
+                // there's another gun which can fire first
+                continue;
+            }
+
+            float targetDistance = Vector2.Distance(gun.transform.position, target.Body.position);
+            if (targetDistance < distanceToGun)
+            {
+                // it's closer, set it as the gun
+                distanceToGun = targetDistance;
+                gunIndex = g;
+            }
+        }
+
+        return gunIndex;
     }
 }

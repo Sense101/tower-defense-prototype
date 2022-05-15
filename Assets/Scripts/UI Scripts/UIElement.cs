@@ -15,6 +15,8 @@ public class UIElement : MonoBehaviour
     [Tooltip("sets the base width/height to the current size")]
     [SerializeField] bool DetectSize = false; // custom button
 
+    public bool primaryElement = false;
+
     private Vector2 _cachedBaseSize = Vector2.zero;
 
     public Vector2 CachedBaseSize
@@ -52,11 +54,5 @@ public class UIElement : MonoBehaviour
             DetectSize = false;
             Scale.DefaultSize = RectTransform.sizeDelta;
         }
-    }
-
-    public virtual void UpdateCustomScaling(Vector2 baseSize)
-    {
-        // called every time the scale changes, can be overridden to create custom logic
-        return;
     }
 }

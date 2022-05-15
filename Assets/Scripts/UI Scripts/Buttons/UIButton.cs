@@ -3,13 +3,14 @@ using UnityEngine.UI;
 
 public class UIButton : Button
 {
-    const string ANIMATOR_SELECTED = "Selected";
+    const string ANIMATOR_SELECTED = "selected";
     private bool _selected;
     public bool Selected
     {
         get
         {
             // check to see if we are out of sync with animator
+            // @TODO do we need this? or should we never pull from animator
             if (_animator)
             {
                 _selected = animator.GetBool(ANIMATOR_SELECTED);
@@ -25,9 +26,8 @@ public class UIButton : Button
 
     Animator _animator;
 
-    protected override void Start()
+    public virtual void Initialize()
     {
-        base.Start();
         TryGetComponent<Animator>(out _animator);
     }
 

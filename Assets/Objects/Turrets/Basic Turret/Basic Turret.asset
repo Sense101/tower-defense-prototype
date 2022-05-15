@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 234f1c4f9fd69f14c8c77a6afd8a7a79, type: 3}
   m_Name: Basic Turret
   m_EditorClassIdentifier: 
-  _damage: 5
+  _damage: 10
   _range: 2
-  _reloadSpeed: 0.78
+  _reloadSpeed: 1
   _spinSpeed: 110

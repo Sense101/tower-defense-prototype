@@ -17,5 +17,13 @@ public class HotbarButtonEditor : UnityEditor.UI.ButtonEditor
             typeof(GameObject),
             false
         ) as GameObject;
+
+        targetUIButton.TurretPreviewSprite = EditorGUILayout.ObjectField
+        (
+            "Preview Sprite",
+            targetUIButton.TurretPreviewSprite,
+            typeof(Sprite),
+            false
+        ) as Sprite;
     }
 }

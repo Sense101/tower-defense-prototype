@@ -43,6 +43,10 @@ public class Enemy : MonoBehaviour
         HealthBar.Initialize(camera);
     }
 
+    public bool IsSpaceForDamage() {
+        return currentHealth - previewDamage > 0;
+    }
+
     /// <summary>
     /// moves the enemy forwards each frame
     /// </summary>

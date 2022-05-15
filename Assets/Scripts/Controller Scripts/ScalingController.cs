@@ -49,7 +49,7 @@ public class ScalingController : Singleton<ScalingController>
         float cameraHeight = _camera.orthographicSize * 2;
         _canvasTransform.sizeDelta = new Vector2(cameraHeight * _currentRatio, cameraHeight);
 
-        // scale the UI parts
+        // scale the UI parts - we have to find them every time because it runs in the editor
         foreach (UIElement e in FindObjectsOfType<UIElement>())
         {
             //----
@@ -73,6 +73,7 @@ public class ScalingController : Singleton<ScalingController>
                     ? baseElement.Scale.DefaultSize
                     : e.BaseTransform.sizeDelta;
             }
+
 
             // difference in world units
             Vector2 baseSizeDiff = baseSize - baseDefaultSize;
