@@ -1,8 +1,7 @@
 using UnityEngine;
 
 // a part of a UI element
-[System.Serializable]
-public abstract class ElementPart : ScriptableObject
+public abstract class ElementPart
 {
-
+    public bool active = false;
 }

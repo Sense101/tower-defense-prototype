@@ -29,7 +29,10 @@ public class UIButton : Button
     public virtual void Initialize()
     {
         TryGetComponent<Animator>(out _animator);
+        SetReferences();
     }
+
+    public virtual void SetReferences() { }
 
     public virtual void OnSelect()
     {

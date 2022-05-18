@@ -19,6 +19,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     Camera _mainCamera;
     UIController _uiController;
     TurretPlacer _turretPlacer;
+    TurretInterface _turretInterface;
 
 
     // input actions stuff, wish this happened automatically
@@ -39,6 +40,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         _mainCamera = Camera.main;
         _uiController = UIController.Instance;
         _turretPlacer = TurretPlacer.Instance;
+        _turretInterface = TurretInterface.Instance;
         _active = true;
     }
 
@@ -77,7 +79,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         if (_turretPlacer.CurrentTurretPrefab)
         {
             // deselect the turret
-            UIController.Instance.hotbar.DeselectAll();
+            UIController.Instance.Hotbar.DeselectAll();
             _turretPlacer.CurrentTurretPrefab = null;
         }
     }

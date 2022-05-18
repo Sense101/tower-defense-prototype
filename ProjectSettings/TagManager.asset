@@ -49,6 +49,9 @@ TagManager:
   - name: Enemies
     uniqueID: 2584779337
     locked: 0
+  - name: Range Indicator
+    uniqueID: 44459863
+    locked: 0
   - name: Turrets
     uniqueID: 3361317583
     locked: 0

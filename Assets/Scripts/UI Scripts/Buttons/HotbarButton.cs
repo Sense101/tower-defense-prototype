@@ -6,9 +6,8 @@ public class HotbarButton : UIButton
     public Sprite TurretPreviewSprite = null;
     private TurretPlacer _turretPlacer;
 
-    public override void Initialize()
+    public override void SetReferences()
     {
-        base.Initialize();
         _turretPlacer = TurretPlacer.Instance;
     }
 
@@ -16,8 +15,6 @@ public class HotbarButton : UIButton
     {
         // set the current turret to ours
         _turretPlacer.CurrentTurretPrefab = TurretPrefab;
-        _turretPlacer.TurretPreview.sprite = TurretPreviewSprite;
-
-        //
+        _turretPlacer.turretPreview.sprite = TurretPreviewSprite;
     }
 }

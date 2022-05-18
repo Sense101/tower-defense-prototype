@@ -7,10 +7,11 @@ public class TurretPlacer : Singleton<TurretPlacer>
     Color BLOCKED_COLOR = new Color(255, 0, 0, 0.1f);
 
     // set in inspector
-    public SpriteRenderer TurretPreview;
+    public SpriteRenderer turretPreview;
+    public SpriteRenderer rangePreview;
 
     // stored variables
-    private bool _previewDisabled = false;
+    private bool _overUI = false;
     private GameObject _currentTurretPrefab = null;
     public GameObject CurrentTurretPrefab
     {
@@ -20,9 +21,13 @@ public class TurretPlacer : Singleton<TurretPlacer>
         }
         set
         {
-            // also set preview visibility here
-            TurretPreview.gameObject.SetActive(value && !_previewDisabled);
             _currentTurretPrefab = value;
+            if (value)
+            {
+                RecalculateCanPlace();
+            }
+
+            UpdateActivePreviews();
         }
     }
 
@@ -38,11 +43,8 @@ public class TurretPlacer : Singleton<TurretPlacer>
         _turretController = TurretController.Instance;
         _enemyController = EnemyController.Instance;
 
-        InputController.mouseMoveEvent += OnMouseMove;
-        InputController.overUIEvent += overUI => {
-            _previewDisabled = overUI;
-            TurretPreview.gameObject.SetActive(CurrentTurretPrefab && !_previewDisabled);
-        };
+        InputController.mouseMoveEvent += OnMouseMoveEvent;
+        InputController.overUIEvent += OnOverUIEvent;
     }
 
     public bool TryPlaceTurret()
@@ -63,7 +65,8 @@ public class TurretPlacer : Singleton<TurretPlacer>
         var newTurret = Instantiate(
                 CurrentTurretPrefab,
                 (Vector3Int)_currentMouseTile,
-                Quaternion.identity
+                Quaternion.identity,
+                transform
             ).GetComponent<Turret>();
 
         // initialize
@@ -74,66 +77,55 @@ public class TurretPlacer : Singleton<TurretPlacer>
         _map.SetTurretWorldSpace(_currentMouseTile, newTurret);
 
         // deselect, temp
-        UIController.Instance.hotbar.DeselectAll();
-        CurrentTurretPrefab = null;
+        //UIController.Instance.hotbar.DeselectAll();
+        //CurrentTurretPrefab = null;
 
         RecalculateCanPlace();
 
         return true;
     }
 
-    private void OnMouseMove(Vector2 mousePos)
+    private void OnMouseMoveEvent(Vector2 mousePos)
     {
         Vector2Int newMouseTile = Vector2Int.RoundToInt(mousePos);
         if (newMouseTile != _currentMouseTile)
         {
             _currentMouseTile = newMouseTile;
-            RecalculateCanPlace();
+            if (CurrentTurretPrefab)
+            {
+                RecalculateCanPlace();
+            }
         }
+    }
+
+    private void OnOverUIEvent(bool overUI)
+    {
+        _overUI = overUI;
+        UpdateActivePreviews();
     }
 
     // recalculates if we can place at the current tile and updates the preview
     private void RecalculateCanPlace()
     {
+        Debug.Log("ok");
         // we are at a new tile, recalculate if we can place
         _canPlace = _map.CanPlaceAtTileWorldSpace(_currentMouseTile);
-        TurretPreview.transform.position = (Vector3Int)_currentMouseTile;
+
+        // move the previews
+        turretPreview.transform.position = (Vector3Int)_currentMouseTile;
+        rangePreview.transform.position = (Vector3Int)_currentMouseTile;
 
         // set the color
         Color newColor = _canPlace ? UNBLOCKED_COLOR : BLOCKED_COLOR;
-        TurretPreview.color = newColor;
+        turretPreview.color = newColor;
+
+        UpdateActivePreviews();
+    }
+
+    // updates the previews
+    private void UpdateActivePreviews()
+    {
+        turretPreview.gameObject.SetActive(_currentTurretPrefab && !_overUI);
+        rangePreview.gameObject.SetActive(_currentTurretPrefab && !_overUI && _canPlace);
     }
 }
-
-
-//private void OnRightButton(InputAction.CallbackContext context)
-//{
-//    if (context.started)
-//    {
-//        return;
-//        // @TODO simplify to one function
-//        var mousePos = Vector2Int.RoundToInt(InputController.MousePos);
-//        var tileInfo = _map.TryGetTileWorldSpace(mousePos);
-//
-//        // check to see if tile exists
-//        if (tileInfo == null) return;
-//
-//        Turret turret = tileInfo.Turret;
-//        if (turret)
-//        {
-//            Debug.Log("destroying turret");
-//            if (turret.turretState == Turret.TurretState.firing)
-//            {
-//                // we need to remove the preview damage from its target
-//                // as it will never actually fire
-//                turret.currentTarget.previewDamage -= turret.Info.Damage;
-//            }
-//            Destroy(turret.gameObject);
-//            tileInfo.Turret = null;
-//        }
-//        else
-//        {
-//            Debug.Log("cannot destroy");
-//        }
-//    }
-//}

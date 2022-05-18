@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UIController : Singleton<UIController>
 {
+    public const string CANVAS_TAG = "MainCanvas";
+
     private List<UIElement> elements = new List<UIElement>();
     private List<UIButton> buttons = new List<UIButton>();
     public List<UIElement> Elements
@@ -31,17 +33,32 @@ public class UIController : Singleton<UIController>
 
     // references set in inspector
     [Header("References")]
-    public UIButtonSelector hotbar = default;
+    public UIButtonSelector Hotbar = default;
 
     private void Start()
     {
-        foreach (UIElement element in Elements)
+        UIElement canvasElement = GameObject.FindWithTag(CANVAS_TAG).GetComponent<UIElement>();
+        foreach (UIElement e in Elements)
         {
-            // initialize
+            // set the base transform
+            if (e.scalingBase == UIElement.ScalingBase.canvas)
+            {
+                e.baseElement = canvasElement;
+            }
+            else
+            {
+                UIElement parentElement = e.transform.parent.GetComponent<UIElement>();
+                if (!parentElement)
+                {
+                    Debug.LogError($"The parent of element '{gameObject.name}' is not a UI element!");
+                }
+                e.baseElement = parentElement;
+            }
+            e.Initialize();
         }
-        foreach (UIButton button in Buttons)
+        foreach (UIButton b in Buttons)
         {
-            button.Initialize();
+            b.Initialize();
         }
     }
 
@@ -63,10 +80,5 @@ public class UIController : Singleton<UIController>
             }
         }
         return false;
-    }
-
-    private void Update()
-    {
-
     }
 }

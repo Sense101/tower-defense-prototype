@@ -1,11 +1,9 @@
 using UnityEngine;
 
 // automatically scales the camera so it stays in view of the screen, and scales the canvas with it
-[ExecuteInEditMode]
+//@TODO merge into UI controller??
 public class ScalingController : Singleton<ScalingController>
 {
-    // tags
-    const string CANVAS_TAG = "MainCanvas";
 
     // more than ideal ratio = wider, less = taller
     const float IDEAL_RATIO = 16f / 9f;
@@ -16,14 +14,20 @@ public class ScalingController : Singleton<ScalingController>
 
     Camera _camera;
     RectTransform _canvasTransform;
+    UIController _uiController;
+
+    private void Start()
+    {
+        _camera = Camera.main;
+        _canvasTransform = GameObject.FindWithTag(UIController.CANVAS_TAG).GetComponent<RectTransform>();
+        _uiController = UIController.Instance;
+    }
 
     // Adjust the camera's height so the desired scene width fits in view
     // even if the screen/window size changes dynamically.
     private void Update()
     {
-        SetReferences();
-
-        // check if the scale has changed, if so recalculate
+        // check if the scale has changed
         float newRatio = (float)Screen.width / (float)Screen.height;
         if (newRatio == _currentRatio)
         {
@@ -50,68 +54,50 @@ public class ScalingController : Singleton<ScalingController>
         _canvasTransform.sizeDelta = new Vector2(cameraHeight * _currentRatio, cameraHeight);
 
         // scale the UI parts - we have to find them every time because it runs in the editor
-        foreach (UIElement e in FindObjectsOfType<UIElement>())
+        foreach (UIElement e in _uiController.Elements)
         {
             //----
             // SCALE
             //----
 
-            Vector2 defaultSize = e.Scale.DefaultSize;
+            Vector2 defaultSize = e.scale.defaultSize;
 
             // find the rect transform to scale from, default is canvas
-            Vector2 baseSize = e.BaseTransform
-                ? e.BaseTransform.sizeDelta
-                : _canvasTransform.sizeDelta;
-
-            Vector2 baseDefaultSize = new Vector2(DESIRED_CAMERA_WIDTH, DESIRED_CAMERA_HEIGHT);
-            if (e.BaseTransform)
+            Vector2 baseSize = e.baseElement.RectTransform.sizeDelta;
+            Vector2 baseDefaultSize;
+            if (e.scalingBase == UIElement.ScalingBase.canvas)
             {
-                // check for a UI element with a default size
-                UIElement baseElement = null;
-                e.BaseTransform.TryGetComponent<UIElement>(out baseElement);
-                baseDefaultSize = baseElement
-                    ? baseElement.Scale.DefaultSize
-                    : e.BaseTransform.sizeDelta;
+                baseDefaultSize = new Vector2(DESIRED_CAMERA_WIDTH, DESIRED_CAMERA_HEIGHT);
             }
-
+            else
+            {
+                baseDefaultSize = e.baseElement.scale.defaultSize;
+            }
 
             // difference in world units
             Vector2 baseSizeDiff = baseSize - baseDefaultSize;
 
             // scale size
-            float newWidth = defaultSize.x + (baseSizeDiff.x * e.Scale.WidthIncrease);
-            float newHeight = defaultSize.y + (baseSizeDiff.y * e.Scale.HeightIncrease);
+            if (e.scale.active)
+            {
+                float newWidth = defaultSize.x + (baseSizeDiff.x * e.scale.widthIncrease);
+                float newHeight = defaultSize.y + (baseSizeDiff.y * e.scale.heightIncrease);
 
-            e.RectTransform.sizeDelta = new Vector2(newWidth, newHeight);
+                e.RectTransform.sizeDelta = new Vector2(newWidth, newHeight);
+            }
 
             //----
             // POSITION
             //----
 
-            ElementPosition position = e.Parts.Find(x => x is ElementPosition) as ElementPosition;
-            if (position)
+            if (e.position.active)
             {
                 e.RectTransform.anchoredPosition = new Vector2
-                (
-                    position.DefaultPosition.x + (baseSizeDiff.x * position.XMovement),
-                    position.DefaultPosition.y + (baseSizeDiff.y * position.YMovement)
-                );
+                    (
+                        e.position.DefaultPosition.x + (baseSizeDiff.x * e.position.XMovement),
+                        e.position.DefaultPosition.y + (baseSizeDiff.y * e.position.YMovement)
+                    );
             }
-        }
-    }
-
-    // set references, if they don't yet exist
-    private void SetReferences()
-    {
-        // camera
-        if (!_camera)
-        {
-            _camera = Camera.main;
-        }
-        // canvas
-        if (!_canvasTransform)
-        {
-            _canvasTransform = GameObject.FindWithTag(CANVAS_TAG).GetComponent<RectTransform>();
         }
     }
 }

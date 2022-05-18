@@ -1,58 +1,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// checks for a "button" in the editor which sets the width and height
-[ExecuteInEditMode]
 public class UIElement : MonoBehaviour
 {
-    // scaling
+    // what to scale from
+    public enum ScalingBase { canvas, parent }
+
+    [Tooltip("the scaling type the element should use")]
+    public ScalingBase scalingBase = ScalingBase.canvas;
+
     [Space(5)]
-    [Tooltip("the rect transform that the scale is based off (defaults to the main canvas)")]
-    public RectTransform BaseTransform = null;
-
-
-    [Space(5)]
-    [Tooltip("sets the base width/height to the current size")]
-    [SerializeField] bool DetectSize = false; // custom button
-
+    [Tooltip("whether this element is primary and blocks inputs")]
     public bool primaryElement = false;
 
-    private Vector2 _cachedBaseSize = Vector2.zero;
-
-    public Vector2 CachedBaseSize
-    {
-        get
-        {
-            //@TODO got to fix this back to what it was
-            return _cachedBaseSize;
-        }
-    }
 
     [Space(5)]
-    public ElementScale Scale;
-
-    public List<ElementPart> Parts = new List<ElementPart>();
+    public ElementScale scale;
+    public ElementPosition position;
+    // public ElementFlex flex - coming soon :tm:
 
     // references
-    private RectTransform _rectTransform;
-    public RectTransform RectTransform
-    {
-        get
-        {
-            if (!_rectTransform)
-            {
-                _rectTransform = GetComponent<RectTransform>();
-            }
-            return _rectTransform;
-        }
-    }
+    [HideInInspector]
+    public UIElement baseElement = null;
+    public RectTransform RectTransform { get; private set; }
 
-    private void Update()
+    public void Initialize()
     {
-        if (DetectSize)
-        {
-            DetectSize = false;
-            Scale.DefaultSize = RectTransform.sizeDelta;
-        }
+        // set the rect transform
+        RectTransform = GetComponent<RectTransform>();
     }
 }

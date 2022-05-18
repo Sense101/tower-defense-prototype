@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// element part that holds position scaling variables
 /// </summary>
-[CreateAssetMenu]
+[System.Serializable]
 public class ElementPosition : ElementPart
 {
     [Tooltip("the default position relative to the anchor point")]
