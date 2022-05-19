@@ -1,0 +1,1080 @@
+fileFormatVersion: 2
+guid: a3bd88aa86c2f0846b1d8ae979583ab2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1864974212331143132
+    second: path_test_full_0
+  - first:
+      213: -1932967578030618267
+    second: path_test_full_1
+  - first:
+      213: -41821524756261190
+    second: path_test_full_2
+  - first:
+      213: 1154489144103602916
+    second: path_test_full_3
+  - first:
+      213: -7580707364808928783
+    second: path_test_full_4
+  - first:
+      213: 2780041869619841538
+    second: path_test_full_5
+  - first:
+      213: 1682891862363844855
+    second: path_test_full_6
+  - first:
+      213: -3218760227697721783
+    second: path_test_full_7
+  - first:
+      213: -5346049261535250216
+    second: path_test_full_8
+  - first:
+      213: 6614110836104135906
+    second: path_test_full_9
+  - first:
+      213: -3845110982690284618
+    second: path_test_full_10
+  - first:
+      213: -1117418973322459437
+    second: path_test_full_11
+  - first:
+      213: 2639852108653140578
+    second: path_test_full_12
+  - first:
+      213: -8186137188033263343
+    second: path_test_full_13
+  - first:
+      213: -1121445989484900121
+    second: path_test_full_14
+  - first:
+      213: -2819544989126103379
+    second: path_test_full_15
+  - first:
+      213: 2068746416044611247
+    second: path_test_full_16
+  - first:
+      213: -9110777787623788889
+    second: path_test_full_17
+  - first:
+      213: 6724274205481850837
+    second: path_test_full_18
+  - first:
+      213: -8733452755744083179
+    second: path_test_full_19
+  - first:
+      213: -558377075254849245
+    second: path_test_full_20
+  - first:
+      213: 9175170942644602802
+    second: path_test_full_21
+  - first:
+      213: 2494759385640091912
+    second: path_test_full_22
+  - first:
+      213: -7845957782230562019
+    second: path_test_full_23
+  - first:
+      213: 5518942255500294162
+    second: path_test_full_24
+  - first:
+      213: -8002270169353287174
+    second: path_test_full_25
+  - first:
+      213: -8732401482556851534
+    second: path_test_full_26
+  - first:
+      213: 6357292804287364158
+    second: path_test_full_27
+  - first:
+      213: -8582688231440549721
+    second: path_test_full_28
+  - first:
+      213: 7222124000362715235
+    second: path_test_full_29
+  - first:
+      213: -6137243323404139984
+    second: path_test_full_30
+  - first:
+      213: -371231366340901753
+    second: path_test_full_31
+  - first:
+      213: 519390336188464292
+    second: path_test_full_32
+  - first:
+      213: 8524294480004379835
+    second: path_test_full_33
+  - first:
+      213: -1200132646886808113
+    second: path_test_full_34
+  - first:
+      213: -8619860739009880206
+    second: path_test_full_35
+  - first:
+      213: -7830644786239805243
+    second: path_test_full_36
+  - first:
+      213: 4803427185802654005
+    second: path_test_full_37
+  - first:
+      213: 9101973339091088833
+    second: path_test_full_38
+  - first:
+      213: 4540657552934047473
+    second: path_test_full_39
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: path_test_full_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4200dbeb5d74e16e0800000000000000
+      internalID: -1864974212331143132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_1
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5694325aa38bc25e0800000000000000
+      internalID: -1932967578030618267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_2
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab610f87b8b6b6ff0800000000000000
+      internalID: -41821524756261190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_3
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ea075382c1950010800000000000000
+      internalID: 1154489144103602916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_4
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f15066e0daebc690800000000000000
+      internalID: -7580707364808928783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_5
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20a4763e951b49620800000000000000
+      internalID: 2780041869619841538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_6
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f0b7938b35da5710800000000000000
+      internalID: 1682891862363844855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_7
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94efbea60aaa453d0800000000000000
+      internalID: -3218760227697721783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_8
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d8b37e65840fc5b0800000000000000
+      internalID: -5346049261535250216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_9
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 307
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e48c0b23ca0acb50800000000000000
+      internalID: 6614110836104135906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_10
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bbdacafeeb63aac0800000000000000
+      internalID: -3845110982690284618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_11
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d645d53d512e70f0800000000000000
+      internalID: -1117418973322459437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_12
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26a16db9183a2a420800000000000000
+      internalID: 2639852108653140578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_13
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11989a8799ff46e80800000000000000
+      internalID: -8186137188033263343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_14
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e057f170d2df60f0800000000000000
+      internalID: -1121445989484900121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_15
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: daee7ee55c6fed8d0800000000000000
+      internalID: -2819544989126103379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_16
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa693ba97e9a5bc10800000000000000
+      internalID: 2068746416044611247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_17
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ae2a258fd3009180800000000000000
+      internalID: -9110777787623788889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_18
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d7511e53cb615d50800000000000000
+      internalID: 6724274205481850837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_19
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 205
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 513b73f8dfa8cc680800000000000000
+      internalID: -8733452755744083179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_20
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32196ba220f3048f0800000000000000
+      internalID: -558377075254849245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_21
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b741d53c51c45f70800000000000000
+      internalID: 9175170942644602802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_22
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8014625817a2f9220800000000000000
+      internalID: 2494759385640091912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_23
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1b8f6b77fe8d1390800000000000000
+      internalID: -7845957782230562019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_24
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 218fcf2adb8379c40800000000000000
+      internalID: 5518942255500294162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_25
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af90ef6cda932f090800000000000000
+      internalID: -8002270169353287174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_26
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2baba1c2e1740d680800000000000000
+      internalID: -8732401482556851534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_27
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3cf1b48f14a93850800000000000000
+      internalID: 6357292804287364158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_28
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a87f0bc68a24e880800000000000000
+      internalID: -8582688231440549721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_29
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 103
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 368517d83832a3460800000000000000
+      internalID: 7222124000362715235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_30
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 032cb50c6b124daa0800000000000000
+      internalID: -6137243323404139984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_31
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78484c70a0f19daf0800000000000000
+      internalID: -371231366340901753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_32
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4acb84842ce353700800000000000000
+      internalID: 519390336188464292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_33
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb4fb797aa06c4670800000000000000
+      internalID: 8524294480004379835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_34
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc566fa57b5485fe0800000000000000
+      internalID: -1200132646886808113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_35
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27fdafde35a106880800000000000000
+      internalID: -8619860739009880206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_36
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c869e13e06f35390800000000000000
+      internalID: -7830644786239805243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_37
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 531b83a639339a240800000000000000
+      internalID: 4803427185802654005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_38
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c5b99f0784b05e70800000000000000
+      internalID: 9101973339091088833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: path_test_full_39
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 1
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fe0459acf7a30f30800000000000000
+      internalID: 4540657552934047473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

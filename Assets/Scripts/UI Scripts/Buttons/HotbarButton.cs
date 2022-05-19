@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class HotbarButton : UIButton
 {
-    public GameObject TurretPrefab = null;
-    public Sprite TurretPreviewSprite = null;
+    //@TOOO change to turret info eventually.. maybe???
+    public Turret turretPrefab = null;
+    public Sprite turretPreviewSprite = null;
     private TurretPlacer _turretPlacer;
 
     public override void SetReferences()
@@ -14,7 +15,7 @@ public class HotbarButton : UIButton
     public override void OnSelect()
     {
         // set the current turret to ours
-        _turretPlacer.CurrentTurretPrefab = TurretPrefab;
-        _turretPlacer.turretPreview.sprite = TurretPreviewSprite;
+        _turretPlacer.CurrentTurretPrefab = turretPrefab;
+        _turretPlacer.turretPreview.sprite = turretPreviewSprite;
     }
 }

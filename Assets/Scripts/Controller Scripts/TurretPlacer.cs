@@ -12,18 +12,21 @@ public class TurretPlacer : Singleton<TurretPlacer>
 
     // stored variables
     private bool _overUI = false;
-    private GameObject _currentTurretPrefab = null;
-    public GameObject CurrentTurretPrefab
+    private Turret _currentTurretPrefab = null;
+    public Turret CurrentTurretPrefab
     {
         get
         {
             return _currentTurretPrefab;
         }
+        // IMPORTANT: this should never be set before start
         set
         {
             _currentTurretPrefab = value;
             if (value)
             {
+                _turretInterface.SelectedTurret = null;
+                UpdateRangeScale(value);
                 RecalculateCanPlace();
             }
 
@@ -36,11 +39,14 @@ public class TurretPlacer : Singleton<TurretPlacer>
 
     Map _map;
     TurretController _turretController;
+    TurretInterface _turretInterface;
     EnemyController _enemyController;
+
     private void Start()
     {
         _map = Map.Instance;
         _turretController = TurretController.Instance;
+        _turretInterface = TurretInterface.Instance;
         _enemyController = EnemyController.Instance;
 
         InputController.mouseMoveEvent += OnMouseMoveEvent;
@@ -62,12 +68,12 @@ public class TurretPlacer : Singleton<TurretPlacer>
         }
 
         // create the turret
-        var newTurret = Instantiate(
+        Turret newTurret = Instantiate(
                 CurrentTurretPrefab,
                 (Vector3Int)_currentMouseTile,
                 Quaternion.identity,
                 transform
-            ).GetComponent<Turret>();
+            );
 
         // initialize
         newTurret.Initialize();
@@ -104,10 +110,9 @@ public class TurretPlacer : Singleton<TurretPlacer>
         UpdateActivePreviews();
     }
 
-    // recalculates if we can place at the current tile and updates the preview
+    // recalculates if we can place at the current tile and updates the previews
     private void RecalculateCanPlace()
     {
-        Debug.Log("ok");
         // we are at a new tile, recalculate if we can place
         _canPlace = _map.CanPlaceAtTileWorldSpace(_currentMouseTile);
 
@@ -125,7 +130,14 @@ public class TurretPlacer : Singleton<TurretPlacer>
     // updates the previews
     private void UpdateActivePreviews()
     {
-        turretPreview.gameObject.SetActive(_currentTurretPrefab && !_overUI);
-        rangePreview.gameObject.SetActive(_currentTurretPrefab && !_overUI && _canPlace);
+        bool placerActive = CurrentTurretPrefab && !_overUI;
+        turretPreview.gameObject.SetActive(placerActive);
+        rangePreview.gameObject.SetActive(_turretInterface.SelectedTurret || (placerActive && _canPlace));
+    }
+
+    public void UpdateRangeScale(Turret turret)
+    {
+        float rangeScale = 1 + (turret.Info.Range * 2);
+        rangePreview.transform.localScale = new Vector2(rangeScale, rangeScale);
     }
 }

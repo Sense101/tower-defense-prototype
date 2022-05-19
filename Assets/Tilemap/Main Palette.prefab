@@ -49,15 +49,17 @@ Tilemap:
       m_TileMatrixIndex: 0
       m_TileColorIndex: 267
       m_TileObjectToInstantiateIndex: 65535
-      m_AllTileFlags: 2
+      dummyAlignment: 0
+      m_AllTileFlags: 0
   - first: {x: 15, y: -20, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 565
-      m_TileSpriteIndex: 565
+      m_TileSpriteIndex: 4294967295
       m_TileMatrixIndex: 0
       m_TileColorIndex: 267
       m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
       m_AllTileFlags: 1073741826
   m_AnimatedTiles: {}
   m_TileAssetArray:
@@ -2326,10 +2328,10 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
-    m_Data: {fileID: 21300000, guid: d691b59081247634eb3c5385ca95b6a7, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 21300000, guid: 926b45fdaa814014ca3090fe565a9b02, type: 3}
+    m_Data: {fileID: 4540657552934047473, guid: e6324ee502c16e64185622e489de6ab6, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 2
     m_Data:
@@ -2951,7 +2953,7 @@ TilemapRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0.003937006, y: 0.003937006, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0.00018310547, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -3002,7 +3004,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &4818678932375313311
+--- !u!114 &7219723827128821942
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3015,3 +3017,5 @@ MonoBehaviour:
   m_Name: Palette Settings
   m_EditorClassIdentifier: 
   cellSizing: 0
+  m_TransparencySortMode: 0
+  m_TransparencySortAxis: {x: 0, y: 0, z: 1}

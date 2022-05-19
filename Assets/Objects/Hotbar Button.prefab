@@ -91,15 +91,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af907192ba0d236469335e07fdaae420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BaseTransform: {fileID: 0}
-  DetectSize: 0
-  Scale:
-    BaseTransform: {fileID: 0}
-    CachedBaseElement: {fileID: 0}
-    DefaultSize: {x: 1, y: 1}
-    WidthIncrease: 0
-    HeightIncrease: 0
-  Parts: []
+  scalingBase: 0
+  primaryElement: 0
+  scale:
+    active: 0
+    defaultSize: {x: 1, y: 1}
+    widthIncrease: 0
+    heightIncrease: 0
+  position:
+    active: 0
+    DefaultPosition: {x: 0, y: 0}
+    XMovement: 0
+    YMovement: 0
+  baseElement: {fileID: 0}
 --- !u!114 &2554138637105883988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +123,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 3
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -144,8 +148,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  TurretPrefab: {fileID: 9022021501169529461, guid: f78b1492d068e7841944556cef4900a3, type: 3}
-  TurretPreviewSprite: {fileID: 21300000, guid: 16cf81ec93aebc94e85d6155ba470fa5, type: 3}
+  turretPrefab: {fileID: 0}
+  turretPreviewSprite: {fileID: 0}
 --- !u!95 &2554138637105883989
 Animator:
   serializedVersion: 3

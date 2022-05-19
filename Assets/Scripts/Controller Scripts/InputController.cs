@@ -8,8 +8,8 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     public delegate void OverUIEvent(bool overUI);
     public static event PositionEvent mouseMoveEvent;
     public static event OverUIEvent overUIEvent;
-    public static Vector2 MousePos { get; private set; }
-    public static bool MouseOverUI { get; private set; }
+    public static Vector2 mousePos { get; private set; }
+    public static bool mouseOverUI { get; private set; }
 
     // prevents any inputs until start
     private bool _active = false;
@@ -20,6 +20,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     UIController _uiController;
     TurretPlacer _turretPlacer;
     TurretInterface _turretInterface;
+    Map _map;
 
 
     // input actions stuff, wish this happened automatically
@@ -41,6 +42,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         _uiController = UIController.Instance;
         _turretPlacer = TurretPlacer.Instance;
         _turretInterface = TurretInterface.Instance;
+        _map = Map.Instance;
         _active = true;
     }
 
@@ -55,7 +57,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         }
 
         // ignore input if over UI
-        if (MouseOverUI)
+        if (mouseOverUI)
         {
             return;
         }
@@ -64,9 +66,12 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         if (_turretPlacer.TryPlaceTurret())
         {
             // nice, we placed a turret
+            return;
         }
 
-        // otherwise select a turret?
+        // try and select a turret
+        TileInfo currentTile = _map.TryGetTileWorldSpace(Vector2Int.RoundToInt(mousePos));
+        _turretInterface.SelectedTurret = currentTile?.Turret;
     }
 
     public void OnRightButton(InputAction.CallbackContext context)
@@ -76,11 +81,20 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
             return;
         }
 
+        // stop placing
         if (_turretPlacer.CurrentTurretPrefab)
         {
             // deselect the turret
             UIController.Instance.Hotbar.DeselectAll();
             _turretPlacer.CurrentTurretPrefab = null;
+            return;
+        }
+
+        // deselect if a turret is selected
+        if (_turretInterface.SelectedTurret)
+        {
+            _turretInterface.SelectedTurret = null;
+            return;
         }
     }
 
@@ -94,14 +108,13 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         Vector2 screenPos = context.ReadValue<Vector2>();
         Vector2 worldPos = _mainCamera.ScreenToWorldPoint(screenPos);
 
-        MousePos = worldPos;
+        mousePos = worldPos;
         bool newMouseOverUI = _uiController.IsWithinPrimaryElement(worldPos);
-        if (newMouseOverUI != MouseOverUI)
+        if (newMouseOverUI != mouseOverUI)
         {
             // it's changed, send an event
-            Debug.Log("change");
             overUIEvent(newMouseOverUI);
-            MouseOverUI = newMouseOverUI;
+            mouseOverUI = newMouseOverUI;
         }
         mouseMoveEvent(worldPos);
     }

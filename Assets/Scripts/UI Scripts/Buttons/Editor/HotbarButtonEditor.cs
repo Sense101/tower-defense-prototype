@@ -10,18 +10,18 @@ public class HotbarButtonEditor : UnityEditor.UI.ButtonEditor
 
         HotbarButton targetUIButton = (HotbarButton)target;
 
-        targetUIButton.TurretPrefab = EditorGUILayout.ObjectField
+        targetUIButton.turretPrefab = EditorGUILayout.ObjectField
         (
             "Turret Prefab",
-            targetUIButton.TurretPrefab,
-            typeof(GameObject),
+            targetUIButton.turretPrefab,
+            typeof(Turret),
             false
-        ) as GameObject;
+        ) as Turret;
 
-        targetUIButton.TurretPreviewSprite = EditorGUILayout.ObjectField
+        targetUIButton.turretPreviewSprite = EditorGUILayout.ObjectField
         (
             "Preview Sprite",
-            targetUIButton.TurretPreviewSprite,
+            targetUIButton.turretPreviewSprite,
             typeof(Sprite),
             false
         ) as Sprite;
