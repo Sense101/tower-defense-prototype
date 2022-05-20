@@ -471,9 +471,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0323b6511259ca2418bbe287af120135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Info: {fileID: 11400000, guid: 3e76a123acdc8cb4b875e347441c71b8, type: 2}
-  Top: {fileID: 2898963770609021768}
-  Guns:
+  info: {fileID: 11400000, guid: 3e76a123acdc8cb4b875e347441c71b8, type: 2}
+  top: {fileID: 2898963770609021768}
+  renderers:
+  - {fileID: 4467135833139568148}
+  - {fileID: 218085998080219587}
+  - {fileID: 6632060075556579255}
+  guns:
   - {fileID: 2229237848716017341}
   currentTarget: {fileID: 0}
   currentGunIndex: 0

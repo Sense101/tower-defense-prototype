@@ -44,4 +44,11 @@ public class TurretInfo : ScriptableObject
     {
         get => _spinSpeed;
     }
+
+    [Space(5)]
+    [Header("Sprites")]
+    public Sprite fullSprite = default;
+    public Sprite baseSprite = default;
+    public Sprite previewSprite = default;
+    //@TODO add all sprites for dynamic turret upgrading?
 }

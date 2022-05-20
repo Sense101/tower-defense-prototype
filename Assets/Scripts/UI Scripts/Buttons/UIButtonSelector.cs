@@ -8,22 +8,18 @@ using UnityEngine;
 public class UIButtonSelector : MonoBehaviour
 {
     private List<UIButton> _buttons = new List<UIButton>();
-    public UIButton _selectedButton = null;
+    public UIButton selectedButton = null;
 
     //script to select one
     private void Start()
     {
-        // find all the buttons and make sure navigation is horizontal
+        // find all the buttons
         for (int i = 0; i < transform.childCount; i++)
         {
             UIButton button = null;
             transform.GetChild(i).TryGetComponent<UIButton>(out button);
             if (button)
             {
-                //Navigation newNavigation = new Navigation();
-                //newNavigation.mode = Navigation.Mode.Horizontal;
-                //newNavigation.wrapAround = true;
-                //button.navigation = newNavigation;
                 _buttons.Add(button);
             }
         }
@@ -34,6 +30,13 @@ public class UIButtonSelector : MonoBehaviour
             UIButton button = _buttons[i];
             int index = i;
             button.onClick.AddListener(() => OnClick(index));
+        }
+
+        if (selectedButton)
+        {
+            // we start with a button selected, select it
+            int index = _buttons.FindIndex(x => x == selectedButton);
+            SelectButton(index);
         }
     }
 
@@ -51,7 +54,7 @@ public class UIButtonSelector : MonoBehaviour
             {
                 if (!button.Selected)
                 {
-                    _selectedButton = button;
+                    selectedButton = button;
                     button.Selected = true;
                     button.OnSelect();
                 }

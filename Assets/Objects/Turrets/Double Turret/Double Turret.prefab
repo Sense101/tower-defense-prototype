@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438291389530043086}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.49, y: 6, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8363705519026931851}
@@ -45,9 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0323b6511259ca2418bbe287af120135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Info: {fileID: 11400000, guid: b68204ea97f57984795bbad97ce612f0, type: 2}
-  Top: {fileID: 5988247380062450675}
-  Guns:
+  info: {fileID: 11400000, guid: b68204ea97f57984795bbad97ce612f0, type: 2}
+  top: {fileID: 5988247380062450675}
+  renderers:
+  - {fileID: 5107015096905391791}
+  - {fileID: 8658024582057777528}
+  - {fileID: 2821638153175049996}
+  - {fileID: 168189050591175518}
+  guns:
   - {fileID: 7335923371281710598}
   - {fileID: 7639374017187047194}
   currentTarget: {fileID: 0}

@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Undefined
   - MainCanvas
   layers:
   - Default
@@ -60,6 +59,9 @@ TagManager:
     locked: 0
   - name: Turret Placer
     uniqueID: 3358430659
+    locked: 0
+  - name: UI
+    uniqueID: 201168575
     locked: 0
   - name: Front
     uniqueID: 3444038309

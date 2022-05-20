@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class TurretPlacer : Singleton<TurretPlacer>
 {
@@ -83,8 +82,8 @@ public class TurretPlacer : Singleton<TurretPlacer>
         _map.SetTurretWorldSpace(_currentMouseTile, newTurret);
 
         // deselect, temp
-        //UIController.Instance.hotbar.DeselectAll();
-        //CurrentTurretPrefab = null;
+        UIController.Instance.hotbar.DeselectAll();
+        CurrentTurretPrefab = null;
 
         RecalculateCanPlace();
 
@@ -137,7 +136,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
 
     public void UpdateRangeScale(Turret turret)
     {
-        float rangeScale = 1 + (turret.Info.Range * 2);
+        float rangeScale = 1 + (turret.info.Range * 2);
         rangePreview.transform.localScale = new Vector2(rangeScale, rangeScale);
     }
 }

@@ -43,17 +43,17 @@ public class TurretController : Singleton<TurretController>
     private Angle FindAngleToTarget(Turret t)
     {
         Vector2 targetPos = t.currentTarget.Body.position;
-        Gun currentGun = t.Guns[t.currentGunIndex];
+        Gun currentGun = t.guns[t.currentGunIndex];
         float localGunRotation = currentGun.transform.localEulerAngles.z;
 
 
         // from gun to target
-        Angle angleFromGun = Angle.Towards(t.Guns[t.currentGunIndex].transform.position, targetPos);
+        Angle angleFromGun = Angle.Towards(t.guns[t.currentGunIndex].transform.position, targetPos);
         // from turret to target
         Angle angleFromTurret = Angle.Towards(t.transform.position, targetPos).Rotate(localGunRotation);
 
         // temp - draw targeting line
-        Debug.DrawLine(t.Guns[t.currentGunIndex].transform.position, targetPos);
+        Debug.DrawLine(t.guns[t.currentGunIndex].transform.position, targetPos);
 
         // between the angle from turret and gun
         Angle desiredAngle = angleFromTurret;
@@ -76,7 +76,7 @@ public class TurretController : Singleton<TurretController>
             // since we are not already firing, stop targeting enemies that go out of range
             Vector2 targetPos = t.currentTarget.Body.position;
             float targetDistance = Vector2.Distance(t.transform.position, targetPos);
-            if (targetDistance > t.Info.Range)
+            if (targetDistance > t.info.Range)
             {
                 // recalculate target next frame
                 t.state = Turret.State.none;
@@ -87,11 +87,11 @@ public class TurretController : Singleton<TurretController>
         Angle desiredAngle = FindAngleToTarget(t);
 
         // rotate towards the desired rotation by the spin speed
-        t.Top.rotation = Quaternion.RotateTowards
+        t.top.rotation = Quaternion.RotateTowards
         (
-            t.Top.rotation, // from
+            t.top.rotation, // from
             desiredAngle.AsQuaternion(), // to
-            t.Info.SpinSpeed * Time.deltaTime // delta speed
+            t.info.SpinSpeed * Time.deltaTime // delta speed
         );
 
 
@@ -99,7 +99,7 @@ public class TurretController : Singleton<TurretController>
         if (!firing)
         {
             // work out the difference between our current rotation and target rotation
-            float currentDiff = t.Top.transform.eulerAngles.z - desiredAngle.degrees;
+            float currentDiff = t.top.transform.eulerAngles.z - desiredAngle.degrees;
             bool lockedToTarget = currentDiff == 0;
 
             t.state = lockedToTarget ? Turret.State.locked : Turret.State.aiming;
@@ -110,7 +110,7 @@ public class TurretController : Singleton<TurretController>
     {
         // find all the targets in range
         List<Enemy> targetsInRange = enemies.FindAll(x => {
-            return Vector2.Distance(t.transform.position, x.Body.position) <= t.Info.Range;
+            return Vector2.Distance(t.transform.position, x.Body.position) <= t.info.Range;
         });
 
         List<Enemy> finalTargets = new List<Enemy>();
@@ -183,7 +183,7 @@ public class TurretController : Singleton<TurretController>
     public void ChooseClosestTarget(Turret t, List<Enemy> targets, out Enemy newTarget, out int newGunIndex)
     {
         bool allowReloadingGuns = false;
-        if (!t.Guns.Find(x => x.canFire))
+        if (!t.guns.Find(x => x.canFire))
         {
             // if no guns are ready to fire we can default to any gun
             allowReloadingGuns = true;
@@ -206,9 +206,9 @@ public class TurretController : Singleton<TurretController>
             // find the closest gun to the enemy
             float distanceToGun = 0;
             int gunIndex = 0;
-            for (int g = 0; g < t.Guns.Count; g++)
+            for (int g = 0; g < t.guns.Count; g++)
             {
-                Gun gun = t.Guns[g];
+                Gun gun = t.guns[g];
                 if (!gun.canFire && !allowReloadingGuns)
                 {
                     continue;

@@ -9,11 +9,13 @@ public class Turret : MonoBehaviour
     public enum TargetType { close, first, strong, weak }
 
     // set in inspector
-    public TurretInfo Info;
-    public Transform Top = default; // the part of the turret that rotates
-    public List<Gun> Guns = new List<Gun>();
+    public TurretInfo info;
+    public Transform top; // the part of the turret that rotates
+    public SpriteRenderer[] renderers;
+    public List<Gun> guns = new List<Gun>();
 
 
+[Space(10)]
     // info unique to this turret
     public Enemy currentTarget = null;
     public int currentGunIndex = 0;
@@ -28,10 +30,10 @@ public class Turret : MonoBehaviour
     public void Initialize()
     {
 
-        for (int i = 0; i < Guns.Count; i++)
+        for (int i = 0; i < guns.Count; i++)
         {
-            var gun = Guns[i];
-            gun.Initialize(this, Info.ReloadSpeed);
+            var gun = guns[i];
+            gun.Initialize(this, info.ReloadSpeed);
         }
 
         StartCoroutine(FireGuns());
@@ -39,19 +41,19 @@ public class Turret : MonoBehaviour
 
     public virtual IEnumerator FireGuns()
     {
-        var gunCount = Guns.Count;
-        var reloadSpeed = Info.ReloadSpeed;
+        var gunCount = guns.Count;
+        var reloadSpeed = info.ReloadSpeed;
         while (true)
         {
             // wait till we are locked onto a target
             yield return new WaitUntil(() => state == State.locked);
 
-            if (currentTarget.IsSpaceForDamage() && Guns[currentGunIndex].TryFire())
+            if (currentTarget.IsSpaceForDamage() && guns[currentGunIndex].TryFire())
             {
                 state = State.firing;
 
                 // add preview
-                currentTarget.previewDamage += Info.Damage;
+                currentTarget.previewDamage += info.Damage;
 
                 // wait till we are done firing the current gun
                 yield return new WaitUntil(() => state != State.firing);
@@ -78,9 +80,9 @@ public class Turret : MonoBehaviour
         if (currentTarget)
         {
             // remove preview
-            currentTarget.previewDamage -= Info.Damage;
+            currentTarget.previewDamage -= info.Damage;
 
-            currentTarget.TakeHit(Info.Damage, 0);
+            currentTarget.TakeHit(info.Damage, 0);
 
         }
     }

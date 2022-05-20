@@ -8,6 +8,7 @@ public class UIController : Singleton<UIController>
 
     private List<UIElement> elements = new List<UIElement>();
     private List<UIButton> buttons = new List<UIButton>();
+    //@TODO remove this montrosity
     public List<UIElement> Elements
     {
         get
@@ -33,7 +34,7 @@ public class UIController : Singleton<UIController>
 
     // references set in inspector
     [Header("References")]
-    public UIButtonSelector Hotbar = default;
+    public UIButtonSelector hotbar = default;
 
     private void Start()
     {
