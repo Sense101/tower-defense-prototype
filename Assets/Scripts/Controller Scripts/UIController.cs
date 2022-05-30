@@ -68,6 +68,13 @@ public class UIController : Singleton<UIController>
         List<UIElement> primaryElements = Elements.FindAll(x => x.primaryElement);
         foreach (UIElement element in primaryElements)
         {
+            CanvasFadeGroup fadeGroup = element.GetComponent<CanvasFadeGroup>();
+            if (fadeGroup && fadeGroup.state == CanvasFadeGroup.FadeState.hidden)
+            {
+                // skip if it's not visible
+                continue;
+            }
+
             // the distance from the center of the element to the edge, including scaling
             Vector2 elementBounds = element.RectTransform.sizeDelta * element.RectTransform.lossyScale / 2; //@TODO cache this so we only need to check it once, and also filter out inactive ones
             float xDistance = Mathf.Abs(element.RectTransform.position.x - pos.x);

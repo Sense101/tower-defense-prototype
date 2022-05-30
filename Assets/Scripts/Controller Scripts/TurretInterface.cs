@@ -20,45 +20,9 @@ public class TurretInterface : Singleton<TurretInterface>
     public TextMeshProUGUI turretName;
     public UIButtonSelector targetTypeSelector;
 
+
+    // internal variables
     private Turret _selectedTurret = null;
-    public Turret SelectedTurret
-    {
-        get
-        {
-            return _selectedTurret;
-        }
-        // IMPORTANT: this should never be set before start
-        set
-        {
-            _selectedTurret = value;
-
-            // set visibility
-            GameObject rangePreviewObject = _turretPlacer.rangePreview.gameObject;
-            rangePreviewObject.SetActive(value);
-
-            if (value)
-            {
-                // we've selected a turret, update the interface
-                turretName.text = _selectedTurret.gameObject.name;
-                targetTypeSelector.SelectButton((int)value.targetType);
-                mainInterfaceGroup.Show();
-
-                // update the range preview
-                rangePreviewObject.transform.position = _selectedTurret.transform.position;
-                float rangeScale = 1 + (_selectedTurret.info.Range * 2);
-                rangePreviewObject.transform.localScale = new Vector2(rangeScale, rangeScale);
-
-                // update the actual preview
-                _turretPreviewController.SetPreview(value);
-            }
-            else
-            {
-                turretName.text = "";
-                targetTypeSelector.DeselectAll();
-                mainInterfaceGroup.Hide();
-            }
-        }
-    }
 
     // references
     TurretPlacer _turretPlacer;
@@ -76,4 +40,43 @@ public class TurretInterface : Singleton<TurretInterface>
     }
 
     /////////// bunch of scripts called by the buttons within the interface
+
+
+    // IMPORTANT: this cannot be called till after start
+    // sets the turret
+    public void SetTurret(Turret turret)
+    {
+        _selectedTurret = turret;
+
+        // set the range preview visibility
+        GameObject rangePreviewObject = _turretPlacer.rangePreview.gameObject;
+        rangePreviewObject.SetActive(turret);
+
+        // update the turret preview
+        _turretPreviewController.SetPreview(turret);
+
+        if (turret)
+        {
+            // we've selected a turret, show the main interface
+            mainInterfaceGroup.Show();
+
+            // update stuff within the interface - @TODO
+            turretName.text = turret.gameObject.name;
+            targetTypeSelector.SelectButton((int)turret.targetType);
+
+            // update the range preview
+            float rangeScale = 1 + (turret.info.Range * 2);
+            rangePreviewObject.transform.position = turret.transform.position;
+            rangePreviewObject.transform.localScale = new Vector2(rangeScale, rangeScale);
+        }
+        else
+        {
+            mainInterfaceGroup.Hide();
+        }
+    }
+
+    public Turret GetTurret()
+    {
+        return _selectedTurret;
+    }
 }

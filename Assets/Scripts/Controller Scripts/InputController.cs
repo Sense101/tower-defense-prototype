@@ -71,7 +71,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
 
         // try and select a turret
         TileInfo currentTile = _map.TryGetTileWorldSpace(Vector2Int.RoundToInt(mousePos));
-        _turretInterface.SelectedTurret = currentTile?.Turret;
+        _turretInterface.SetTurret(currentTile?.Turret);
     }
 
     public void OnRightButton(InputAction.CallbackContext context)
@@ -91,9 +91,9 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         }
 
         // deselect if a turret is selected
-        if (_turretInterface.SelectedTurret)
+        if (_turretInterface.GetTurret())
         {
-            _turretInterface.SelectedTurret = null;
+            _turretInterface.SetTurret(null);
             return;
         }
     }

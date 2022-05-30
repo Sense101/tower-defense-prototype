@@ -40,7 +40,7 @@ public class Gun : MonoBehaviour
         return false;
     }
 
-    // called by the animator
+    // called by the animator - when the firing animation is finished
     public void OnAnimatorFire()
     {
         _turret.HitEnemy();

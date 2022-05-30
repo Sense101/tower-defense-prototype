@@ -13,7 +13,7 @@ public class TargetTypeButton : UIButton
     public override void OnSelect()
     {
         // set the target type of the selected turret
-        Turret selected = _turretInterface.SelectedTurret;
+        Turret selected = _turretInterface.GetTurret();
         if (selected)
         {
             selected.targetType = targetType;

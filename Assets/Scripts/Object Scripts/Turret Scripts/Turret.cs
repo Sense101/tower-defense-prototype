@@ -5,31 +5,40 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
+    // enums
     public enum State { none, aiming, locked, firing }
     public enum TargetType { close, first, strong, weak }
+
+    // delegate for actually hitting the enemy - or just give bullet info and leave it to it?
+    // also leave preview damage to bullet?
+    public delegate void HitDelegate();
+    public HitDelegate hitDelegate;
 
     // set in inspector
     public TurretInfo info;
     public Transform top; // the part of the turret that rotates
-    public SpriteRenderer[] renderers;
+    public SpriteRenderer[] renderers; //@TODO what use is this?
     public List<Gun> guns = new List<Gun>();
 
 
-[Space(10)]
+    [Space(10)]
     // info unique to this turret
     public Enemy currentTarget = null;
     public int currentGunIndex = 0;
     public State state = State.none;
     public TargetType targetType = TargetType.close;
 
-    // reload time / number of guns = wait time between shots - UNLESS OVERRIDEN
+    // the xp of the turret @TODO how do you get this? take from damage done to enemies?
+    // stats for the turret, augmentations will affect these
+    public int damage;
+    public int experience = 0;
+
 
     /// <summary>
     /// initialize the turret
     /// </summary>
     public void Initialize()
     {
-
         for (int i = 0; i < guns.Count; i++)
         {
             var gun = guns[i];
@@ -52,7 +61,7 @@ public class Turret : MonoBehaviour
             {
                 state = State.firing;
 
-                // add preview
+                // add preview damage
                 currentTarget.previewDamage += info.Damage;
 
                 // wait till we are done firing the current gun
@@ -65,12 +74,13 @@ public class Turret : MonoBehaviour
 
 
                 // prevent firing of next gun till we hit a nicer ratio
+                // reload time / number of guns = wait time between shots
                 yield return new WaitForSeconds(reloadSpeed / gunCount);
             }
         }
     }
 
-    // called by gun
+    // called by the gun
     public void HitEnemy()
     {
         // reset the turret
@@ -81,9 +91,9 @@ public class Turret : MonoBehaviour
         {
             // remove preview
             currentTarget.previewDamage -= info.Damage;
-
+        
             currentTarget.TakeHit(info.Damage, 0);
-
+        
         }
     }
 }

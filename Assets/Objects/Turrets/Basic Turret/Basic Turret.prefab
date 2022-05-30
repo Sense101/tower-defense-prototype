@@ -483,3 +483,4 @@ MonoBehaviour:
   currentGunIndex: 0
   state: 0
   targetType: 0
+  experience: 0

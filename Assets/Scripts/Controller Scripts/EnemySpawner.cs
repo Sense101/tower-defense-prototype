@@ -48,7 +48,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
                 {
                     var spawnPos = transform.position + new Vector3(side * (0.5f - gapFromEdge), 0);
 
-                    var newEnemy = Instantiate(group.EnemyPrefab, spawnPos, Quaternion.identity).GetComponent<Enemy>();
+                    var newEnemy = Instantiate(group.EnemyPrefab, spawnPos, transform.rotation).GetComponent<Enemy>();
                     var pathSide = EnemyInfo.PathSide.left;
                     if (side == 1) pathSide = EnemyInfo.PathSide.right;
 

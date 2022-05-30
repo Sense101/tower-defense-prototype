@@ -2,8 +2,10 @@
 
 public class TurretPlacer : Singleton<TurretPlacer>
 {
-    Color UNBLOCKED_COLOR = new Color(255, 255, 255, 0.4f);
-    Color BLOCKED_COLOR = new Color(255, 0, 0, 0.1f);
+    readonly Color UNBLOCKED_COLOR = new Color(255, 255, 255, 0.4f);
+    readonly Color BLOCKED_COLOR = new Color(255, 0, 0, 0.1f);
+    readonly Color RANGE_UNBLOCKED_COLOR = new Color(150, 150, 150, 0.05f);
+    readonly Color RANGE_BLOCKED_COLOR = new Color(200, 0, 0, 0.05f);
 
     // set in inspector
     public SpriteRenderer turretPreview;
@@ -24,9 +26,14 @@ public class TurretPlacer : Singleton<TurretPlacer>
             _currentTurretPrefab = value;
             if (value)
             {
-                _turretInterface.SelectedTurret = null;
+                _turretInterface.SetTurret(null);
                 UpdateRangeScale(value);
                 RecalculateCanPlace();
+            }
+            else
+            {
+                // make sure range color is back to normal
+                rangePreview.color = RANGE_UNBLOCKED_COLOR;
             }
 
             UpdateActivePreviews();
@@ -85,7 +92,10 @@ public class TurretPlacer : Singleton<TurretPlacer>
         UIController.Instance.hotbar.DeselectAll();
         CurrentTurretPrefab = null;
 
-        RecalculateCanPlace();
+        if (CurrentTurretPrefab)
+        {
+            RecalculateCanPlace();
+        }
 
         return true;
     }
@@ -122,6 +132,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         // set the color
         Color newColor = _canPlace ? UNBLOCKED_COLOR : BLOCKED_COLOR;
         turretPreview.color = newColor;
+        rangePreview.color = _canPlace ? RANGE_UNBLOCKED_COLOR : RANGE_BLOCKED_COLOR;
 
         UpdateActivePreviews();
     }
@@ -131,7 +142,9 @@ public class TurretPlacer : Singleton<TurretPlacer>
     {
         bool placerActive = CurrentTurretPrefab && !_overUI;
         turretPreview.gameObject.SetActive(placerActive);
-        rangePreview.gameObject.SetActive(_turretInterface.SelectedTurret || (placerActive && _canPlace));
+
+        // range preview also shows when there is a turret selected
+        rangePreview.gameObject.SetActive(_turretInterface.GetTurret() || placerActive);
     }
 
     public void UpdateRangeScale(Turret turret)

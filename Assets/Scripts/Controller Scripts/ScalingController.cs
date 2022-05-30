@@ -53,13 +53,17 @@ public class ScalingController : Singleton<ScalingController>
         float cameraHeight = _camera.orthographicSize * 2;
         _canvasTransform.sizeDelta = new Vector2(cameraHeight * _currentRatio, cameraHeight);
 
+        float currentCameraWidth = cameraHeight * _currentRatio;
+        _camera.transform.position = new Vector3
+        (
+            8 + ((DESIRED_CAMERA_WIDTH - currentCameraWidth) / 2),
+            4.5f + ((DESIRED_CAMERA_HEIGHT - cameraHeight) / 2),
+            -10
+        );
+
         // scale the UI parts - we have to find them every time because it runs in the editor
         foreach (UIElement e in _uiController.Elements)
         {
-            //----
-            // SCALE
-            //----
-
             Vector2 defaultSize = e.scale.defaultSize;
 
             // find the rect transform to scale from, default is canvas

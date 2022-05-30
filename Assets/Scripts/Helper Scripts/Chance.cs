@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// stores a chance of something happening between one and ten
+/// stores a chance of something happening between zero and ten
 /// </summary>
 [System.Serializable]
 public class Chance
@@ -11,7 +11,7 @@ public class Chance
     public int chance;
 
     /// <summary>
-    /// sets the chance of something happening, between one and ten
+    /// sets the chance of something happening, between zero and ten
     /// </summary>
     public Chance(int chance)
     {

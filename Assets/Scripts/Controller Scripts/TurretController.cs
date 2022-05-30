@@ -40,27 +40,6 @@ public class TurretController : Singleton<TurretController>
         }
     }
 
-    private Angle FindAngleToTarget(Turret t)
-    {
-        Vector2 targetPos = t.currentTarget.Body.position;
-        Gun currentGun = t.guns[t.currentGunIndex];
-        float localGunRotation = currentGun.transform.localEulerAngles.z;
-
-
-        // from gun to target
-        Angle angleFromGun = Angle.Towards(t.guns[t.currentGunIndex].transform.position, targetPos);
-        // from turret to target
-        Angle angleFromTurret = Angle.Towards(t.transform.position, targetPos).Rotate(localGunRotation);
-
-        // temp - draw targeting line
-        Debug.DrawLine(t.guns[t.currentGunIndex].transform.position, targetPos);
-
-        // between the angle from turret and gun
-        Angle desiredAngle = angleFromTurret;
-
-        return desiredAngle;
-    }
-
     private void TurnTurret(Turret t)
     {
         if (!t.currentTarget)
@@ -104,6 +83,27 @@ public class TurretController : Singleton<TurretController>
 
             t.state = lockedToTarget ? Turret.State.locked : Turret.State.aiming;
         }
+    }
+
+    private Angle FindAngleToTarget(Turret t)
+    {
+        Vector2 targetPos = t.currentTarget.Body.position;
+        Gun currentGun = t.guns[t.currentGunIndex];
+        float localGunRotation = currentGun.transform.localEulerAngles.z;
+
+
+        // from gun to target
+        Angle angleFromGun = Angle.Towards(t.guns[t.currentGunIndex].transform.position, targetPos);
+        // from turret to target
+        Angle angleFromTurret = Angle.Towards(t.transform.position, targetPos).Rotate(localGunRotation);
+
+        // temp - draw targeting line
+        Debug.DrawLine(t.guns[t.currentGunIndex].transform.position, targetPos);
+
+        // between the angle from turret and gun
+        Angle desiredAngle = angleFromTurret;
+
+        return desiredAngle;
     }
 
     private void ChooseNewTarget(Turret t, List<Enemy> enemies)

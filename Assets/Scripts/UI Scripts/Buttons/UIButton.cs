@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIButton : Button
 {
     const string ANIMATOR_SELECTED = "selected";
+    const string ANIMATOR_HIGHLIGHTED = "highlighted";
     private bool _selected;
     public bool Selected
     {
@@ -40,6 +42,20 @@ public class UIButton : Button
     }
     public virtual void OnDeselect()
     {
-        Debug.Log("deselected button");
+        //Debug.Log("deselected button");
+    }
+
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("highlight " + gameObject.name);
+        _animator?.SetBool(ANIMATOR_HIGHLIGHTED, true);
+        base.OnPointerEnter(eventData);
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("stop highlight " + gameObject.name);
+        _animator?.SetBool(ANIMATOR_HIGHLIGHTED, false);
+        base.OnPointerExit(eventData);
     }
 }
