@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 public class Turret : MonoBehaviour
@@ -9,10 +10,7 @@ public class Turret : MonoBehaviour
     public enum State { none, aiming, locked, firing }
     public enum TargetType { close, first, strong, weak }
 
-    // delegate for actually hitting the enemy - or just give bullet info and leave it to it?
-    // also leave preview damage to bullet?
-    public delegate void HitDelegate();
-    public HitDelegate hitDelegate;
+    [HideInInspector] public UnityEvent onHitEvent = new UnityEvent();
 
     // set in inspector
     public TurretInfo info;
@@ -28,10 +26,9 @@ public class Turret : MonoBehaviour
     public State state = State.none;
     public TargetType targetType = TargetType.close;
 
-    // the xp of the turret @TODO how do you get this? take from damage done to enemies?
-    // stats for the turret, augmentations will affect these
-    public int damage;
-    public int experience = 0;
+    [Space(5)]
+    // and the actual statistics - this is what augments will modify
+    public TurretStatistics statistics;
 
 
     /// <summary>
@@ -39,10 +36,14 @@ public class Turret : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
+        // inizialize statistics
+        statistics = new TurretStatistics(info.Damage, info.SpinSpeed, info.ReloadSpeed);
+
+        // inizialize guns
         for (int i = 0; i < guns.Count; i++)
         {
             var gun = guns[i];
-            gun.Initialize(this, info.ReloadSpeed);
+            gun.Initialize(this, statistics.reloadSpeed);
         }
 
         StartCoroutine(FireGuns());
@@ -51,32 +52,28 @@ public class Turret : MonoBehaviour
     public virtual IEnumerator FireGuns()
     {
         var gunCount = guns.Count;
-        var reloadSpeed = info.ReloadSpeed;
+        var reloadSpeed = statistics.reloadSpeed;
         while (true)
         {
             // wait till we are locked onto a target
             yield return new WaitUntil(() => state == State.locked);
 
+            // then try and fire
             if (currentTarget.IsSpaceForDamage() && guns[currentGunIndex].TryFire())
             {
                 state = State.firing;
 
                 // add preview damage
-                currentTarget.previewDamage += info.Damage;
+                currentTarget.previewDamage += statistics.damage; //@TODO what if preview damage changes while firing, maybe wait till not firing before applying change
 
                 // wait till we are done firing the current gun
                 yield return new WaitUntil(() => state != State.firing);
-
-                // @TODO don't just cycle through, find the most eligible gun
-                // will have to calculate closest target to each?
-                // move to the next gun
-                //currentGunIndex = (currentGunIndex + 1) % gunCount;
-
 
                 // prevent firing of next gun till we hit a nicer ratio
                 // reload time / number of guns = wait time between shots
                 yield return new WaitForSeconds(reloadSpeed / gunCount);
             }
+
         }
     }
 
@@ -89,11 +86,14 @@ public class Turret : MonoBehaviour
         // make sure the enemy exists
         if (currentTarget)
         {
-            // remove preview
-            currentTarget.previewDamage -= info.Damage;
-        
-            currentTarget.TakeHit(info.Damage, 0);
-        
+            // remove preview and hit the enemy
+            currentTarget.previewDamage -= statistics.damage;
+            currentTarget.TakeHit(statistics.damage, 0);
+
+            // add xp
+            statistics.xp += statistics.damage;
+
+            onHitEvent.Invoke();
         }
     }
 }

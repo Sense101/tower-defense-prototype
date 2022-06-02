@@ -16,7 +16,7 @@ public class TurretInterface : Singleton<TurretInterface>
 
     [Space(5)]
     public GameObject previewPane;
-    public GameObject xpBar;
+    public TextMeshProUGUI xpBar;
     public TextMeshProUGUI turretName;
     public UIButtonSelector targetTypeSelector;
 
@@ -46,6 +46,19 @@ public class TurretInterface : Singleton<TurretInterface>
     // sets the turret
     public void SetTurret(Turret turret)
     {
+        if (_selectedTurret == turret)
+        {
+            // it's the same
+            return;
+        }
+
+        if (_selectedTurret)
+        {
+            // we are changing, remove the event link from the old turret
+            _selectedTurret.onHitEvent.RemoveListener(OnTurretHit);
+        }
+
+        // actually update the reference
         _selectedTurret = turret;
 
         // set the range preview visibility
@@ -60,9 +73,13 @@ public class TurretInterface : Singleton<TurretInterface>
             // we've selected a turret, show the main interface
             mainInterfaceGroup.Show();
 
+            // add a hit event listener so we can update as the new turret changes
+            turret.onHitEvent.AddListener(OnTurretHit);
+
             // update stuff within the interface - @TODO
             turretName.text = turret.gameObject.name;
             targetTypeSelector.SelectButton((int)turret.targetType);
+            xpBar.text = turret.statistics.xp.ToString();
 
             // update the range preview
             float rangeScale = 1 + (turret.info.Range * 2);
@@ -78,5 +95,12 @@ public class TurretInterface : Singleton<TurretInterface>
     public Turret GetTurret()
     {
         return _selectedTurret;
+    }
+
+    // called when the current turret hits an enemy
+    private void OnTurretHit()
+    {
+        // update xp
+        xpBar.text = _selectedTurret.statistics.xp.ToString();
     }
 }

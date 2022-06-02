@@ -51,4 +51,9 @@ public class TurretInfo : ScriptableObject
     public Sprite baseSprite = default;
     public Sprite previewSprite = default;
     //@TODO add all sprites for dynamic turret upgrading?
+
+    public Sprite gunMountSprite = default;
+
+    // list of gun infos - gun sprite, gun position, gun rotation
+    // on change gun should move 
 }

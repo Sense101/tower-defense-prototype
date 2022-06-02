@@ -6,32 +6,23 @@ using UnityEngine;
 [System.Serializable]
 public class TurretStatistics
 {
-    /// <summary>
-    /// the experience the turret has
-    /// </summary>
-    public int xp = 0; // this will always start at 0
-
-    /// <summary>
-    /// the damage that is done to enemies
-    /// </summary>
+    // these three are set upon initialization
     public int damage;
-
-    /// <summary>
-    /// the turn speed in degrees/second
-    /// </summary>
-    public int turnSpeed;
-
-    /// <summary>
-    /// the time to reload in seconds
-    /// </summary>
+    public int spinSpeed; // degrees/sec
     public float reloadSpeed;
+    public TurretStatistics(int damage, int spinSpeed, float reloadSpeed)
+    {
+        this.damage = damage;
+        this.spinSpeed = spinSpeed;
+        this.reloadSpeed = reloadSpeed;
+    }
 
-    /// <summary>
-    /// the extra damage done to enemy armor
-    /// </summary>
+    public int xp = 0;
     public int armorPiercing = 0;
 
     public Chance critChance = new Chance(0);
+
+    // and damage over time
 
     // unfinished
 
@@ -40,18 +31,6 @@ public class TurretStatistics
     public int stun; //chance/amount
 
     public bool seeCloakedEnemies = false; //(temp, adds an eye on the turret)
-
-
-
-    // armor piercing amount
-    // see cloaking enemies skill?
-    // crit chance (double damage)
-    // poison/virus amount
-
-    public TurretStatistics(int damage, float turnSpeed, float reloadSpeed, int armorPiercing)
-    {
-
-    }
 
     // lightning will be left for now
 }

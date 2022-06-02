@@ -598,8 +598,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 835291664}
-  - {fileID: 2125913717}
   - {fileID: 1747187275}
+  - {fileID: 2125913717}
   m_Father: {fileID: 519420032}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1434,7 +1434,7 @@ RectTransform:
   m_GameObject: {fileID: 620432068}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 1076369432}
   - {fileID: 1937590536}
@@ -1448,7 +1448,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -2.83, y: -4}
   m_SizeDelta: {x: 6, y: 2.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &620432070
@@ -7850,7 +7850,7 @@ RectTransform:
   - {fileID: 1856733653}
   - {fileID: 1295618638}
   m_Father: {fileID: 143459041}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -7887,10 +7887,10 @@ MonoBehaviour:
   scale:
     active: 1
     defaultSize: {x: 18, y: 2}
-    widthIncrease: 0
-    heightIncrease: 1
+    widthIncrease: 1
+    heightIncrease: 0
   position:
-    active: 1
+    active: 0
     DefaultPosition: {x: 0, y: 1}
     XMovement: 0
     YMovement: 0.5
@@ -9238,7 +9238,7 @@ RectTransform:
   m_Children:
   - {fileID: 620432069}
   m_Father: {fileID: 143459041}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9259,7 +9259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainInterfaceGroup: {fileID: 620432075}
   previewPane: {fileID: 0}
-  xpBar: {fileID: 0}
+  xpBar: {fileID: 755937802}
   turretName: {fileID: 2122278749}
   targetTypeSelector: {fileID: 86155810}
 --- !u!1 &2129181059
@@ -9517,6 +9517,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0323b6511259ca2418bbe287af120135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   info: {fileID: 0}
   top: {fileID: 0}
   renderers: []
@@ -9525,8 +9528,17 @@ MonoBehaviour:
   currentGunIndex: 0
   state: 0
   targetType: 0
-  damage: 0
-  experience: 0
+  statistics:
+    damage: 0
+    spinSpeed: 0
+    reloadSpeed: 0
+    xp: 0
+    armorPiercing: 0
+    critChance:
+      chance: 0
+    slowdown: 0
+    stun: 0
+    seeCloakedEnemies: 0
 --- !u!114 &198889017606637323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9539,6 +9551,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0323b6511259ca2418bbe287af120135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   info: {fileID: 0}
   top: {fileID: 0}
   renderers: []
@@ -9547,8 +9562,17 @@ MonoBehaviour:
   currentGunIndex: 0
   state: 0
   targetType: 0
-  damage: 0
-  experience: 0
+  statistics:
+    damage: 0
+    spinSpeed: 0
+    reloadSpeed: 0
+    xp: 0
+    armorPiercing: 0
+    critChance:
+      chance: 0
+    slowdown: 0
+    stun: 0
+    seeCloakedEnemies: 0
 --- !u!1 &1302252150795522735
 GameObject:
   m_ObjectHideFlags: 0
@@ -9578,6 +9602,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0323b6511259ca2418bbe287af120135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   info: {fileID: 0}
   top: {fileID: 0}
   renderers: []
@@ -9586,8 +9613,17 @@ MonoBehaviour:
   currentGunIndex: 0
   state: 0
   targetType: 0
-  damage: 0
-  experience: 0
+  statistics:
+    damage: 0
+    spinSpeed: 0
+    reloadSpeed: 0
+    xp: 0
+    armorPiercing: 0
+    critChance:
+      chance: 0
+    slowdown: 0
+    stun: 0
+    seeCloakedEnemies: 0
 --- !u!224 &2554138636986837088
 RectTransform:
   m_ObjectHideFlags: 0

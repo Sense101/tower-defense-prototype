@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class InputController : Singleton<InputController>, InputActions.IMouseActions
 {
     // allow other scripts to fire when the mouse position changes
-    public delegate void PositionEvent(Vector2 pos);
-    public delegate void OverUIEvent(bool overUI);
-    public static event PositionEvent mouseMoveEvent;
-    public static event OverUIEvent overUIEvent;
+    public static UnityEvent<Vector2> mouseMoveEvent = new UnityEvent<Vector2>();
+    public static UnityEvent<bool> overUIEvent = new UnityEvent<bool>();
     public static Vector2 mousePos { get; private set; }
     public static bool mouseOverUI { get; private set; }
 
@@ -113,9 +112,9 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         if (newMouseOverUI != mouseOverUI)
         {
             // it's changed, send an event
-            overUIEvent(newMouseOverUI);
+            overUIEvent.Invoke(newMouseOverUI);
             mouseOverUI = newMouseOverUI;
         }
-        mouseMoveEvent(worldPos);
+        mouseMoveEvent.Invoke(worldPos);
     }
 }

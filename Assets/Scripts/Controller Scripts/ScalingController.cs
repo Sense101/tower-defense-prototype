@@ -7,8 +7,8 @@ public class ScalingController : Singleton<ScalingController>
 
     // more than ideal ratio = wider, less = taller
     const float IDEAL_RATIO = 16f / 9f;
-    const float DESIRED_CAMERA_HEIGHT = 10;
-    const float DESIRED_CAMERA_WIDTH = DESIRED_CAMERA_HEIGHT * IDEAL_RATIO;
+    float desiredCameraHeight;
+    float desiredCameraWidth;
 
     float _currentRatio = 0;
 
@@ -19,6 +19,9 @@ public class ScalingController : Singleton<ScalingController>
     private void Start()
     {
         _camera = Camera.main;
+        desiredCameraHeight = _camera.orthographicSize * 2;
+        desiredCameraWidth = desiredCameraHeight * IDEAL_RATIO;
+
         _canvasTransform = GameObject.FindWithTag(UIController.CANVAS_TAG).GetComponent<RectTransform>();
         _uiController = UIController.Instance;
     }
@@ -39,27 +42,27 @@ public class ScalingController : Singleton<ScalingController>
         // scale the camera
         if (_currentRatio > IDEAL_RATIO || Mathf.Approximately(_currentRatio, IDEAL_RATIO))
         {
-            _camera.orthographicSize = DESIRED_CAMERA_HEIGHT / 2;
+            _camera.orthographicSize = desiredCameraHeight / 2;
         }
         else
         {
-            float unitsPerPixel = DESIRED_CAMERA_WIDTH / Screen.width;
+            float unitsPerPixel = desiredCameraWidth / Screen.width;
             float desiredHeight = unitsPerPixel * Screen.height;
 
-            _camera.orthographicSize = Mathf.Max(desiredHeight, DESIRED_CAMERA_HEIGHT) / 2;
+            _camera.orthographicSize = Mathf.Max(desiredHeight, desiredCameraHeight) / 2;
         }
 
         // scale the canvas
         float cameraHeight = _camera.orthographicSize * 2;
         _canvasTransform.sizeDelta = new Vector2(cameraHeight * _currentRatio, cameraHeight);
 
-        float currentCameraWidth = cameraHeight * _currentRatio;
-        _camera.transform.position = new Vector3
-        (
-            8 + ((DESIRED_CAMERA_WIDTH - currentCameraWidth) / 2),
-            4.5f + ((DESIRED_CAMERA_HEIGHT - cameraHeight) / 2),
-            -10
-        );
+        //float currentCameraWidth = cameraHeight * _currentRatio;
+        //_camera.transform.position = new Vector3
+        //(
+        //    8 + ((desiredCameraWidth - currentCameraWidth) / 2),
+        //    4.5f + ((desiredCameraHeight - cameraHeight) / 2),
+        //    -10
+        //);
 
         // scale the UI parts - we have to find them every time because it runs in the editor
         foreach (UIElement e in _uiController.Elements)
@@ -71,7 +74,7 @@ public class ScalingController : Singleton<ScalingController>
             Vector2 baseDefaultSize;
             if (e.scalingBase == UIElement.ScalingBase.canvas)
             {
-                baseDefaultSize = new Vector2(DESIRED_CAMERA_WIDTH, DESIRED_CAMERA_HEIGHT);
+                baseDefaultSize = new Vector2(desiredCameraWidth, desiredCameraHeight);
             }
             else
             {

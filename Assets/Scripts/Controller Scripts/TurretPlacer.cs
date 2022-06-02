@@ -55,8 +55,8 @@ public class TurretPlacer : Singleton<TurretPlacer>
         _turretInterface = TurretInterface.Instance;
         _enemyController = EnemyController.Instance;
 
-        InputController.mouseMoveEvent += OnMouseMoveEvent;
-        InputController.overUIEvent += OnOverUIEvent;
+        InputController.mouseMoveEvent.AddListener(OnMouseMoveEvent);
+        InputController.overUIEvent.AddListener(OnOverUIEvent);
     }
 
     public bool TryPlaceTurret()
