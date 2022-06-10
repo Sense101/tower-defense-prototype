@@ -50,6 +50,7 @@ MonoBehaviour:
       m_Calls: []
   info: {fileID: 11400000, guid: b68204ea97f57984795bbad97ce612f0, type: 2}
   top: {fileID: 5988247380062450675}
+  body: {fileID: 8658024582057777528}
   renderers:
   - {fileID: 5107015096905391791}
   - {fileID: 8658024582057777528}
@@ -62,6 +63,15 @@ MonoBehaviour:
   currentGunIndex: 0
   state: 0
   targetType: 0
+  aug1:
+    augmentation: {fileID: 0}
+    currentTier: 0
+  aug2:
+    augmentation: {fileID: 0}
+    currentTier: 0
+  aug3:
+    augmentation: {fileID: 0}
+    currentTier: 0
   statistics:
     damage: 0
     spinSpeed: 0

@@ -91,6 +91,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         // deselect, temp
         UIController.Instance.hotbar.DeselectAll();
         CurrentTurretPrefab = null;
+        TurretInterface.Instance.SetTurret(newTurret);
 
         if (CurrentTurretPrefab)
         {

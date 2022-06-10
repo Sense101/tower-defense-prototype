@@ -31,31 +31,39 @@ public class UIButton : Button
     public virtual void Initialize()
     {
         TryGetComponent<Animator>(out _animator);
+        onClick.AddListener(OnClick);
         SetReferences();
     }
 
     public virtual void SetReferences() { }
 
-    public virtual void OnSelect()
-    {
-        //Debug.Log("selected button");
-    }
-    public virtual void OnDeselect()
-    {
-        //Debug.Log("deselected button");
-    }
+    public virtual void OnSelect() { }
+    public virtual void OnDeselect() { }
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("highlight " + gameObject.name);
-        _animator?.SetBool(ANIMATOR_HIGHLIGHTED, true);
         base.OnPointerEnter(eventData);
+        OnHoverStart();
     }
-
     public override void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("stop highlight " + gameObject.name);
-        _animator?.SetBool(ANIMATOR_HIGHLIGHTED, false);
         base.OnPointerExit(eventData);
+        OnHoverEnd();
+    }
+    public virtual void OnHoverStart()
+    {
+        _animator?.SetBool(ANIMATOR_HIGHLIGHTED, true);
+    }
+    public virtual void OnHoverEnd()
+    {
+        _animator?.SetBool(ANIMATOR_HIGHLIGHTED, false);
+    }
+
+    public virtual void OnClick() { }
+
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        base.OnPointerDown(eventData);
+        Debug.Log("pointer down");
     }
 }

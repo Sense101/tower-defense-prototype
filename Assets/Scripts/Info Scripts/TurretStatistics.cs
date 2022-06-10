@@ -7,22 +7,17 @@ using UnityEngine;
 public class TurretStatistics
 {
     // these three are set upon initialization
-    public int damage;
-    public int spinSpeed; // degrees/sec
-    public float reloadSpeed;
-    public TurretStatistics(int damage, int spinSpeed, float reloadSpeed)
-    {
-        this.damage = damage;
-        this.spinSpeed = spinSpeed;
-        this.reloadSpeed = reloadSpeed;
-    }
+    [Min(0)] public int damage;
+    [Min(0)] public int spinSpeed; // degrees/sec
+    [Min(0)] public float reloadSpeed;
 
-    public int xp = 0;
-    public int armorPiercing = 0;
+    [Min(0)] public int xp;
+    [Min(0)] public int armorPiercing;
 
-    public Chance critChance = new Chance(0);
+    public Chance critChance;
 
     // and damage over time
+    // turret needs to store a list of augments
 
     // unfinished
 
@@ -33,4 +28,24 @@ public class TurretStatistics
     public bool seeCloakedEnemies = false; //(temp, adds an eye on the turret)
 
     // lightning will be left for now
+
+    public TurretStatistics(TurretInfo info)
+    {
+        Reset(info, true);
+    }
+
+    public void Reset(TurretInfo info, bool includeXp = false)
+    {
+        damage = info.Damage;
+        spinSpeed = info.SpinSpeed;
+        reloadSpeed = info.ReloadSpeed;
+
+        armorPiercing = 0;
+        critChance = new Chance(0);
+
+        if (includeXp)
+        {
+            xp = 0;
+        }
+    }
 }

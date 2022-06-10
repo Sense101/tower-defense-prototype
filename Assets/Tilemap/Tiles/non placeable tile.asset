@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd1907fc447416741baa47e2179095e6, type: 3}
+  m_Name: non placeable tile
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 519390336188464292, guid: 78f083083e6892948ac7617096bf0f0d, type: 3}
+  path: 0
+  placeable: 0

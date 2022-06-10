@@ -7,9 +7,6 @@ using UnityEngine;
 // this is the script that will handle all the interface parts
 public class TurretInterface : Singleton<TurretInterface>
 {
-    // constants
-    const float FADE_TIME = 1;
-
     // set in inspector - the different parts of the interface
     [Header("Main Interface")]
     public CanvasFadeGroup mainInterfaceGroup;
@@ -27,11 +24,13 @@ public class TurretInterface : Singleton<TurretInterface>
     // references
     TurretPlacer _turretPlacer;
     TurretPreviewController _turretPreviewController;
+    AugmentationController _augController;
 
     private void Start()
     {
         _turretPlacer = TurretPlacer.Instance;
         _turretPreviewController = TurretPreviewController.Instance;
+        _augController = AugmentationController.Instance;
     }
 
     private void Update()
@@ -39,7 +38,25 @@ public class TurretInterface : Singleton<TurretInterface>
 
     }
 
-    /////////// bunch of scripts called by the buttons within the interface
+    // bunch of scripts called by the buttons within the interface
+
+    public void SellTurret()
+    {
+        Debug.Log("sell, todo");
+        // then hide interface - setturret null
+    }
+
+    public void ApplyAugmentation(Augmentation aug, int index)
+    {
+        if (_selectedTurret)
+        {
+            AugmentationInfo info = _selectedTurret.Augmentations[index];
+            info.augmentation = aug;
+            info.currentTier = 1; //@TODO hard code tier 1 for now
+
+            _augController.UpdateTurretAugmentations(_selectedTurret);
+        }
+    }
 
 
     // IMPORTANT: this cannot be called till after start

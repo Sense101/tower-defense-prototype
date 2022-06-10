@@ -15,6 +15,7 @@ public class Turret : MonoBehaviour
     // set in inspector
     public TurretInfo info;
     public Transform top; // the part of the turret that rotates
+    public SpriteRenderer body; // the main body of the turret
     public SpriteRenderer[] renderers; //@TODO what use is this?
     public List<Gun> guns = new List<Gun>();
 
@@ -26,7 +27,26 @@ public class Turret : MonoBehaviour
     public State state = State.none;
     public TargetType targetType = TargetType.close;
 
-    [Space(5)]
+    [Space(10)]
+    public AugmentationInfo aug1;
+    public AugmentationInfo aug2;
+    public AugmentationInfo aug3;
+
+    // iterable accessor for augmentations
+    private AugmentationInfo[] _augmentations = null;
+    public AugmentationInfo[] Augmentations
+    {
+        get
+        {
+            if (_augmentations == null)
+            {
+                _augmentations = new AugmentationInfo[3] { aug1, aug2, aug3 };
+            }
+            return _augmentations;
+        }
+    }
+
+    [Space(10)]
     // and the actual statistics - this is what augments will modify
     public TurretStatistics statistics;
 
@@ -37,7 +57,7 @@ public class Turret : MonoBehaviour
     public void Initialize()
     {
         // inizialize statistics
-        statistics = new TurretStatistics(info.Damage, info.SpinSpeed, info.ReloadSpeed);
+        statistics = new TurretStatistics(info);
 
         // inizialize guns
         for (int i = 0; i < guns.Count; i++)

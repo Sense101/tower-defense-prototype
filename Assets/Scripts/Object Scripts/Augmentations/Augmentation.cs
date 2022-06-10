@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// this is the actual augentation scriptable object
+/// </summary>
 [CreateAssetMenu]
 public class Augmentation : ScriptableObject
 {
@@ -9,7 +12,7 @@ public class Augmentation : ScriptableObject
     public string title = "";
 
     // this augmentation's unique color - this will mix with others on a turret
-    public Color color = new Color(1, 1, 1);
+    public Color color = Color.white;
 
     [Header("Sprite")]
     // whether to have the sprite be on the turret, or on each gun
@@ -20,5 +23,5 @@ public class Augmentation : ScriptableObject
     public int rendererOrder = 10;
 
     [Space(5)]
-    public AugmentationTierInfo[] tiers;
+    public AugmentationTier[] tiers;
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class AugmentationTierInfo
+public class AugmentationTier
 {
     public int upgradeCost = 0;
 
@@ -10,4 +10,9 @@ public class AugmentationTierInfo
 
     // this is shown on the turret or each gun
     public Sprite sprite;
+
+    [Header("Modifiers")]
+    public AugmentationModifier damageModifier;
+    public AugmentationModifier spinSpeedModifier;
+    public AugmentationModifier reloadSpeedModifier;
 }

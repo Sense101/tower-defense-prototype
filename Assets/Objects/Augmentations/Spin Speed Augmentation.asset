@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5141a75821413943a2b7d35296baed8, type: 3}
-  m_Name: DamageAugmentation
+  m_Name: Spin Speed Augmentation
   m_EditorClassIdentifier: 
   title: DamageTemp
-  color: {r: 0.8, g: 0, b: 0, a: 1}
+  color: {r: 0, g: 0.8, b: 0, a: 1}
   spriteLocation: 0
   spriteOffset: {x: 0, y: 0}
   rendererOrder: 10
@@ -22,13 +22,13 @@ MonoBehaviour:
     icon: {fileID: 0}
     sprite: {fileID: 0}
     damageModifier:
-      active: 1
+      active: 0
       multiplier: 1
       amount: 1.5
     spinSpeedModifier:
-      active: 0
-      multiplier: 0
-      amount: 0
+      active: 1
+      multiplier: 1
+      amount: 2
     reloadSpeedModifier:
       active: 0
       multiplier: 0

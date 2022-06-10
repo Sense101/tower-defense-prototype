@@ -20,6 +20,7 @@ public class TurretPreviewController : Singleton<TurretPreviewController>
 
     private void Update()
     {
+        return; // NO
         // main preview to turn towards mouse
         if (_currentPrefab)
         {
