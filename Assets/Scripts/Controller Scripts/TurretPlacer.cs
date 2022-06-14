@@ -73,19 +73,14 @@ public class TurretPlacer : Singleton<TurretPlacer>
             return false;
         }
 
+        // we can place
+
+
+
         // create the turret
-        Turret newTurret = Instantiate(
-                CurrentTurretPrefab,
-                (Vector3Int)_currentMouseTile,
-                Quaternion.identity,
-                transform
-            );
+        Turret newTurret = _turretController.CreateTurret(_currentMouseTile);
 
-        // initialize
-        newTurret.Initialize();
-
-        // add to the controller
-        _turretController._turrets.Add(newTurret);
+        // add it to the map
         _map.SetTurretWorldSpace(_currentMouseTile, newTurret);
 
         // deselect, temp
@@ -150,7 +145,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
 
     public void UpdateRangeScale(Turret turret)
     {
-        float rangeScale = 1 + (turret.info.Range * 2);
+        float rangeScale = turret.info.Range * 2;
         rangePreview.transform.localScale = new Vector2(rangeScale, rangeScale);
     }
 }

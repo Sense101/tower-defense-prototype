@@ -23,35 +23,48 @@ public class TurretInterface : Singleton<TurretInterface>
 
     // references
     TurretPlacer _turretPlacer;
-    TurretPreviewController _turretPreviewController;
+    TurretController _turretController;
+    TurretPreviewController _turretPreviewController; //@TODO merge preview controller into interface script?
     AugmentationController _augController;
+    Map _map;
 
     private void Start()
     {
+        // set references
         _turretPlacer = TurretPlacer.Instance;
+        _turretController = TurretController.Instance;
         _turretPreviewController = TurretPreviewController.Instance;
         _augController = AugmentationController.Instance;
-    }
-
-    private void Update()
-    {
-
+        _map = Map.Instance;
     }
 
     // bunch of scripts called by the buttons within the interface
 
     public void SellTurret()
     {
-        Debug.Log("sell, todo");
-        // then hide interface - setturret null
+        if (!_selectedTurret)
+        {
+            // we don't have a turret selected
+            return;
+        }
+
+        Debug.Log("selling turret");
+        // sell the turret
+        _turretController.SellTurret(_selectedTurret);
+
+        // set the tile to not be holding a turret
+        _map.SetTurretWorldSpace(Vector2Int.RoundToInt(_selectedTurret.transform.position), null);
+
+        // hide interface
+        SetTurret(null);
     }
 
-    public void ApplyAugmentation(Augmentation aug, int index)
+    public void ApplyAugmentation()
     {
         if (_selectedTurret)
         {
-            AugmentationInfo info = _selectedTurret.Augmentations[index];
-            info.augmentation = aug;
+            AugmentationInfo info = _selectedTurret.augment;
+            info.augmentation = _augController.ChooseNewAugmentation(info.augmentation);
             info.currentTier = 1; //@TODO hard code tier 1 for now
 
             _augController.UpdateTurretAugmentations(_selectedTurret);
@@ -99,9 +112,8 @@ public class TurretInterface : Singleton<TurretInterface>
             xpBar.text = turret.statistics.xp.ToString();
 
             // update the range preview
-            float rangeScale = 1 + (turret.info.Range * 2);
+            _turretPlacer.UpdateRangeScale(turret);
             rangePreviewObject.transform.position = turret.transform.position;
-            rangePreviewObject.transform.localScale = new Vector2(rangeScale, rangeScale);
         }
         else
         {

@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class AugmentationButton : UIButton
 {
-    public Augmentation augmentation;
-    public int index = 0;
 
     TurretInterface _turretInterface;
 
@@ -14,6 +12,6 @@ public class AugmentationButton : UIButton
 
     public override void OnClick()
     {
-        _turretInterface.ApplyAugmentation(augmentation, index);
+        _turretInterface.ApplyAugmentation();
     }
 }

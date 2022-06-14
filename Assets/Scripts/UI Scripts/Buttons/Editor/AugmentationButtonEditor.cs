@@ -10,18 +10,18 @@ public class AugmentationButtonEditor : UnityEditor.UI.ButtonEditor
 
         AugmentationButton targetUIButton = (AugmentationButton)target;
 
-        targetUIButton.augmentation = EditorGUILayout.ObjectField
-        (
-            "Augmentation",
-            targetUIButton.augmentation,
-            typeof(Augmentation),
-            false
-        ) as Augmentation;
-
-        targetUIButton.index = EditorGUILayout.IntField
-        (
-            "Index",
-            targetUIButton.index
-        );
+        //targetUIButton.augmentation = EditorGUILayout.ObjectField
+        //(
+        //    "Augmentation",
+        //    targetUIButton.augmentation,
+        //    typeof(Augmentation),
+        //    false
+        //) as Augmentation;
+        //
+        //targetUIButton.index = EditorGUILayout.IntField
+        //(
+        //    "Index",
+        //    targetUIButton.index
+        //);
     }
 }

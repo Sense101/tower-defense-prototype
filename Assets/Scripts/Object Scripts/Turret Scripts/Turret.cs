@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-public class Turret : MonoBehaviour
+public class Turret : PoolObject
 {
     // enums
     public enum State { none, aiming, locked, firing }
@@ -15,9 +15,12 @@ public class Turret : MonoBehaviour
     // set in inspector
     public TurretInfo info;
     public Transform top; // the part of the turret that rotates
-    public SpriteRenderer body; // the main body of the turret
-    public SpriteRenderer[] renderers; //@TODO what use is this?
     public List<Gun> guns = new List<Gun>();
+
+    // renderers - set in inspector
+    public SpriteRenderer turretBase;
+    public SpriteRenderer body;
+    public SpriteRenderer gunMount;
 
 
     [Space(10)]
@@ -28,45 +31,76 @@ public class Turret : MonoBehaviour
     public TargetType targetType = TargetType.close;
 
     [Space(10)]
-    public AugmentationInfo aug1;
-    public AugmentationInfo aug2;
-    public AugmentationInfo aug3;
-
-    // iterable accessor for augmentations
-    private AugmentationInfo[] _augmentations = null;
-    public AugmentationInfo[] Augmentations
-    {
-        get
-        {
-            if (_augmentations == null)
-            {
-                _augmentations = new AugmentationInfo[3] { aug1, aug2, aug3 };
-            }
-            return _augmentations;
-        }
-    }
+    public AugmentationInfo augment;
 
     [Space(10)]
     // and the actual statistics - this is what augments will modify
     public TurretStatistics statistics;
 
+    public override void SetReferences()
+    {
+        // set gun references
+        foreach (Gun gun in guns)
+        {
+            gun.SetReferences(this);
+        }
+    }
 
-    /// <summary>
-    /// initialize the turret
-    /// </summary>
-    public void Initialize()
+
+    public override void Activate()
     {
         // inizialize statistics
         statistics = new TurretStatistics(info);
 
-        // inizialize guns
-        for (int i = 0; i < guns.Count; i++)
+        // initialize guns
+        foreach (Gun gun in guns)
         {
-            var gun = guns[i];
-            gun.Initialize(this, statistics.reloadSpeed);
+            gun.Activate();
+            gun.SetReloadSpeed(statistics.reloadSpeed);
         }
 
         StartCoroutine(FireGuns());
+
+        // show everything
+        turretBase.color = Color.white;
+        body.color = new HSVColor(147, 77, 80).AsColor(); //@TODO should this be on the controller?
+        gunMount.color = Color.white;
+    }
+
+    public override void Deactivate()
+    {
+        // should be removed from turret controller before this is called
+
+        // stop firing guns
+        StopAllCoroutines();
+
+        // deactivate guns
+        foreach (Gun gun in guns)
+        {
+            gun.Deactivate();
+        }
+
+        // hide completely
+        turretBase.color = Color.clear;
+        body.color = Color.clear;
+        gunMount.color = Color.clear;
+
+
+        //@TODO what about clearing preview damage?
+    }
+
+    public override void Reset()
+    {
+        currentTarget = null;
+        currentGunIndex = 0;
+        state = State.none;
+        targetType = TargetType.close;
+        statistics.Reset(info);
+    }
+
+    public override void SetRotation(Angle rotation)
+    {
+        top.rotation = rotation.AsQuaternion();
     }
 
     public virtual IEnumerator FireGuns()

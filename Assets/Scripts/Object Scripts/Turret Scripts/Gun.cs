@@ -3,25 +3,54 @@
 /// <summary>
 /// script for each individual gun on a turret
 /// </summary>
-public class Gun : MonoBehaviour
+public class Gun : PoolObject
 {
-    static readonly string FIRE_TRIGGER = "fire";
-    static readonly string RELOAD_MULTIPLIER = "reload_multiplier";
+    const string FIRE_TRIGGER = "fire";
+    const string RESET_TRIGGER = "reset";
+    const string ACTIVATE_TRIGGER = "activate";
+    const string DEACTIVATE_TRIGGER = "deactivate";
+    const string RELOAD_MULTIPLIER = "reload_multiplier";
 
     Animator _animator;
     Turret _turret;
 
-    public bool canFire = true;
+    public bool canFire = false;
+    private bool active = false;
 
     /// <summary>
-    /// initializes the gun with all the needed info
+    /// Sets all the references of the gun
     /// </summary>
-    /// <param name="reloadTime">the reload time in seconds</param>
-    public void Initialize(Turret turret, float reloadTime)
+    /// <param name="turret">The parent turret</param>
+    public void SetReferences(Turret turret)
     {
         _turret = turret;
         _animator = GetComponent<Animator>();
-        _animator.SetFloat(RELOAD_MULTIPLIER, 1 / reloadTime);
+    }
+
+    public override void Activate()
+    {
+        active = true;
+        canFire = true;
+        _animator.SetTrigger(ACTIVATE_TRIGGER);
+    }
+
+    public override void Deactivate()
+    {
+        // prevent firing and hide
+        active = false;
+        _animator.SetTrigger(DEACTIVATE_TRIGGER);
+    }
+
+    public override void Reset()
+    {
+        // resets the gun back to its base state
+        _animator.SetTrigger(RESET_TRIGGER);
+    }
+
+    public void SetReloadSpeed(float reloadSpeed)
+    {
+        // set speed of reload animation
+        _animator.SetFloat(RELOAD_MULTIPLIER, 1 / reloadSpeed);
     }
 
     /// <summary>
@@ -30,7 +59,7 @@ public class Gun : MonoBehaviour
     /// <returns>if the gun fired succesfully</returns>
     public bool TryFire()
     {
-        if (canFire)
+        if (active && canFire)
         {
             canFire = false;
             // fire
@@ -43,7 +72,7 @@ public class Gun : MonoBehaviour
     // called by the animator
     public void OnAnimatorFire()
     {
-        // the firing animation is finished
+        // the firing animation is finished, hit the enemy now
         _turret.HitEnemy();
     }
 

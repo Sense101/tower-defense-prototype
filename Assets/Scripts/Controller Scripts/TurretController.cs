@@ -4,14 +4,35 @@ using UnityEngine;
 /// <summary>
 /// controls the firing and turning of all turrets
 /// </summary>
-public class TurretController : Singleton<TurretController>
+public class TurretController : ObjectPoolHandlerSingleton<TurretController, Turret>
 {
-    public readonly List<Turret> _turrets = new List<Turret>();
+    public static Color defaultTurretColor = new Color(46, 204, 117);
+
+    // internal variables
+    private List<Turret> _turrets = new List<Turret>();
 
     EnemyController _enemyController;
     private void Start()
     {
         _enemyController = EnemyController.Instance;
+    }
+
+    public Turret CreateTurret(Vector2 location)
+    {
+        // create and activate a turret at the location specified
+        Turret newTurret = CreateObject(location, Angle.zero, transform);
+        newTurret.Activate();
+
+        // add it to our list
+        _turrets.Add(newTurret);
+
+        return newTurret;
+    }
+
+    public void SellTurret(Turret turret)
+    {
+        DisableObject(turret);
+        _turrets.Remove(turret);
     }
 
     private void Update()

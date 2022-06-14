@@ -9,6 +9,8 @@ using UnityEngine;
 [System.Serializable]
 public class Angle
 {
+    public static Angle zero = new Angle(0);
+
     // cached conversions
     private static readonly Dictionary<float, Vector2> cachedAngleToVectors = new Dictionary<float, Vector2>();
     private static readonly Dictionary<Vector2, float> cachedVectorToDegrees = new Dictionary<Vector2, float>();

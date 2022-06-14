@@ -4,6 +4,8 @@ public class AugmentationController : Singleton<AugmentationController>
 {
     readonly private HSVColor baseColor = new HSVColor(145, 77, 80);
 
+    [SerializeField] Augmentation damageAugment;
+
     // what does this need to do
     // apply augments to a turret
     // hold a reference of all augments
@@ -18,69 +20,65 @@ public class AugmentationController : Singleton<AugmentationController>
 
     }
 
+    public Augmentation ChooseNewAugmentation(Augmentation current)
+    {
+        if (current == null)
+        {
+            return damageAugment;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public void UpdateTurretAugmentations(Turret t)
     {
         // first reset the stats
         t.statistics.Reset(t.info);
 
-        // color handling
-        HSVColor color = baseColor;
-        bool isNewColor = false;
-
         // then iterate through the turret augments
-        foreach (AugmentationInfo info in t.Augmentations)
+        AugmentationInfo info = t.augment;
+
+        Augmentation aug = info.augmentation;
+        if (!aug)
         {
-            Augmentation aug = info.augmentation;
-            if (!aug)
-            {
-                // no augment in this slot
-                continue;
-            }
-
-            // change the color here
-            HSVColor augColor = HSVColor.FromColor(aug.color);
-            if (!isNewColor)
-            {
-                isNewColor = true;
-                color = augColor;
-            }
-            else
-            {
-                color = HSVColor.Lerp(color, augColor, 0.5f);
-            }
-
-            // for now just apply modifiers
-            for (int i = 0; i < info.currentTier; i++)
-            {
-                AugmentationTier tier = aug.tiers[i];
-
-                // now apply each modifier seperately
-                if (tier.damageModifier.active)
-                {
-                    // damage
-                    t.statistics.damage = Mathf.RoundToInt(
-                        ApplyModifier(t.statistics.damage, tier.damageModifier)
-                    );
-                    Debug.Log("applied damage");
-                }
-                if (tier.spinSpeedModifier.active)
-                {
-                    // spin speed
-                    t.statistics.spinSpeed = Mathf.RoundToInt(
-                        ApplyModifier(t.statistics.spinSpeed, tier.spinSpeedModifier)
-                    );
-                }
-                if (tier.reloadSpeedModifier.active)
-                {
-                    // reload speed
-                    t.statistics.reloadSpeed = Mathf.RoundToInt(
-                        ApplyModifier(t.statistics.reloadSpeed, tier.reloadSpeedModifier)
-                    );
-                }
-            }
+            // no augment, set default color
+            t.body.color = baseColor.AsColor();
+            return;
         }
 
-        t.body.color = color.AsColor();
+        t.body.color = aug.color;
+
+        // for now just apply modifiers
+        for (int i = 0; i < info.currentTier; i++)
+        {
+            AugmentationTier tier = aug.tiers[i];
+
+            // now apply each modifier seperately
+            if (tier.damageModifier.active)
+            {
+                // damage
+                t.statistics.damage = Mathf.RoundToInt(
+                    ApplyModifier(t.statistics.damage, tier.damageModifier)
+                );
+                Debug.Log("applied damage");
+            }
+            if (tier.spinSpeedModifier.active)
+            {
+                // spin speed
+                t.statistics.spinSpeed = Mathf.RoundToInt(
+                    ApplyModifier(t.statistics.spinSpeed, tier.spinSpeedModifier)
+                );
+            }
+            if (tier.reloadSpeedModifier.active)
+            {
+                // reload speed
+                t.statistics.reloadSpeed = Mathf.RoundToInt(
+                    ApplyModifier(t.statistics.reloadSpeed, tier.reloadSpeedModifier)
+                );
+            }
+        }
     }
 
     private float ApplyModifier(float original, AugmentationModifier modifier)
