@@ -44,7 +44,7 @@ public class TurretPreviewController : Singleton<TurretPreviewController>
             (
                 mainPreview.transform.rotation, // from
                 angleToMouse.AsQuaternion(), // to
-                _currentPrefab.info.SpinSpeed / 2 * Time.deltaTime // delta speed
+                _currentPrefab.info.SpinSpeedModifier / 2 * Time.deltaTime // delta speed
             );
         }
     }
@@ -82,7 +82,7 @@ public class TurretPreviewController : Singleton<TurretPreviewController>
             yield return new WaitUntil(() => fadeGroup.state == CanvasFadeGroup.FadeState.hidden);
 
             // change the sprites
-            basePreview.sprite = newPrefab.info.baseSprite;
+            basePreview.sprite = newPrefab.info.turretBaseSprite;
             mainPreview.sprite = newPrefab.info.previewSprite;
 
             _currentPrefab = newPrefab;

@@ -10,12 +10,14 @@ public class TurretInterface : Singleton<TurretInterface>
     // set in inspector - the different parts of the interface
     [Header("Main Interface")]
     public CanvasFadeGroup mainInterfaceGroup;
-
-    [Space(5)]
     public GameObject previewPane;
     public TextMeshProUGUI xpBar;
     public TextMeshProUGUI turretName;
     public UIButtonSelector targetTypeSelector;
+
+    [Header("Upgrade Interface")]
+    public CanvasFadeGroup upgradeInterfaceGroup;
+    public TurretInfo doubleInfo; //temp
 
 
     // internal variables
@@ -25,7 +27,7 @@ public class TurretInterface : Singleton<TurretInterface>
     TurretPlacer _turretPlacer;
     TurretController _turretController;
     TurretPreviewController _turretPreviewController; //@TODO merge preview controller into interface script?
-    AugmentationController _augController;
+    AugmentController _augController;
     Map _map;
 
     private void Start()
@@ -34,7 +36,7 @@ public class TurretInterface : Singleton<TurretInterface>
         _turretPlacer = TurretPlacer.Instance;
         _turretController = TurretController.Instance;
         _turretPreviewController = TurretPreviewController.Instance;
-        _augController = AugmentationController.Instance;
+        _augController = AugmentController.Instance;
         _map = Map.Instance;
     }
 
@@ -63,12 +65,19 @@ public class TurretInterface : Singleton<TurretInterface>
     {
         if (_selectedTurret)
         {
-            AugmentationInfo info = _selectedTurret.augment;
+            AugmentationInfo info = _selectedTurret.customAugment;
             info.augmentation = _augController.ChooseNewAugmentation(info.augmentation);
             info.currentTier = 1; //@TODO hard code tier 1 for now
 
-            _augController.UpdateTurretAugmentations(_selectedTurret);
+            //_augController.UpdateTurretAugmentations(_selectedTurret);
         }
+    }
+
+    public void UpgradeTurret()
+    {
+        Debug.Log("did");
+        _turretPlacer.UpgradeTurret(doubleInfo);
+        _turretPlacer.TryDeselectTurret();
     }
 
 
@@ -109,7 +118,7 @@ public class TurretInterface : Singleton<TurretInterface>
             // update stuff within the interface - @TODO
             turretName.text = turret.gameObject.name;
             targetTypeSelector.SelectButton((int)turret.targetType);
-            xpBar.text = turret.statistics.xp.ToString();
+            xpBar.text = turret.stats.xp.ToString();
 
             // update the range preview
             _turretPlacer.UpdateRangeScale(turret);
@@ -130,6 +139,6 @@ public class TurretInterface : Singleton<TurretInterface>
     private void OnTurretHit()
     {
         // update xp
-        xpBar.text = _selectedTurret.statistics.xp.ToString();
+        xpBar.text = _selectedTurret.stats.xp.ToString();
     }
 }

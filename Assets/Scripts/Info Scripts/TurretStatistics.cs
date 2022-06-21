@@ -8,6 +8,7 @@ public class TurretStatistics
 {
     // these three are set upon initialization
     [Min(0)] public int damage;
+    [Min(0)] public float range;
     [Min(0)] public int spinSpeed; // degrees/sec
     [Min(0)] public float reloadSpeed;
 
@@ -29,23 +30,22 @@ public class TurretStatistics
 
     // lightning will be left for now
 
-    public TurretStatistics(TurretInfo info)
+    public TurretStatistics()
     {
-        Reset(info, true);
+        Reset();
     }
 
-    public void Reset(TurretInfo info, bool includeXp = false)
+    public void Reset()
     {
-        damage = info.Damage;
-        spinSpeed = info.SpinSpeed;
-        reloadSpeed = info.ReloadSpeed;
+        // completely reset, everything to zero
+        damage = 0;
+        range = 0;
+        spinSpeed = 0;
+        reloadSpeed = 0;
+
+        xp = 0;
 
         armorPiercing = 0;
         critChance = new Chance(0);
-
-        if (includeXp)
-        {
-            xp = 0;
-        }
     }
 }

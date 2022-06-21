@@ -12,11 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 234f1c4f9fd69f14c8c77a6afd8a7a79, type: 3}
   m_Name: Double Turret
   m_EditorClassIdentifier: 
-  _damage: 5
-  _range: 2
-  _reloadSpeed: 0.4
-  _spinSpeed: 80
-  fullSprite: {fileID: 21300000, guid: ae1affea503af2045925c85b810c6bdc, type: 3}
-  baseSprite: {fileID: 21300000, guid: b11a896cabcd1f247a09d33b95bb50f3, type: 3}
+  type: 0
+  _damageModifier: 0.5
+  _rangeModifier: 0.7
+  _reloadSpeedModifier: 2
+  _spinSpeedMultiplier: 1.4
   previewSprite: {fileID: 21300000, guid: 25a4f5e3c75e9bd44a0caca41d147835, type: 3}
-  gunMountSprite: {fileID: 0}
+  turretBaseSprite: {fileID: 21300000, guid: b11a896cabcd1f247a09d33b95bb50f3, type: 3}
+  bodySprite: {fileID: 21300000, guid: f00d5fd30ceb9f647ac391ca42b98147, type: 3}
+  gunMountSprite: {fileID: 21300000, guid: b58ca1b7e2e1d8642a76966748b3c5b0, type: 3}
+  guns:
+  - sprite: {fileID: 21300000, guid: 77b831e2a0d722d42b555e3076a65336, type: 3}
+    localPosition: {x: -0.075, y: 0.35}
+    localRotation: 0
+    animatorController: {fileID: 9100000, guid: b13864dc4a4d5d84199e84a23b92757c, type: 2}
+  - sprite: {fileID: 21300000, guid: 77b831e2a0d722d42b555e3076a65336, type: 3}
+    localPosition: {x: 0.075, y: 0.35}
+    localRotation: 0
+    animatorController: {fileID: 9100000, guid: b13864dc4a4d5d84199e84a23b92757c, type: 2}

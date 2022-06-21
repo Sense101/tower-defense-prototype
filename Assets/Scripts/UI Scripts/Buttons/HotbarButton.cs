@@ -15,7 +15,7 @@ public class HotbarButton : UIButton
     public override void OnSelect()
     {
         // set the current turret to ours
-        _turretPlacer.CurrentTurretPrefab = turretPrefab;
+        _turretPlacer.SetTurretPrefab(turretPrefab);
         _turretPlacer.turretPreview.sprite = turretPreviewSprite;
     }
 }

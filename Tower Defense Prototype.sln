@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animancer.FSM", "Animancer.FSM.csproj", "{438adc66-90ff-754a-6924-2f48422873b4}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{e7ef87e2-44aa-844e-4cdd-bf241e548977}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animancer", "Animancer.csproj", "{ed3cea37-f1df-2194-f8a7-cde0099725f6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{4affe682-5875-49dd-34a0-72c63a77f3b9}"
 EndProject
@@ -10,8 +14,12 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{438adc66-90ff-754a-6924-2f48422873b4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{438adc66-90ff-754a-6924-2f48422873b4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{e7ef87e2-44aa-844e-4cdd-bf241e548977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{e7ef87e2-44aa-844e-4cdd-bf241e548977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ed3cea37-f1df-2194-f8a7-cde0099725f6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ed3cea37-f1df-2194-f8a7-cde0099725f6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4affe682-5875-49dd-34a0-72c63a77f3b9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4affe682-5875-49dd-34a0-72c63a77f3b9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection

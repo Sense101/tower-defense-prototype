@@ -62,7 +62,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         }
 
         // then place turret if we have one selected
-        if (_turretPlacer.CurrentTurretPrefab)
+        if (_turretPlacer.GetTurretPrefab())
         {
             _turretPlacer.TryPlaceTurret();
             return;
@@ -81,11 +81,8 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         }
 
         // stop placing
-        if (_turretPlacer.CurrentTurretPrefab)
+        if (_turretPlacer.TryDeselectTurret())
         {
-            // deselect the turret
-            UIController.Instance.hotbar.DeselectAll();
-            _turretPlacer.CurrentTurretPrefab = null;
             return;
         }
 

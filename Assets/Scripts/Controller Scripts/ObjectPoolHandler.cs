@@ -70,7 +70,7 @@ public abstract class ObjectPoolHandler<O> : MonoBehaviour where O : PoolObject
     }
 
     // disables an object and returns it to the available pool of objects
-    public virtual void DisableObject(O poolObject)
+    public virtual void DeactivateObject(O poolObject)
     {
         if (availableObjects.Contains(poolObject))
         {

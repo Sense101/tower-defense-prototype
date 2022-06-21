@@ -9,40 +9,24 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     public static Color defaultTurretColor = new Color(46, 204, 117);
 
     // internal variables
-    private List<Turret> _turrets = new List<Turret>();
+    private List<Turret> _activeTurrets = new List<Turret>();
 
     EnemyController _enemyController;
+    GunController _gunController;
     private void Start()
     {
         _enemyController = EnemyController.Instance;
-    }
-
-    public Turret CreateTurret(Vector2 location)
-    {
-        // create and activate a turret at the location specified
-        Turret newTurret = CreateObject(location, Angle.zero, transform);
-        newTurret.Activate();
-
-        // add it to our list
-        _turrets.Add(newTurret);
-
-        return newTurret;
-    }
-
-    public void SellTurret(Turret turret)
-    {
-        DisableObject(turret);
-        _turrets.Remove(turret);
+        _gunController = GunController.Instance;
     }
 
     private void Update()
     {
-        for (int i = 0; i < _turrets.Count; i++)
+        for (int i = 0; i < _activeTurrets.Count; i++)
         {
-            var t = _turrets[i];
+            var t = _activeTurrets[i];
             if (!t)
             {
-                _turrets.RemoveAt(i);
+                _activeTurrets.RemoveAt(i);
                 continue;
             }
 
@@ -61,6 +45,124 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
         }
     }
 
+    public Turret PlaceTurret(Vector2 location)
+    {
+        // create and activate a turret at the location specified
+        Turret newTurret = CreateObject(location, Angle.zero, transform);
+        UpdateTurret(newTurret, newTurret.info);
+        //UpdateTurretStats(newTurret.stats, newTurret.info);
+        newTurret.Activate();
+
+        // add it to our list, so we have control over it
+        _activeTurrets.Add(newTurret);
+
+        return newTurret;
+    }
+
+    public void SellTurret(Turret t)
+    {
+        // first deactivate the guns
+        while (t.guns.Count > 0)
+        {
+            _gunController.DeactivateObject(t.guns[0]);
+            t.guns.RemoveAt(0);
+        }
+
+        // then deactivate the turret
+        DeactivateObject(t);
+        _activeTurrets.Remove(t);
+    }
+
+    // updates the given turret to match the info provided
+    public void UpdateTurret(Turret t, TurretInfo newInfo)
+    {
+        // reset targeting
+        t.ResetTargeting();
+
+        // update sprites
+        UpdateTurretSprites(t, newInfo);
+
+        // update stats
+        UpdateTurretStats(t.stats, newInfo);
+
+        // update guns
+        UpdateTurretGuns(t, newInfo);
+
+        // reset firing routine to account for gun changes
+        t.RestartFiringRoutine();
+    }
+
+    private void UpdateTurretSprites(Turret t, TurretInfo newInfo)
+    {
+        t.turretBase.sprite = newInfo.turretBaseSprite;
+        t.body.sprite = newInfo.bodySprite;
+        t.gunMount.sprite = newInfo.gunMountSprite;
+    }
+
+    private void UpdateTurretGuns(Turret t, TurretInfo newInfo)
+    {
+        int currentGunAmount = t.guns.Count;
+
+        int g;
+        for (g = 0; g < newInfo.guns.Length; g++)
+        {
+            GunInfo info = newInfo.guns[g];
+
+            if (g < currentGunAmount)
+            {
+                // there is an existing gun, update the existing gun to match
+                _gunController.UpdateGun(t.guns[g], info, t.stats.reloadSpeed);
+            }
+            else
+            {
+                // we need to add an extra gun
+                Gun newGun = _gunController.CreateGun(t.top, info, t.stats.reloadSpeed);
+                newGun.turret = t;
+                t.guns.Add(newGun);
+
+                currentGunAmount++;
+            }
+        }
+
+        // destroy any extra guns on the turret
+        t.guns.RemoveRange(g, currentGunAmount - g);
+    }
+
+
+
+    private void UpdateTurretStats(TurretStatistics stats, TurretInfo newInfo)
+    {
+        if (newInfo.type == TurretInfo.Type.multiplier)
+        {
+            UpdateTurretStatsMultiplier(stats, newInfo);
+        }
+        else
+        {
+            UpdateTurretStatsBasic(stats, newInfo);
+        }
+    }
+    private void UpdateTurretStatsMultiplier(TurretStatistics stats, TurretInfo newInfo)
+    {
+        // multiply all basic stats by modifier
+        stats.damage = Mathf.RoundToInt(stats.damage * newInfo.DamageModifier);
+        stats.range *= newInfo.RangeModifier;
+        stats.reloadSpeed *= newInfo.ReloadSpeedModifier;
+        stats.spinSpeed = Mathf.RoundToInt(stats.spinSpeed * newInfo.SpinSpeedModifier);
+    }
+    private void UpdateTurretStatsBasic(TurretStatistics stats, TurretInfo newInfo)
+    {
+        // force sets stats to whatever the modifiers are, NEGATING any augments that were applied.
+        // as such, should only be used for the basic turret, before any augments.
+        stats.damage = Mathf.RoundToInt(newInfo.DamageModifier);
+        stats.range = newInfo.RangeModifier;
+        stats.reloadSpeed = newInfo.ReloadSpeedModifier;
+        stats.spinSpeed = Mathf.RoundToInt(newInfo.SpinSpeedModifier);
+    }
+
+    // --------------------------------
+    // moving and aiming turrets
+    // --------------------------------
+
     private void TurnTurret(Turret t)
     {
         if (!t.currentTarget)
@@ -76,7 +178,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
             // since we are not already firing, stop targeting enemies that go out of range
             Vector2 targetPos = t.currentTarget.Body.position;
             float targetDistance = Vector2.Distance(t.transform.position, targetPos);
-            if (targetDistance > t.info.Range)
+            if (targetDistance > t.info.RangeModifier)
             {
                 // recalculate target next frame
                 t.state = Turret.State.none;
@@ -91,7 +193,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
         (
             t.top.rotation, // from
             desiredAngle.AsQuaternion(), // to
-            t.info.SpinSpeed * Time.deltaTime // delta speed
+            t.info.SpinSpeedModifier * Time.deltaTime // delta speed
         );
 
 
@@ -131,7 +233,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     {
         // find all the targets in range
         List<Enemy> targetsInRange = enemies.FindAll(x => {
-            return Vector2.Distance(t.transform.position, x.Body.position) <= t.info.Range;
+            return Vector2.Distance(t.transform.position, x.Body.position) <= t.info.RangeModifier;
         });
 
         List<Enemy> finalTargets = new List<Enemy>();

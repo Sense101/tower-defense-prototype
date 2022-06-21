@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Animancer;
+using UnityEngine;
 
 /// <summary>
 /// script for each individual gun on a turret
@@ -12,18 +13,13 @@ public class Gun : PoolObject
     const string RELOAD_MULTIPLIER = "reload_multiplier";
 
     Animator _animator;
-    Turret _turret;
+    public Turret turret;
 
     public bool canFire = false;
     private bool active = false;
 
-    /// <summary>
-    /// Sets all the references of the gun
-    /// </summary>
-    /// <param name="turret">The parent turret</param>
-    public void SetReferences(Turret turret)
+    public override void SetReferences()
     {
-        _turret = turret;
         _animator = GetComponent<Animator>();
     }
 
@@ -45,6 +41,11 @@ public class Gun : PoolObject
     {
         // resets the gun back to its base state
         _animator.SetTrigger(RESET_TRIGGER);
+    }
+
+    public void SetAnimatorController(RuntimeAnimatorController newController)
+    {
+        _animator.runtimeAnimatorController = newController;
     }
 
     public void SetReloadSpeed(float reloadSpeed)
@@ -73,11 +74,12 @@ public class Gun : PoolObject
     public void OnAnimatorFire()
     {
         // the firing animation is finished, hit the enemy now
-        _turret.HitEnemy();
+        turret.HitEnemy();
     }
 
     public void OnAnimatorReload()
     {
         canFire = true;
+        Debug.Log("reload");
     }
 }

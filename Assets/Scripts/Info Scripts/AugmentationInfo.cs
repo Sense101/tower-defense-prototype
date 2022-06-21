@@ -7,7 +7,7 @@ using UnityEngine;
 public class AugmentationInfo
 {
     // the augmentation object
-    public Augmentation augmentation;
+    public Augment augmentation;
 
     public int currentTier = 0;
 }

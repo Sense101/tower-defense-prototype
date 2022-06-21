@@ -78,17 +78,11 @@ public class Map : Singleton<Map>
     /// <summary>
     /// checks if a turret can be placed at a given tile, in map space
     /// </summary>
-    public bool CanPlaceAtTile(Vector2Int mapSpace)
+    public bool IsTilePlaceable(Vector2Int mapSpace)
     {
         TileInfo tileInfo = TryGetTile(mapSpace);
 
-        if (tileInfo == null)
-        {
-            // no tile there, we can't
-            return false;
-        }
-
-        if (tileInfo.Placeable && !tileInfo.Turret)
+        if (tileInfo != null && tileInfo.Placeable)
         {
             return true;
         }
@@ -97,10 +91,10 @@ public class Map : Singleton<Map>
     /// <summary>
     /// checks if a turret can be placed at a given tile, in world space
     /// </summary>
-    public bool CanPlaceAtTileWorldSpace(Vector2Int worldSpace)
+    public bool IsTilePlaceableWorldSpace(Vector2Int worldSpace)
     {
         Vector2Int mapSpace = WorldToMapSpace(worldSpace);
-        return CanPlaceAtTile(mapSpace);
+        return IsTilePlaceable(mapSpace);
     }
 
 
@@ -110,6 +104,15 @@ public class Map : Singleton<Map>
     }
     public void SetTurretWorldSpace(Vector2Int worldSpace, Turret turret)
     {
-        _tiles[WorldToMapSpace(worldSpace)].Turret = turret;
+        SetTurret(WorldToMapSpace(worldSpace), turret);
+    }
+
+    public Turret GetTurret(Vector2Int mapSpace)
+    {
+        return TryGetTile(mapSpace)?.Turret;
+    }
+    public Turret GetTurretWorldSpace(Vector2Int worldSpace)
+    {
+        return GetTurret(WorldToMapSpace(worldSpace));
     }
 }
