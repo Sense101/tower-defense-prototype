@@ -4,31 +4,37 @@ using UnityEngine;
 public class GunController : ObjectPoolHandlerSingleton<GunController, Gun>
 {
     // "creates" a gun, for a turret to use
-    public Gun CreateGun(Transform parent, GunInfo info, float reloadSpeed)
+    public Gun CreateGun(Transform parent, GunInfo info, Turret parentTurret)
     {
         // create
         Gun newGun = CreateObject(Vector2.zero, Angle.zero, parent);
 
-        // update
-        UpdateGun(newGun, info, reloadSpeed);
+        // modify to our specifications
+        ModifyGun(newGun, info, parentTurret);
 
         // activate
-        newGun.Activate(); /////////////// IMPLEMENT RELOAD SPEED AND GET GUNS INITIOALIZED WITHOUT TURRET
+        newGun.Activate();
 
         return newGun;
     }
 
-    // updates an active gun
-    public void UpdateGun(Gun g, GunInfo info, float reloadSpeed)
+    // modifies a gun
+    public void ModifyGun(Gun g, GunInfo info, Turret parentTurret)
     {
+        // match info
+        g.body.sprite = info.sprite;
         g.transform.localPosition = info.localPosition;
         g.transform.localRotation = new Angle(info.localRotation).AsQuaternion();
-        g.SetAnimatorController(info.animatorController);
-        g.SetReloadSpeed(reloadSpeed);
+
+        // modify stats
+        g.stats.Modify(parentTurret, info.bodyDefaultPosition, info.bodyFirePosition);
+
+        // reset
+        g.Reset();
     }
 
     // "deletes" a gun
-    public void DeleteGun(Gun g)
+    public void DeactivateGun(Gun g)
     {
         g.SetParent(transform);
         DeactivateObject(g);

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 234f1c4f9fd69f14c8c77a6afd8a7a79, type: 3}
+  m_Name: Basic Turret
+  m_EditorClassIdentifier: 
+  type: 1
+  _damageModifier: 10
+  _rangeModifier: 2.5
+  _reloadTimeModifier: 1
+  _spinSpeedMultiplier: 100
+  fullSprite: {fileID: 21300000, guid: 16cf81ec93aebc94e85d6155ba470fa5, type: 3}
+  previewSprite: {fileID: 21300000, guid: c9d93f68dac38d842b2559cf3bd865b5, type: 3}
+  turretBaseSprite: {fileID: 21300000, guid: a8abc1281d2a16c418af9d337745d78b, type: 3}
+  bodySprite: {fileID: 21300000, guid: 602f48fd2b5f84e48b18a971bcaba5e8, type: 3}
+  gunMountSprite: {fileID: 21300000, guid: 04a19a2fb4ea55948b96c2c4d4d1d74b, type: 3}
+  guns:
+  - sprite: {fileID: 21300000, guid: d291f8536c30f9b4798644017d622a12, type: 3}
+    localPosition: {x: 0, y: 0.37}
+    localRotation: 0
+    bodyDefaultPosition: {x: 0, y: 0}
+    bodyFirePosition: {x: 0, y: -0.1}
+  bulletInfo:
+    sprite: {fileID: 21300000, guid: 42c8e04c56b6dfe4dbcb3961b1ed8db8, type: 3}
+    controller: {fileID: 9100000, guid: 6563ccc37c20ea549aa2f16dc55e9a37, type: 2}
+    type: 0
+  path1: {fileID: 11400000, guid: b68204ea97f57984795bbad97ce612f0, type: 2}
+  path2: {fileID: 11400000, guid: 5af18dffed60359409220cd48bcc4e52, type: 2}
+  path3: {fileID: 11400000, guid: 2503d050ced2c2f41b5af7751a37f849, type: 2}

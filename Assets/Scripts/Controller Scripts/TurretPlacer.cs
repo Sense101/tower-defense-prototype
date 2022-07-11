@@ -23,6 +23,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
     Map _map;
     TurretController _turretController;
     TurretInterface _turretInterface;
+    UpgradeInterface _upgradeInterface;
     EnemyController _enemyController;
     UIController _uiController;
 
@@ -31,6 +32,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         _map = Map.Instance;
         _turretController = TurretController.Instance;
         _turretInterface = TurretInterface.Instance;
+        _upgradeInterface = UpgradeInterface.Instance;
         _enemyController = EnemyController.Instance;
         _uiController = UIController.Instance;
 
@@ -72,7 +74,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         if (_state == State.choosingUpgrade)
         {
             // stop choosing an upgrade
-            SetChoosingUpgrade(false);
+            SetChoosingUpgrade(null);
             UpdateRangeScale(_currentTurretPrefab);
             return false;
         }
@@ -87,8 +89,8 @@ public class TurretPlacer : Singleton<TurretPlacer>
         if (turret)
         {
             // trying to place a turret where one exists, time for some merging!
-            SetChoosingUpgrade(true);
-            UpdateRangeScale(turret, true);
+            SetChoosingUpgrade(turret);
+            UpdateRangeScale(turret);
             return false;
         }
 
@@ -101,7 +103,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         // deselect, temp
         UIController.Instance.hotbar.DeselectAll();
         SetTurretPrefab(null);
-        TurretInterface.Instance.SetTurret(newTurret);
+        _turretInterface.SetTurret(newTurret);
 
         if (_currentTurretPrefab)
         {
@@ -119,7 +121,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
             if (_state == State.choosingUpgrade)
             {
                 // reset back to normal, we are cancelling
-                SetChoosingUpgrade(false);
+                SetChoosingUpgrade(null);
             }
 
             // deselect the turret
@@ -153,16 +155,16 @@ public class TurretPlacer : Singleton<TurretPlacer>
         UpdateActivePreviews();
     }
 
-    private void SetChoosingUpgrade(bool choosingUpgrade)
+    private void SetChoosingUpgrade(Turret turret)
     {
-        if (choosingUpgrade)
+        if (turret)
         {
-            _turretInterface.upgradeInterfaceGroup.Show();
+            _upgradeInterface.Show(turret);
             _state = State.choosingUpgrade;
         }
         else
         {
-            _turretInterface.upgradeInterfaceGroup.Hide();
+            _upgradeInterface.Hide();
             RecalculateCanPlace();
         }
     }
@@ -210,16 +212,16 @@ public class TurretPlacer : Singleton<TurretPlacer>
         rangePreview.transform.position = position;
     }
 
-    public void UpdateRangeScale(Turret turret, bool useRuntimeStats = false)
+    public void UpdateRangeScale(Turret turret)
     {
         float rangeScale;
-        if (useRuntimeStats)
+        if (turret.info.type == TurretInfo.Type.basic)
         {
-            rangeScale = turret.stats.range * 2;
+            rangeScale = turret.info.RangeModifier * 2;
         }
         else
         {
-            rangeScale = turret.info.RangeModifier * 2;
+            rangeScale = turret.stats.range * 2;
         }
 
         rangePreview.transform.localScale = new Vector2(rangeScale, rangeScale);
@@ -228,6 +230,6 @@ public class TurretPlacer : Singleton<TurretPlacer>
     public void UpgradeTurret(TurretInfo info)
     {
         Turret turret = _map.GetTurretWorldSpace(Vector2Int.RoundToInt(rangePreview.transform.position));
-        _turretController.UpdateTurret(turret, info);
+        _turretController.ModifyTurret(turret, info);
     }
 }

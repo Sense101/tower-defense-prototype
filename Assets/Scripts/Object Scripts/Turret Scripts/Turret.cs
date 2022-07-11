@@ -7,10 +7,10 @@ using UnityEngine.Events;
 public class Turret : PoolObject
 {
     // enums
-    public enum State { none, aiming, locked, firing }
+    public enum State { none, lookingForTarget, aiming, locked, firing }
     public enum TargetType { close, first, strong, weak }
 
-    [HideInInspector] public UnityEvent onHitEvent = new UnityEvent();
+    [HideInInspector] public UnityEvent onBulletHitEvent = new UnityEvent();
 
     // set in inspector
     public TurretInfo info;
@@ -27,28 +27,41 @@ public class Turret : PoolObject
     // info unique to this turret
     public Enemy currentTarget = null;
     public int currentGunIndex = 0;
-    public State state = State.none;
+    public State state = Turret.State.none;
     public TargetType targetType = TargetType.close;
-    private Coroutine firingRoutine = null;
+    private Coroutine _firingRoutine = null;
 
     [Space(10)]
-    public AugmentationInfo damageAugment;
-    public AugmentationInfo rangeAugment;
-    public AugmentationInfo customAugment;
+    // info about the augments
+    public int damageAugmentLevel = 0;
+    public int rangeAugmentLevel = 0;
+    public int customAugmentLevel = 0;
+    public Augment customAugment;
 
     [Space(10)]
     // and the actual statistics - this is what augments will modify
     public TurretStatistics stats;
 
+    // the one controller each turret must store a reference to :(
+    BulletController _bulletController;
+
     public override void SetReferences()
     {
         // inizialize statistics
         stats = new TurretStatistics();
+
+        _bulletController = BulletController.Instance;
     }
 
 
     public override void Activate()
     {
+        // start looking for a target
+        state = State.lookingForTarget;
+
+        // start firing guns
+        StartFiringRoutine();
+
         // show everything
         turretBase.color = Color.white;
         body.color = new HSVColor(147, 77, 80).AsColor(); //@TODO should this be on the controller?
@@ -57,10 +70,11 @@ public class Turret : PoolObject
 
     public override void Deactivate()
     {
-        // should be removed from turret controller before this is called
+        // prevent it doing anything
+        state = State.none;
 
         // stop firing guns
-        StopCoroutine(firingRoutine);
+        StopFiringRoutine();
 
         // hide completely
         turretBase.color = Color.clear;
@@ -75,77 +89,101 @@ public class Turret : PoolObject
     {
         targetType = TargetType.close;
         stats.Reset();
-        ResetTargeting();
-    }
-
-    // clears the turret target
-    public void ResetTargeting()
-    {
         currentTarget = null;
         currentGunIndex = 0;
-        state = State.none;
     }
 
     public override void SetRotation(Angle rotation)
     {
+        // the rotation of the *top*
         top.rotation = rotation.AsQuaternion();
     }
 
-    public void RestartFiringRoutine()
+    public void StartFiringRoutine()
     {
-        if (firingRoutine != null)
+        // start the firing coroutine
+        if (_firingRoutine == null)
         {
-            StopCoroutine(firingRoutine);
+            _firingRoutine = StartCoroutine(FireGuns());
         }
-        firingRoutine = StartCoroutine(FireGuns());
     }
-
-    public virtual IEnumerator FireGuns()
+    public void StopFiringRoutine()
     {
-        var gunCount = guns.Count;
-        var reloadSpeed = stats.reloadSpeed;
+        // stop the firing routine
+        if (_firingRoutine != null)
+        {
+            StopCoroutine(_firingRoutine);
+            _firingRoutine = null;
+        }
+    }
+    private IEnumerator FireGuns()
+    {
         while (true)
         {
-            // wait till we are locked onto a target
-            yield return new WaitUntil(() => state == State.locked);
-
-            // then try and fire
-            if (currentTarget.IsSpaceForDamage() && guns[currentGunIndex].TryFire())
+            // wait till we've found a target
+            if (state == State.lookingForTarget)
             {
-                state = State.firing;
-
-                // add preview damage
-                currentTarget.previewDamage += stats.damage; //@TODO what if preview damage changes while firing, maybe wait till not firing before applying change
-
-                // wait till we are done firing the current gun
-                yield return new WaitUntil(() => state != State.firing);
-
-                // prevent firing of next gun till we hit a nicer ratio
-                // reload time / number of guns = wait time between shots
-                yield return new WaitForSeconds(reloadSpeed / gunCount);
+                yield return new WaitUntil(() => state != State.lookingForTarget);
             }
 
+            int gunCount = guns.Count;
+            float reloadSpeed = stats.reloadTime;
+
+            // wait till we are locked onto a target and we can fire
+            if (!CanFire(guns[currentGunIndex]))
+            {
+                yield return new WaitUntil(() => CanFire(guns[currentGunIndex]));
+            }
+
+            // check if the target will die already
+            if (currentTarget.IsSpaceForDamage())
+            {
+                Gun currentGun = guns[currentGunIndex];
+
+                // fire!
+                state = State.firing;
+                currentGun.Fire(stats.reloadTime);
+
+                // spawn bullet
+                BulletStatistics newBulletStats = new BulletStatistics(currentTarget, stats.damage, stats.armorPiercing);
+                Vector2 spawnPos = currentGun.transform.position;
+                Angle spawnAngle = new Angle(currentGun.transform.rotation);
+                Bullet newBullet = _bulletController.CreateBullet(info.bulletInfo, newBulletStats, spawnPos, spawnAngle, currentGun.transform);
+                newBullet.onHitEvent.AddListener(damage => OnBulletHit(newBullet, damage));
+
+                // wait till firing is complete
+                yield return new WaitUntil(() => currentGun.state == Gun.State.reloading);
+
+                // don't do damage to the enemy - the bullet will handle it
+
+                // prevent firing of next gun till we hit a nicer ratio - temp, allow this to be modified in future
+                yield return new WaitUntil(() => currentGun.remainingReloadTime <= reloadSpeed / 2);
+            }
+            else
+            {
+                // this target will already die, find another target
+                state = State.lookingForTarget;
+            }
         }
     }
 
-    // called by the gun
-    public void HitEnemy()
+    private bool CanFire(Gun gun)
     {
-        // reset the turret
-        state = State.none;
+        return state == State.locked && gun.state == Gun.State.waitingToFire;
+    }
 
-        // make sure the enemy exists
-        if (currentTarget)
-        {
-            // remove preview and hit the enemy
-            currentTarget.previewDamage -= stats.damage;
-            currentTarget.TakeHit(stats.damage, 0);
+    // called when a bullet hit something
+    public void OnBulletHit(Bullet b, int damage)
+    {
+        stats.xp += damage;
+        onBulletHitEvent.Invoke();
 
-            // add xp
-            stats.xp += stats.damage;
+        // now destroy the bullet, its done its job
+        b.onHitEvent.RemoveAllListeners();
+        _bulletController.DestroyBullet(b);
 
-            onHitEvent.Invoke();
-        }
+        // now that we've hit, start looking for a new target
+        state = State.lookingForTarget;
     }
 }
 
@@ -161,5 +199,8 @@ NOTE TO SELF: code is a mess, tidy up before doing anything else
 - and comment all the ode afterwards too
 
 - it's worth getting this done cleanly!
+leaves 12:50 terminal 1
+arrives 8:05 terminal 3
+EZY1827
 
 */

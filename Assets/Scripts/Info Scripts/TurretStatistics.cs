@@ -10,7 +10,7 @@ public class TurretStatistics
     [Min(0)] public int damage;
     [Min(0)] public float range;
     [Min(0)] public int spinSpeed; // degrees/sec
-    [Min(0)] public float reloadSpeed;
+    [Min(0)] public float reloadTime;
 
     [Min(0)] public int xp;
     [Min(0)] public int armorPiercing;
@@ -41,7 +41,7 @@ public class TurretStatistics
         damage = 0;
         range = 0;
         spinSpeed = 0;
-        reloadSpeed = 0;
+        reloadTime = 0;
 
         xp = 0;
 

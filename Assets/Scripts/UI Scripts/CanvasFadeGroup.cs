@@ -22,11 +22,13 @@ public class CanvasFadeGroup : MonoBehaviour
         {
             _group.alpha = 0;
             _group.interactable = false;
+            _group.blocksRaycasts = false;
         }
         else if (state == FadeState.shown)
         {
             _group.alpha = 1;
             _group.interactable = true;
+            _group.blocksRaycasts = true;
         }
     }
 
@@ -58,6 +60,7 @@ public class CanvasFadeGroup : MonoBehaviour
 
                 // reenable interaction when we are fully visible
                 _group.interactable = true;
+                _group.blocksRaycasts = true;
             }
         }
     }
@@ -68,6 +71,7 @@ public class CanvasFadeGroup : MonoBehaviour
         {
             // disable interacting as soon as we start hiding
             _group.interactable = false;
+            _group.blocksRaycasts = false;
 
             if (fadeTime <= 0 || forceInstant)
             {

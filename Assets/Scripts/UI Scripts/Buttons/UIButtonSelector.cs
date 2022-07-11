@@ -53,17 +53,12 @@ public class UIButtonSelector : MonoBehaviour
             UIButton button = _buttons[i];
             if (i == index)
             {
-                if (!button.Selected)
-                {
-                    selectedButton = button;
-                    button.Selected = true;
-                    button.OnSelect();
-                }
+                selectedButton = button;
+                button.Selected = true;
             }
             else if (button.Selected)
             {
                 button.Selected = false;
-                button.OnDeselect();
             }
         }
     }
@@ -71,14 +66,9 @@ public class UIButtonSelector : MonoBehaviour
 
     public void DeselectAll()
     {
-        for (int i = 0; i < _buttons.Count; i++)
+        foreach (UIButton button in _buttons)
         {
-            UIButton button = _buttons[i];
-            if (button.Selected)
-            {
-                button.Selected = false;
-                button.OnDeselect();
-            }
+            button.Selected = false;
         }
     }
 }

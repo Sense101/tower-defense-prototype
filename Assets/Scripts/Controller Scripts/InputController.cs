@@ -50,7 +50,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
 
     public void OnLeftButton(InputAction.CallbackContext context)
     {
-        if (!context.started || !_active)
+        if (!context.performed || !_active)
         {
             return;
         }
@@ -60,6 +60,8 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         {
             return;
         }
+
+        //@TODO check if we have any overlays open, and if so close them first
 
         // then place turret if we have one selected
         if (_turretPlacer.GetTurretPrefab())
@@ -75,7 +77,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
 
     public void OnRightButton(InputAction.CallbackContext context)
     {
-        if (!context.started || !_active)
+        if (!context.performed || !_active)
         {
             return;
         }

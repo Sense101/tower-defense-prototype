@@ -1,4 +1,5 @@
-﻿using Animancer;
+﻿using System.Collections;
+using Animancer;
 using UnityEngine;
 
 /// <summary>
@@ -6,80 +7,110 @@ using UnityEngine;
 /// </summary>
 public class Gun : PoolObject
 {
-    const string FIRE_TRIGGER = "fire";
-    const string RESET_TRIGGER = "reset";
-    const string ACTIVATE_TRIGGER = "activate";
-    const string DEACTIVATE_TRIGGER = "deactivate";
-    const string RELOAD_MULTIPLIER = "reload_multiplier";
+    public enum State { none, waitingToFire, firing, reloading }
 
-    Animator _animator;
-    public Turret turret;
+    // set in inspector
+    public SpriteRenderer body;
+    public SpriteRenderer augmentSprite;
 
-    public bool canFire = false;
-    private bool active = false;
+    [Space(5)]
+    // internal variables
+    public State state = State.none;
+    public float remainingReloadTime = 0;
+    public Bullet currentBullet = null; //@TODO store bullet reference
 
-    public override void SetReferences()
-    {
-        _animator = GetComponent<Animator>();
-    }
+    [Space(5)]
+    // stores stats which change each time the turret is updated
+    public GunStatistics stats;
 
     public override void Activate()
     {
-        active = true;
-        canFire = true;
-        _animator.SetTrigger(ACTIVATE_TRIGGER);
+        state = State.waitingToFire;
+
+        stats.currentTurret.guns.Add(this);
     }
 
     public override void Deactivate()
     {
-        // prevent firing and hide
-        active = false;
-        _animator.SetTrigger(DEACTIVATE_TRIGGER);
+        state = State.none;
+
+        stats.currentTurret.guns.Remove(this);
+
+        // hide sprites
+        body.sprite = null;
+        augmentSprite.sprite = null;
     }
 
     public override void Reset()
     {
-        // resets the gun back to its base state
-        _animator.SetTrigger(RESET_TRIGGER);
+        state = State.waitingToFire;
+
+        body.transform.localPosition = stats.bodyDefaultPosition;
+        remainingReloadTime = 0;
+        StopAllCoroutines();
     }
 
-    public void SetAnimatorController(RuntimeAnimatorController newController)
+    public void Fire(float reloadTime)
     {
-        _animator.runtimeAnimatorController = newController;
+        StartCoroutine(FireGun(reloadTime));
     }
-
-    public void SetReloadSpeed(float reloadSpeed)
+    private IEnumerator FireGun(float reloadTime, float fireTime = 0.1f)
     {
-        // set speed of reload animation
-        _animator.SetFloat(RELOAD_MULTIPLIER, 1 / reloadSpeed);
-    }
+        state = State.firing;
 
-    /// <summary>
-    /// Tries to fire the gun
-    /// </summary>
-    /// <returns>if the gun fired succesfully</returns>
-    public bool TryFire()
-    {
-        if (active && canFire)
+        remainingReloadTime = reloadTime;
+        float actualReloadTime = reloadTime - fireTime;
+
+        // fire!
+        while (remainingReloadTime > actualReloadTime)
         {
-            canFire = false;
-            // fire
-            _animator.SetTrigger(FIRE_TRIGGER);
-            return true;
+            remainingReloadTime -= Time.deltaTime;
+
+            float remainingFireTime = remainingReloadTime - actualReloadTime;
+            float remainingDistanceMultiplier = Mathf.Clamp01(remainingFireTime / fireTime);
+
+            body.transform.localPosition = Vector2.MoveTowards
+            (
+                stats.bodyFirePosition,
+                stats.bodyDefaultPosition,
+                stats.cachedDistance * remainingDistanceMultiplier
+            );
+
+            // wait a frame
+            yield return null;
         }
-        return false;
+
+
+        // firing is finished - start reloading straight away
+        StartCoroutine(ReloadGun(actualReloadTime));
     }
 
-    // called by the animator
-    public void OnAnimatorFire()
+    private IEnumerator ReloadGun(float actualReloadTime)
     {
-        // the firing animation is finished, hit the enemy now
-        turret.HitEnemy();
-    }
+        state = State.reloading;
 
-    public void OnAnimatorReload()
-    {
-        canFire = true;
-        Debug.Log("reload");
+        while (remainingReloadTime > 0)
+        {
+            remainingReloadTime -= Time.deltaTime;
+
+            float remainingDistanceMultiplier = remainingReloadTime / actualReloadTime;
+
+            body.transform.localPosition = Vector2.MoveTowards
+            (
+                stats.bodyDefaultPosition,
+                stats.bodyFirePosition,
+                stats.cachedDistance * remainingDistanceMultiplier
+            );
+
+            // wait a frame, if we're not done
+            if (remainingReloadTime > 0)
+            {
+                yield return null;
+            }
+        }
+
+        // ready to fire again
+        remainingReloadTime = 0;
+        state = State.waitingToFire;
     }
 }

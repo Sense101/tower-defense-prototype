@@ -4,7 +4,8 @@ public class AugmentController : Singleton<AugmentController>
 {
     readonly private HSVColor baseColor = new HSVColor(145, 77, 80);
 
-    [SerializeField] Augment damageAugment;
+    public Augment damageAugment;
+    public Augment rangeAugment;
 
     // what does this need to do
     // apply augments to a turret
@@ -20,7 +21,7 @@ public class AugmentController : Singleton<AugmentController>
 
     }
 
-    public Augment ChooseNewAugmentation(Augment current)
+    public Augment ChooseNewAugment(Augment current)
     {
         if (current == null)
         {
@@ -51,67 +52,36 @@ public class AugmentController : Singleton<AugmentController>
 
     private void ApplyDamageAugment(TurretStatistics stats, int tier)
     {
-        // do stuff, switch by tier
+        switch (tier)
+        {
+            case 1:
+                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
+                break;
+            case 2:
+                // do a thing
+                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
+                break;
+            case 3:
+                // do a thing
+                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
+                break;
+            case 4:
+                // do a thing
+                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
+                break;
+            case 5:
+                // do a thing
+                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
+                break;
+            default:
+                // you expect me to apply a nonexistent tier?? no.
+                Debug.LogError($"Tried to apply nonexistent augment tier {tier}");
+                break;
+        }
     }
     private void ApplyRangeAugment(TurretStatistics stats, int tier)
     {
         // do stuff, switch by tier
+        stats.range = Mathf.RoundToInt(stats.range * 1.5f);
     }
-
-    //public void UpdateTurretAugmentations(Turret t)
-    //{
-    //    // first reset the stats
-    //    t.stats.Reset(t.info);
-    //
-    //    // then iterate through the turret augments
-    //    AugmentationInfo info = t.customAugment;
-    //
-    //    Augment aug = info.augmentation;
-    //    if (!aug)
-    //    {
-    //        // no augment, set default color
-    //        t.body.color = baseColor.AsColor();
-    //        return;
-    //    }
-    //
-    //    t.body.color = aug.color;
-    //
-    //    // for now just apply modifiers
-    //    for (int i = 0; i < info.currentTier; i++)
-    //    {
-    //        AugmentationTier tier = aug.tiers[i];
-    //
-    //        // now apply each modifier seperately
-    //        if (tier.damageModifier.active)
-    //        {
-    //            // damage
-    //            t.stats.damage = Mathf.RoundToInt(
-    //                ApplyModifier(t.stats.damage, tier.damageModifier)
-    //            );
-    //            Debug.Log("applied damage");
-    //        }
-    //        if (tier.spinSpeedModifier.active)
-    //        {
-    //            // spin speed
-    //            t.stats.spinSpeed = Mathf.RoundToInt(
-    //                ApplyModifier(t.stats.spinSpeed, tier.spinSpeedModifier)
-    //            );
-    //        }
-    //        if (tier.reloadSpeedModifier.active)
-    //        {
-    //            // reload speed
-    //            t.stats.reloadSpeed = Mathf.RoundToInt(
-    //                ApplyModifier(t.stats.reloadSpeed, tier.reloadSpeedModifier)
-    //            );
-    //        }
-    //    }
-    //}
-    //
-    //private float ApplyModifier(float original, AugmentationModifier modifier)
-    //{
-    //    float result = modifier.multiplier
-    //        ? original * modifier.amount
-    //        : original + modifier.amount;
-    //    return result;
-    //}
 }

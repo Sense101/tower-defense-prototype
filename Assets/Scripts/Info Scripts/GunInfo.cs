@@ -5,8 +5,9 @@ using UnityEngine.Animations;
 public class GunInfo
 {
     // all set in inspector
-    public Sprite sprite; // does sprite even need to be stored if animator is changing it? @TODO
+    public Sprite sprite;
     public Vector2 localPosition;
     public float localRotation;
-    public RuntimeAnimatorController animatorController;
+    public Vector2 bodyDefaultPosition;
+    public Vector2 bodyFirePosition;
 }

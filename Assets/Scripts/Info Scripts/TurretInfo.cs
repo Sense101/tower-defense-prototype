@@ -26,12 +26,12 @@ public class TurretInfo : ScriptableObject
         get => _rangeModifier;
     }
 
-    // Reload Speed
+    // Reload Time
     [Tooltip("the time it takes for a gun to reload in seconds")]
-    [SerializeField] float _reloadSpeedModifier = 1;
-    public float ReloadSpeedModifier
+    [SerializeField] float _reloadTimeModifier = 1;
+    public float ReloadTimeModifier
     {
-        get => _reloadSpeedModifier;
+        get => _reloadTimeModifier;
     }
 
     // Spin Speed
@@ -44,13 +44,21 @@ public class TurretInfo : ScriptableObject
 
     [Space(5)]
     [Header("Sprites")]
-    public Sprite previewSprite = default;
-    public Sprite turretBaseSprite = default;
-    public Sprite bodySprite = default;
-    public Sprite gunMountSprite = default;
+    public Sprite fullSprite = default; // the full sprite, including the base
+    public Sprite previewSprite = default; // without the base
+    public Sprite turretBaseSprite = default; // just the base
+    public Sprite bodySprite = default; // the body
+    public Sprite gunMountSprite = default; // just the gun mount
 
-    // list of gun infos - gun sprite, gun position, gun rotation
-    // on change gun should move 
-
+    [Space(5)]
     public GunInfo[] guns;
+
+    [Space(5)]
+    public BulletInfo bulletInfo;
+
+    [Space(5)]
+    [Header("Upgrade Paths")]
+    public TurretInfo path1;
+    public TurretInfo path2;
+    public TurretInfo path3;
 }

@@ -8,26 +8,22 @@ using UnityEngine;
 public class TurretInterface : Singleton<TurretInterface>
 {
     // set in inspector - the different parts of the interface
-    [Header("Main Interface")]
-    public CanvasFadeGroup mainInterfaceGroup;
-    public GameObject previewPane;
-    public TextMeshProUGUI xpBar;
-    public TextMeshProUGUI turretName;
-    public UIButtonSelector targetTypeSelector;
-
-    [Header("Upgrade Interface")]
-    public CanvasFadeGroup upgradeInterfaceGroup;
-    public TurretInfo doubleInfo; //temp
+    [SerializeField] TextMeshProUGUI xpBar;
+    [SerializeField] TextMeshProUGUI turretName;
+    [SerializeField] UIButtonSelector targetTypeSelector;
+    [SerializeField] TextMeshProUGUI damageText;
 
 
     // internal variables
     private Turret _selectedTurret = null;
+    private CanvasFadeGroup _fadeGroup;
 
     // references
     TurretPlacer _turretPlacer;
     TurretController _turretController;
-    TurretPreviewController _turretPreviewController; //@TODO merge preview controller into interface script?
-    AugmentController _augController;
+    TurretPreview _turretPreviewController; //@TODO merge preview controller into interface script?
+    AugmentController _augmentController;
+    AugmentInterface _augmentInterface;
     Map _map;
 
     private void Start()
@@ -35,9 +31,12 @@ public class TurretInterface : Singleton<TurretInterface>
         // set references
         _turretPlacer = TurretPlacer.Instance;
         _turretController = TurretController.Instance;
-        _turretPreviewController = TurretPreviewController.Instance;
-        _augController = AugmentController.Instance;
+        _turretPreviewController = TurretPreview.Instance;
+        _augmentController = AugmentController.Instance;
+        _augmentInterface = AugmentInterface.Instance;
         _map = Map.Instance;
+
+        _fadeGroup = GetComponent<CanvasFadeGroup>();
     }
 
     // bunch of scripts called by the buttons within the interface
@@ -61,28 +60,39 @@ public class TurretInterface : Singleton<TurretInterface>
         SetTurret(null);
     }
 
-    public void ApplyAugmentation()
+    // called by buttons
+    public void ApplyAugment(int index)
     {
+
         if (_selectedTurret)
         {
-            AugmentationInfo info = _selectedTurret.customAugment;
-            info.augmentation = _augController.ChooseNewAugmentation(info.augmentation);
-            info.currentTier = 1; //@TODO hard code tier 1 for now
 
-            //_augController.UpdateTurretAugmentations(_selectedTurret);
+            Augment augment;
+            int tier;
+            if (index == 0)
+            {
+                augment = _augmentController.damageAugment;
+                _selectedTurret.damageAugmentLevel++;
+                tier = _selectedTurret.damageAugmentLevel;
+                damageText.text = $"dmaage upgrade ({tier}/5)";
+            }
+            else
+            {
+                augment = _augmentController.rangeAugment;
+                tier = _selectedTurret.rangeAugmentLevel++;
+            }
+
+            _augmentController.ApplyAugment(_selectedTurret.stats, augment.type, tier);
+            //@TODO
         }
     }
-
-    public void UpgradeTurret()
+    public void ChooseAugment()
     {
-        Debug.Log("did");
-        _turretPlacer.UpgradeTurret(doubleInfo);
-        _turretPlacer.TryDeselectTurret();
+        _augmentInterface.Show();
     }
 
-
     // IMPORTANT: this cannot be called till after start
-    // sets the turret
+    // selects the turret
     public void SetTurret(Turret turret)
     {
         if (_selectedTurret == turret)
@@ -94,7 +104,7 @@ public class TurretInterface : Singleton<TurretInterface>
         if (_selectedTurret)
         {
             // we are changing, remove the event link from the old turret
-            _selectedTurret.onHitEvent.RemoveListener(OnTurretHit);
+            _selectedTurret.onBulletHitEvent.RemoveListener(OnTurretHit);
         }
 
         // actually update the reference
@@ -110,10 +120,10 @@ public class TurretInterface : Singleton<TurretInterface>
         if (turret)
         {
             // we've selected a turret, show the main interface
-            mainInterfaceGroup.Show();
+            _fadeGroup.Show();
 
             // add a hit event listener so we can update as the new turret changes
-            turret.onHitEvent.AddListener(OnTurretHit);
+            turret.onBulletHitEvent.AddListener(OnTurretHit);
 
             // update stuff within the interface - @TODO
             turretName.text = turret.gameObject.name;
@@ -126,7 +136,7 @@ public class TurretInterface : Singleton<TurretInterface>
         }
         else
         {
-            mainInterfaceGroup.Hide();
+            _fadeGroup.Hide();
         }
     }
 
