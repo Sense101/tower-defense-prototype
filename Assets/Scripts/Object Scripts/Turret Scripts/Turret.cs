@@ -42,8 +42,8 @@ public class Turret : PoolObject
     // and the actual statistics - this is what augments will modify
     public TurretStatistics stats;
 
-    // the one controller each turret must store a reference to :(
     BulletController _bulletController;
+    EnemyController _enemyController;
 
     public override void SetReferences()
     {
@@ -51,6 +51,7 @@ public class Turret : PoolObject
         stats = new TurretStatistics();
 
         _bulletController = BulletController.Instance;
+        _enemyController = EnemyController.Instance;
     }
 
 
@@ -181,6 +182,13 @@ public class Turret : PoolObject
         // now destroy the bullet, its done its job
         b.onHitEvent.RemoveAllListeners();
         _bulletController.DestroyBullet(b);
+
+        // check if the enemy is dead
+        if (currentTarget.currentHealth <= 0)
+        {
+            // destroy it!
+            _enemyController.DestroyEnemy(currentTarget);
+        }
 
         // now that we've hit, start looking for a new target
         state = State.lookingForTarget;

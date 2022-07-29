@@ -69,7 +69,7 @@ public class UIController : Singleton<UIController>
         foreach (UIElement element in primaryElements)
         {
             CanvasFadeGroup fadeGroup = element.GetComponent<CanvasFadeGroup>();
-            if (fadeGroup && fadeGroup.state == CanvasFadeGroup.FadeState.hidden)
+            if (fadeGroup && fadeGroup.Hidden)
             {
                 // skip if it's not visible
                 continue;

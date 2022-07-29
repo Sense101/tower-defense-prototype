@@ -54,7 +54,7 @@ TagManager:
   - name: Turrets
     uniqueID: 3361317583
     locked: 0
-  - name: Heath Bars
+  - name: Health Bars
     uniqueID: 3997937177
     locked: 0
   - name: Turret Placer

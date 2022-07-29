@@ -42,6 +42,7 @@ public class AugmentController : Singleton<AugmentController>
                 ApplyDamageAugment(stats, tier);
                 break;
             case Augment.Type.range:
+                Debug.Log("ok");
                 ApplyRangeAugment(stats, tier);
                 break;
             default:
@@ -82,6 +83,7 @@ public class AugmentController : Singleton<AugmentController>
     private void ApplyRangeAugment(TurretStatistics stats, int tier)
     {
         // do stuff, switch by tier
-        stats.range = Mathf.RoundToInt(stats.range * 1.5f);
+        //temp
+        stats.range *= 1.2f;
     }
 }

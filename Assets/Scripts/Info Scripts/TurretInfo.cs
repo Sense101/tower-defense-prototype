@@ -36,10 +36,10 @@ public class TurretInfo : ScriptableObject
 
     // Spin Speed
     [Tooltip("spin speed in degrees per second")]
-    [SerializeField] float _spinSpeedMultiplier = 1;
+    [SerializeField] float _spinSpeedModifier = 1;
     public float SpinSpeedModifier
     {
-        get => _spinSpeedMultiplier;
+        get => _spinSpeedModifier;
     }
 
     [Space(5)]

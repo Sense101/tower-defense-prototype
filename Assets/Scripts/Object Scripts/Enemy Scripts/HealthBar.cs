@@ -7,15 +7,16 @@ public class HealthBar : MonoBehaviour
 {
     const string FADE_IN_TRIGGER = "healthBarFadeIn";
 
-    [SerializeField] Canvas canvas = default;
-    [SerializeField] Image innerHealthBar = default;
+    [SerializeField] Canvas canvas;
+    [SerializeField] SpriteRenderer outerBar;
+    [SerializeField] Image innerHealthBar;
+    [SerializeField] Image innerArmorBar;
 
     Animator animator;
 
     bool visible = false;
 
-    // makes sure the canvas has the camera assigned
-    public void Initialize(Camera camera)
+    public void SetReferences(Camera camera)
     {
         canvas.worldCamera = camera;
         animator = GetComponent<Animator>();
@@ -30,9 +31,31 @@ public class HealthBar : MonoBehaviour
         if (!visible)
         {
             visible = true;
-            animator.SetTrigger(FADE_IN_TRIGGER);
+
+            StartCoroutine(Show());
         }
 
         innerHealthBar.fillAmount = fillAmount;
+    }
+
+    private IEnumerator Show()
+    {
+        Color currentColor = new Color(1, 1, 1, 0);
+        while (currentColor.a < 1)
+        {
+            currentColor.a += Time.deltaTime;
+
+            // set visiblities
+            outerBar.color = currentColor;
+            innerHealthBar.color = currentColor;
+
+            yield return null;
+        }
+    }
+
+    public void Hide()
+    {
+        outerBar.color = Color.clear;
+        innerHealthBar.color = Color.clear;
     }
 }

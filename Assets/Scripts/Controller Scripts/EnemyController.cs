@@ -4,205 +4,80 @@ using UnityEngine;
 /// <summary>
 /// Moves all enemies and tells them where to turn next, does not handle damage
 /// </summary>
-public class EnemyController : Singleton<EnemyController>
+public class EnemyController : ObjectPoolHandlerSingleton<EnemyController, Enemy>
 {
-    public readonly List<Enemy> enemies = new List<Enemy>();
+    public readonly List<Enemy> activeEnemies = new List<Enemy>();
+
+
     Map _map;
     TurretController _turretController;
-    float gapFromEdge;
+    Camera _mainCamera;
 
     private void Start()
     {
         _map = Map.Instance;
         _turretController = TurretController.Instance;
-        gapFromEdge = EnemySpawner.gapFromEdge;
+        _mainCamera = Camera.main;
     }
 
     private void Update()
     {
-        for (int i = 0; i < enemies.Count; i++)
+        foreach (Enemy e in activeEnemies)
         {
-            var enemy = enemies[i];
-            if (!enemy)
-            {
-                enemies.RemoveAt(i);
-                continue;
-            }
-
-            UpdateEnemy(enemy, enemy.transform.position);
+            MoveEnemy(e);
         }
     }
 
-    private void UpdateEnemy(Enemy enemy, Vector2 currentPos)
+    public Enemy CreateEnemy(Vector2 location, Angle rotation, EnemyInfo info, PathPoint nextPoint)
     {
-        if (enemy.turnProgress == EnemyInfo.TurnProgress.none)
-        {
-            if (currentPos == enemy.nextTile && !CheckForCorner(enemy, currentPos))
-            {
-                SetNextTile(enemy, currentPos);
-            }
-            enemy.MoveForwards(currentPos);
-        }
-        else
-        {
-            if (currentPos == enemy.nextTile)
-            {
-                if (enemy.turnProgress == EnemyInfo.TurnProgress.starting)
-                {
-                    enemy.turnProgress = EnemyInfo.TurnProgress.turning;
+        Enemy newEnemy = CreateObject(location, rotation, transform);
+        ModifyEnemy(newEnemy, info);
 
-                    var endOffset = (enemy.directionAngle.ToVector() + enemy.turnDirectionAngle.ToVector()) * gapFromEdge;
-                    enemy.nextTile = currentPos + endOffset;
+        newEnemy.targetPoint = nextPoint;
+        newEnemy.Activate();
 
-                    enemy.StartTurn(gapFromEdge);
+        activeEnemies.Add(newEnemy);
 
-                }
-                else if (enemy.turnProgress == EnemyInfo.TurnProgress.turning)
-                {
-                    enemy.turnProgress = EnemyInfo.TurnProgress.ending;
-                    SetNextTile(enemy, currentPos, enemy.turnPadding);
-                }
-                else if (enemy.turnProgress == EnemyInfo.TurnProgress.ending)
-                {
-                    enemy.turnProgress = EnemyInfo.TurnProgress.none;
-                    SetNextTile(enemy, currentPos);
-                }
-            }
-
-            if (enemy.turnProgress == EnemyInfo.TurnProgress.turning)
-            {
-                enemy.Turn(gapFromEdge);
-            }
-            else
-            {
-                enemy.MoveForwards(currentPos);
-            }
-        }
+        return newEnemy;
     }
 
-    /// <summary>
-    /// adds an enemy to the array
-    /// </summary>
-    public void Add(Enemy enemy)
+    protected override Enemy InstantiateObject(Vector2 location, Angle rotation, Transform parent)
     {
-        enemies.Add(enemy);
+        // instantiate
+        Enemy newObject = Instantiate(objectPrefab, location, rotation.AsQuaternion(), parent);
+
+        // set references - custom for enemies
+        newObject.SetReferences(_mainCamera);
+
+        // add to list
+        objects.Add(newObject);
+
+        return newObject;
     }
 
-    /// <summary>
-    /// checks in front of the enemy for a corner
-    /// </summary>
-    /// <returns>whether a corner was found</returns>
-    private bool CheckForCorner(Enemy enemy, Vector2 currentPos)
+    public void ModifyEnemy(Enemy e, EnemyInfo newInfo)
     {
-        /*  --- first check for a path up and to the side --- */
-
-        // find the vector to the tile we are checking
-        var turnDirection = new Vector2Int();
-        switch (enemy.pathSide)
-        {
-            case EnemyInfo.PathSide.left:
-                turnDirection = new Vector2Int(-1, 0);
-                break;
-            case EnemyInfo.PathSide.right:
-                turnDirection = new Vector2Int(1, 0);
-                break;
-            default:
-                break;
-        }
-
-        // the angle relative to the enemy
-        var turnAngle = new Angle(turnDirection).Rotate(enemy.directionAngle.degrees);
-
-        // if the tile is a path - we are on a corner
-        if (CheckTile(currentPos, turnAngle.ToVector(), true))
-        {
-            // set the distances for the turn
-            enemy.turnPadding = 0;
-
-            enemy.turnDirectionAngle = turnAngle;
-            enemy.turnDirection = turnDirection.x;
-
-            enemy.turnProgress = EnemyInfo.TurnProgress.starting;
-
-            return true;
-        }
-
-        /*  --- now check for ground two ahead --- */
-
-        // if the tile two ahead is ground - we are approaching a bend
-        if (CheckTile(currentPos, enemy.directionAngle.ToVector() * 2, false))
-        {
-            // set the distances for the turn
-            enemy.turnPadding = 1 - (gapFromEdge * 2);
-
-            // turn direction and angle is opposite to above
-            enemy.turnDirectionAngle = turnAngle.Rotate(180);
-            enemy.turnDirection = -turnDirection.x;
-
-            enemy.turnProgress = EnemyInfo.TurnProgress.starting;
-
-            SetNextTile(enemy, currentPos, enemy.turnPadding);
-
-            return true;
-        }
-
-        return false;
+        e.info = newInfo;
+        e.body.sprite = newInfo.sprite;
     }
 
-    /// <summary>
-    /// returns true if the tile is the same as specified
-    /// </summary>
-    private bool CheckTile(Vector2 currentPos, Vector2 tileOffset, bool isPath)
+    public void DestroyEnemy(Enemy e)
     {
-        var tilePos = Vector2Int.RoundToInt(currentPos + tileOffset);
-        var tile = _map.TryGetTileWorldSpace(tilePos);
-
-        if (tile != null && tile.Path == isPath) return true;
-
-        return false;
+        activeEnemies.Remove(e);
+        DeactivateObject(e);
     }
 
-    /// <summary>
-    /// set the next tile for the enemy to move to
-    /// </summary>
-    private void SetNextTile(Enemy enemy, Vector2 currentPos, float distanceMultiplier = 1)
+    private void MoveEnemy(Enemy e)
     {
-        enemy.nextTile = currentPos + (enemy.directionAngle.ToVector() * distanceMultiplier);
+        float moveSpeedDelta = e.info.MoveSpeed * Time.deltaTime;
+        Vector2 target = e.targetPoint.cachedWorldPos;
+
+        e.transform.position = Vector2.MoveTowards(e.transform.position, target, moveSpeedDelta);
+
+        // now check to see if we need to change path point
+        if ((Vector2)e.transform.position == target)
+        {
+            e.targetPoint.OnEnemyArrive(e);
+        }
     }
-
-
-    ///////////////////////////////
-    // OBSOLETE
-    ///////////////////////////////
-
-    /// <summary>
-    ///  update surrounding turrets so that they know to fire upon the enemy
-    /// </summary>
-    //private void UpdateTurrets(Enemy enemy, Vector2 currentPos)
-    //{
-    //    var turrets = turretController.turrets;
-    //    for (int i = 0; i < turrets.Count; i++)
-    //    {
-    //        var turret = turrets[i];
-    //
-    //        // add one to the range because we are only checking every tile
-    //        float detectionRange = turret.info.range + 1;
-    //
-    //        // find whether we are close enough to the turret
-    //        float xDiff = currentPos.x - turret.transform.position.x;
-    //        float yDiff = currentPos.y - turret.transform.position.y;
-    //        bool withinX = -detectionRange <= xDiff && xDiff <= detectionRange;
-    //        bool withinY = -detectionRange <= yDiff && yDiff <= detectionRange;
-    //
-    //        if (withinX && withinY)
-    //        {
-    //            // add this enemy to the list of targets for the turret
-    //            if (!turret.targets.Contains(enemy)) turret.targets.Add(enemy);
-    //        }
-    //        else
-    //        {
-    //            turret.targets.Remove(enemy);
-    //        }
-    //    }
-    //}
 }

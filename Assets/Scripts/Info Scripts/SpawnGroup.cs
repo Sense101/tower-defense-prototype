@@ -13,10 +13,10 @@ public class SpawnGroup
         get => _spawnAmount;
     }
 
-    [Tooltip("the enemy prefab")]
-    [SerializeField] GameObject _enemyPrefab = default;
-    public GameObject EnemyPrefab
+    [Tooltip("info about the enemy to spawn")]
+    [SerializeField] EnemyInfo _enemyInfo;
+    public EnemyInfo EnemyInfo
     {
-        get => _enemyPrefab;
+        get => _enemyInfo;
     }
 }

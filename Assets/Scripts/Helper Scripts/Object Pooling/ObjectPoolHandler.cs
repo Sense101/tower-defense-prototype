@@ -30,7 +30,13 @@ public abstract class ObjectPoolHandler<O> : MonoBehaviour where O : PoolObject
         }
     }
 
-    // "creates" a new object under the specified parent
+    /// <summary>
+    /// "creates" a new object under the specified parent
+    /// </summary>
+    /// <param name="location"></param>
+    /// <param name="rotation"></param>
+    /// <param name="parent"></param>
+    /// <returns></returns>
     protected virtual O CreateObject(Vector2 location, Angle rotation, Transform parent)
     {
         O newObject;

@@ -46,7 +46,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         if (turretPrefab)
         {
             _turretInterface.SetTurret(null);
-            UpdateRangeScale(turretPrefab);
+            UpdateRangeScale(turretPrefab, true);
             RecalculateCanPlace();
         }
         else
@@ -75,7 +75,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         {
             // stop choosing an upgrade
             SetChoosingUpgrade(null);
-            UpdateRangeScale(_currentTurretPrefab);
+            UpdateRangeScale(_currentTurretPrefab, true);
             return false;
         }
 
@@ -212,10 +212,10 @@ public class TurretPlacer : Singleton<TurretPlacer>
         rangePreview.transform.position = position;
     }
 
-    public void UpdateRangeScale(Turret turret)
+    public void UpdateRangeScale(Turret turret, bool useInfo = false)
     {
         float rangeScale;
-        if (turret.info.type == TurretInfo.Type.basic)
+        if (useInfo)
         {
             rangeScale = turret.info.RangeModifier * 2;
         }

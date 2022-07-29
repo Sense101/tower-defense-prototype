@@ -25,7 +25,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
             {
                 case Turret.State.lookingForTarget:
                     // the turret wants a target, give it one
-                    ChooseNewTarget(t, _enemyController.enemies);
+                    ChooseNewTarget(t, _enemyController.activeEnemies);
                     break;
                 case Turret.State.aiming:
                 case Turret.State.locked:
@@ -44,7 +44,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     {
         // create and activate a turret at the location specified
         Turret newTurret = CreateObject(location, Angle.zero, transform);
-        ModifyTurret(newTurret, newTurret.info); //@TODOOOOOOOOOO we don't need to modify the full thing here!
+        ModifyTurret(newTurret, newTurret.info);
 
         newTurret.Activate();
 
@@ -174,7 +174,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
         if (!firing)
         {
             // since we are not already firing, stop targeting enemies that go out of range
-            Vector2 targetPos = t.currentTarget.Body.position;
+            Vector2 targetPos = t.currentTarget.body.transform.position;
             float targetDistance = Vector2.Distance(t.transform.position, targetPos);
             if (targetDistance > t.stats.range)
             {
@@ -208,7 +208,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
 
     private Angle FindAngleToTarget(Turret t)
     {
-        Vector2 targetPos = t.currentTarget.Body.position;
+        Vector2 targetPos = t.currentTarget.body.transform.position;
         Gun currentGun = t.guns[t.currentGunIndex];
         float localGunRotation = currentGun.transform.localEulerAngles.z;
 
@@ -231,7 +231,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     {
         // find all the targets in range
         List<Enemy> targetsInRange = enemies.FindAll(x => {
-            return Vector2.Distance(t.transform.position, x.Body.position) <= t.stats.range;
+            return Vector2.Distance(t.transform.position, x.body.transform.position) <= t.stats.range;
         });
 
         if (targetsInRange.Count < 1)
@@ -340,7 +340,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
                     continue;
                 }
 
-                float targetDistance = Vector2.Distance(gun.transform.position, target.Body.position);
+                float targetDistance = Vector2.Distance(gun.transform.position, target.body.transform.position);
                 if (distanceToGun == 0 || targetDistance < distanceToGun)
                 {
                     // it's closer, set it as the gun

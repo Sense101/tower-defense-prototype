@@ -12,6 +12,7 @@ public class TurretInterface : Singleton<TurretInterface>
     [SerializeField] TextMeshProUGUI turretName;
     [SerializeField] UIButtonSelector targetTypeSelector;
     [SerializeField] TextMeshProUGUI damageText;
+    [SerializeField] TextMeshProUGUI rangeText;
 
 
     // internal variables
@@ -64,27 +65,30 @@ public class TurretInterface : Singleton<TurretInterface>
     public void ApplyAugment(int index)
     {
 
-        if (_selectedTurret)
+        if (!_selectedTurret)
         {
-
-            Augment augment;
-            int tier;
-            if (index == 0)
-            {
-                augment = _augmentController.damageAugment;
-                _selectedTurret.damageAugmentLevel++;
-                tier = _selectedTurret.damageAugmentLevel;
-                damageText.text = $"dmaage upgrade ({tier}/5)";
-            }
-            else
-            {
-                augment = _augmentController.rangeAugment;
-                tier = _selectedTurret.rangeAugmentLevel++;
-            }
-
-            _augmentController.ApplyAugment(_selectedTurret.stats, augment.type, tier);
-            //@TODO
+            // no turret selected, do nothing
+            return;
         }
+        Augment augment;
+        int tier;
+        if (index == 0)
+        {
+            augment = _augmentController.damageAugment;
+            _selectedTurret.damageAugmentLevel++;
+            tier = _selectedTurret.damageAugmentLevel;
+            damageText.text = $"damage upgrade ({tier}/5)";
+        }
+        else
+        {
+            augment = _augmentController.rangeAugment;
+            tier = _selectedTurret.rangeAugmentLevel++;
+            rangeText.text = $"range upgrade ({tier}/5)";
+        }
+
+        _augmentController.ApplyAugment(_selectedTurret.stats, augment.type, tier);
+        //@TODO
+        _turretPlacer.UpdateRangeScale(_selectedTurret);
     }
     public void ChooseAugment()
     {

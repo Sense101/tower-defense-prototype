@@ -19,6 +19,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     UIController _uiController;
     TurretPlacer _turretPlacer;
     TurretInterface _turretInterface;
+    AugmentInterface _augmentInterface;
     Map _map;
 
 
@@ -41,6 +42,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         _uiController = UIController.Instance;
         _turretPlacer = TurretPlacer.Instance;
         _turretInterface = TurretInterface.Instance;
+        _augmentInterface = AugmentInterface.Instance;
         _map = Map.Instance;
         _active = true;
     }
@@ -62,6 +64,11 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         }
 
         //@TODO check if we have any overlays open, and if so close them first
+        if (_augmentInterface.fadeGroup.Showing || _augmentInterface.fadeGroup.Shown)
+        {
+            _augmentInterface.Hide();
+            return;
+        }
 
         // then place turret if we have one selected
         if (_turretPlacer.GetTurretPrefab())

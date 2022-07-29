@@ -8,11 +8,6 @@
 [CreateAssetMenu]
 public class EnemyInfo : ScriptableObject
 {
-    public enum PathSide { left, right }
-    // move speed, health, armor, xp, extra stuff
-
-    public enum TurnProgress { none, starting, turning, ending }
-
     [Tooltip("move speed in tiles/sec")]
     [SerializeField] float _moveSpeed = 1.5f;
     public float MoveSpeed
@@ -33,4 +28,7 @@ public class EnemyInfo : ScriptableObject
     {
         get => _armor;
     }
+
+    [Header("Rendering")]
+    public Sprite sprite;
 }

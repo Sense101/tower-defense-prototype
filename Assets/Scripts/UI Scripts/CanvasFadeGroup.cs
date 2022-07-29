@@ -9,6 +9,12 @@ public class CanvasFadeGroup : MonoBehaviour
     public enum FadeState { hiding, showing, hidden, shown }
     public FadeState state = FadeState.hidden;
 
+    // accessors for checking the state quickly
+    public bool Hiding { get => state == FadeState.hiding; }
+    public bool Showing { get => state == FadeState.showing; }
+    public bool Hidden { get => state == FadeState.hidden; }
+    public bool Shown { get => state == FadeState.shown; }
+
     // set in inspector
     [SerializeField] float fadeTime = 1;
 
@@ -18,13 +24,13 @@ public class CanvasFadeGroup : MonoBehaviour
         _group = GetComponent<CanvasGroup>();
 
         // update the group immediately to match the state
-        if (state == FadeState.hidden)
+        if (Hidden)
         {
             _group.alpha = 0;
             _group.interactable = false;
             _group.blocksRaycasts = false;
         }
-        else if (state == FadeState.shown)
+        else if (Shown)
         {
             _group.alpha = 1;
             _group.interactable = true;
@@ -35,7 +41,7 @@ public class CanvasFadeGroup : MonoBehaviour
     private void Update()
     {
         // do stuff with canvas group depending on state
-        if (state == FadeState.hiding)
+        if (Hiding)
         {
             // slowly hide
             if (_group.alpha > 0)
@@ -47,7 +53,7 @@ public class CanvasFadeGroup : MonoBehaviour
                 state = FadeState.hidden;
             }
         }
-        else if (state == FadeState.showing)
+        else if (Showing)
         {
             // slowly show
             if (_group.alpha < 1)
@@ -67,7 +73,7 @@ public class CanvasFadeGroup : MonoBehaviour
 
     public void Hide(bool forceInstant = false)
     {
-        if (state == FadeState.shown || state == FadeState.showing)
+        if (Shown || Showing)
         {
             // disable interacting as soon as we start hiding
             _group.interactable = false;
@@ -89,7 +95,7 @@ public class CanvasFadeGroup : MonoBehaviour
 
     public void Show(bool forceInstant = false)
     {
-        if (state == FadeState.hidden || state == FadeState.hiding)
+        if (Hidden || Hiding)
         {
             if (fadeTime <= 0 || forceInstant)
             {

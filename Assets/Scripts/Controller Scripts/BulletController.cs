@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BulletController : ObjectPoolHandlerSingleton<BulletController, Bullet>
 {
-    // creates a bullet with the controller as the parent
+    // creates a bullet with the bullet controller as the parent
     public Bullet CreateBullet(BulletInfo info, BulletStatistics newStatistics, Vector2 location, Angle rotation)
     {
         return CreateBullet(info, newStatistics, location, rotation, transform);
