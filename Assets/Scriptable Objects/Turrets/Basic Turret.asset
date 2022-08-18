@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   _damageModifier: 10
-  _rangeModifier: 2.5
+  _rangeModifier: 25
   _reloadTimeModifier: 1
   _spinSpeedModifier: 100
   fullSprite: {fileID: 21300000, guid: 16cf81ec93aebc94e85d6155ba470fa5, type: 3}
@@ -24,10 +24,10 @@ MonoBehaviour:
   gunMountSprite: {fileID: 21300000, guid: 04a19a2fb4ea55948b96c2c4d4d1d74b, type: 3}
   guns:
   - sprite: {fileID: 21300000, guid: d291f8536c30f9b4798644017d622a12, type: 3}
-    localPosition: {x: 0, y: 0.37}
+    localPosition: {x: 0, y: 3.7}
     localRotation: 0
     bodyDefaultPosition: {x: 0, y: 0}
-    bodyFirePosition: {x: 0, y: -0.1}
+    bodyFirePosition: {x: 0, y: -1}
   bulletInfo:
     sprite: {fileID: 21300000, guid: 42c8e04c56b6dfe4dbcb3961b1ed8db8, type: 3}
     controller: {fileID: 9100000, guid: 6563ccc37c20ea549aa2f16dc55e9a37, type: 2}

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    const string FADE_IN_TRIGGER = "healthBarFadeIn";
+    const float FADE_IN_SPEED = 2;
 
     [SerializeField] Canvas canvas;
     [SerializeField] SpriteRenderer outerBar;
@@ -43,7 +43,7 @@ public class HealthBar : MonoBehaviour
         Color currentColor = new Color(1, 1, 1, 0);
         while (currentColor.a < 1)
         {
-            currentColor.a += Time.deltaTime;
+            currentColor.a += Time.deltaTime * FADE_IN_SPEED;
 
             // set visiblities
             outerBar.color = currentColor;
@@ -57,5 +57,6 @@ public class HealthBar : MonoBehaviour
     {
         outerBar.color = Color.clear;
         innerHealthBar.color = Color.clear;
+        visible = false;
     }
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   _damageModifier: 3
   _rangeModifier: 0.8
   _reloadTimeModifier: 2
-  _spinSpeedMultiplier: 0.6
+  _spinSpeedModifier: 1
   fullSprite: {fileID: 21300000, guid: 1ee940c5913666f41b976a9e8d47bfd8, type: 3}
   previewSprite: {fileID: 21300000, guid: 8da8c247fcf82bb4fb6cc87c2c215ffa, type: 3}
   turretBaseSprite: {fileID: 21300000, guid: b11a896cabcd1f247a09d33b95bb50f3, type: 3}
@@ -24,10 +24,10 @@ MonoBehaviour:
   gunMountSprite: {fileID: 21300000, guid: 3f537b3db0716ac4aa63a25957d8fd9c, type: 3}
   guns:
   - sprite: {fileID: 21300000, guid: 5061058ced799d34ab9e51d3e42de9c4, type: 3}
-    localPosition: {x: 0, y: 0.35}
+    localPosition: {x: 0, y: 3.5}
     localRotation: 0
     bodyDefaultPosition: {x: 0, y: 0}
-    bodyFirePosition: {x: 0, y: -0.1}
+    bodyFirePosition: {x: 0, y: -1}
   bulletInfo:
     sprite: {fileID: 21300000, guid: 42c8e04c56b6dfe4dbcb3961b1ed8db8, type: 3}
     controller: {fileID: 9100000, guid: 6563ccc37c20ea549aa2f16dc55e9a37, type: 2}

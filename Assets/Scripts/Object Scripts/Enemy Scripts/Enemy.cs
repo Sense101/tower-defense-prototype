@@ -54,8 +54,9 @@ public class Enemy : PoolObject
     }
 
     /// <summary>
-    /// reduces the enemies health
+    /// reduces the enemies health/armor
     /// </summary>
+    /// <returns>@todo the reduction of health and armor</returns>
     public void TakeHit(int damage, int armorPiercing)
     {
         //@TODO implement armor

@@ -225,6 +225,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -247,7 +248,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 200
+  spritePixelsToUnits: 20
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -290,6 +291,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1153,6 +1166,47 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      path_test_full_36: -7830644786239805243
+      path_test_full_6: 1682891862363844855
+      path_test_full_23: -7845957782230562019
+      path_test_full_24: 5518942255500294162
+      path_test_full_0: -1864974212331143132
+      path_test_full_25: -8002270169353287174
+      path_test_full_28: -8582688231440549721
+      path_test_full_20: -558377075254849245
+      path_test_full_4: -7580707364808928783
+      path_test_full_27: 6357292804287364158
+      path_test_full_8: -5346049261535250216
+      path_test_full_34: -1200132646886808113
+      path_test_full_5: 2780041869619841538
+      path_test_full_38: 9101973339091088833
+      path_test_full_2: -41821524756261190
+      path_test_full_22: 2494759385640091912
+      path_test_full_37: 4803427185802654005
+      path_test_full_39: 4540657552934047473
+      path_test_full_10: -3845110982690284618
+      path_test_full_33: 8524294480004379835
+      path_test_full_35: -8619860739009880206
+      path_test_full_1: -1932967578030618267
+      path_test_full_29: 7222124000362715235
+      path_test_full_21: 9175170942644602802
+      path_test_full_9: 6614110836104135906
+      path_test_full_14: -1121445989484900121
+      path_test_full_13: -8186137188033263343
+      path_test_full_19: -8733452755744083179
+      path_test_full_3: 1154489144103602916
+      path_test_full_7: -3218760227697721783
+      path_test_full_15: -2819544989126103379
+      path_test_full_17: -9110777787623788889
+      path_test_full_16: 2068746416044611247
+      path_test_full_31: -371231366340901753
+      path_test_full_18: 6724274205481850837
+      path_test_full_12: 2639852108653140578
+      path_test_full_11: -1117418973322459437
+      path_test_full_30: -6137243323404139984
+      path_test_full_26: -8732401482556851534
+      path_test_full_32: 519390336188464292
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

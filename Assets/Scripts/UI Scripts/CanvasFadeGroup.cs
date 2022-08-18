@@ -15,26 +15,44 @@ public class CanvasFadeGroup : MonoBehaviour
     public bool Hidden { get => state == FadeState.hidden; }
     public bool Shown { get => state == FadeState.shown; }
 
-    // set in inspector
     [SerializeField] float fadeTime = 1;
+
+    [Header("Scaling")]
+    [SerializeField] bool modifyScale = false;
+    [SerializeField] float hiddenScale = 1;
+    [SerializeField] float shownScale = 1;
+
+    [Header("Position")]
+    [SerializeField] bool modifyPosition = false;
+    [SerializeField] Vector2 hiddenPosition = Vector2.zero;
+    [SerializeField] Vector2 shownPosition = Vector2.zero;
+
+    float _cachedhiddenToShownScale;
+    float _cachedhiddenToShownDistance;
 
     CanvasGroup _group;
     private void Awake()
     {
         _group = GetComponent<CanvasGroup>();
 
-        // update the group immediately to match the state
-        if (Hidden)
+        // cache
+        if (modifyScale)
         {
-            _group.alpha = 0;
-            _group.interactable = false;
-            _group.blocksRaycasts = false;
+            _cachedhiddenToShownScale = shownScale - hiddenScale;
         }
-        else if (Shown)
+        if (modifyPosition)
         {
-            _group.alpha = 1;
-            _group.interactable = true;
-            _group.blocksRaycasts = true;
+            _cachedhiddenToShownDistance = Vector2.Distance(hiddenPosition, shownPosition);
+        }
+
+        // update the group immediately to match the state
+        if (Hidden || Showing)
+        {
+            CompleteHide();
+        }
+        else if (Shown || Hiding)
+        {
+            CompleteShow();
         }
     }
 
@@ -47,10 +65,14 @@ public class CanvasFadeGroup : MonoBehaviour
             if (_group.alpha > 0)
             {
                 _group.alpha -= (1 / fadeTime) * Time.deltaTime;
+
+                ModifyScale(_group.alpha);
+                ModifyPosition(_group.alpha);
             }
             else
             {
                 state = FadeState.hidden;
+                CompleteHide();
             }
         }
         else if (Showing)
@@ -59,14 +81,14 @@ public class CanvasFadeGroup : MonoBehaviour
             if (_group.alpha < 1)
             {
                 _group.alpha += (1 / fadeTime) * Time.deltaTime;
+
+                ModifyScale(_group.alpha);
+                ModifyPosition(_group.alpha);
             }
             else
             {
                 state = FadeState.shown;
-
-                // reenable interaction when we are fully visible
-                _group.interactable = true;
-                _group.blocksRaycasts = true;
+                CompleteShow();
             }
         }
     }
@@ -100,7 +122,6 @@ public class CanvasFadeGroup : MonoBehaviour
             if (fadeTime <= 0 || forceInstant)
             {
                 // it's instant
-                _group.alpha = 1;
                 state = FadeState.shown;
             }
             else
@@ -108,6 +129,56 @@ public class CanvasFadeGroup : MonoBehaviour
                 // set the state so we can show over time
                 state = FadeState.showing;
             }
+        }
+    }
+
+    private void ModifyScale(float alpha)
+    {
+        if (modifyScale)
+        {
+            float newScale = hiddenScale + (_cachedhiddenToShownScale * _group.alpha);
+            transform.localScale = new Vector2(newScale, newScale);
+        }
+    }
+
+    private void ModifyPosition(float alpha)
+    {
+        if (modifyPosition)
+        {
+            float newDistance = _cachedhiddenToShownDistance * _group.alpha;
+            transform.localPosition = Vector2.MoveTowards(hiddenPosition, shownPosition, newDistance);
+        }
+    }
+
+    private void CompleteHide()
+    {
+        _group.alpha = 0;
+        _group.interactable = false;
+        _group.blocksRaycasts = false;
+
+        if (modifyScale)
+        {
+            transform.localScale = new Vector2(hiddenScale, hiddenScale);
+        }
+        if (modifyPosition)
+        {
+            transform.localPosition = hiddenPosition;
+        }
+    }
+
+    private void CompleteShow()
+    {
+        _group.alpha = 1;
+        _group.interactable = true;
+        _group.blocksRaycasts = true;
+
+        if (modifyScale)
+        {
+            transform.localScale = new Vector2(shownScale, shownScale);
+        }
+        if (modifyPosition)
+        {
+            transform.localPosition = shownPosition;
         }
     }
 }

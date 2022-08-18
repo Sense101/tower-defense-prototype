@@ -7,16 +7,12 @@
 public class SpawnGroup
 {
     [Tooltip("the amount to spawn")]
-    [SerializeField] int _spawnAmount = 10;
-    public int SpawnAmount
-    {
-        get => _spawnAmount;
-    }
+    public int spawnAmount = 10;
 
     [Tooltip("info about the enemy to spawn")]
-    [SerializeField] EnemyInfo _enemyInfo;
-    public EnemyInfo EnemyInfo
-    {
-        get => _enemyInfo;
-    }
+    public EnemyInfo enemyInfo;
+
+    [Header("Delays")]
+    public float delayBeforeSpawn = 1;
+    public float delayBetweenSpawns = 1;
 }
