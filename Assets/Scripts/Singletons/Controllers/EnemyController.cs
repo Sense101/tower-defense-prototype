@@ -4,9 +4,9 @@ using UnityEngine;
 /// <summary>
 /// Moves all enemies and tells them where to turn next, does not handle damage
 /// </summary>
-public class EnemyController : ObjectPoolHandlerSingleton<EnemyController, Enemy>
+public class EnemyController : Singleton<EnemyController>
 {
-    public readonly List<Enemy> activeEnemies = new List<Enemy>();
+    public List<Enemy> enemies = new List<Enemy>();
 
 
     Map _map;
@@ -22,50 +22,39 @@ public class EnemyController : ObjectPoolHandlerSingleton<EnemyController, Enemy
 
     private void Update()
     {
-        foreach (Enemy e in activeEnemies)
+        for (int i = 0; i < enemies.Count; i++)
         {
+            var e = enemies[i];
+            if (!e)
+            {
+                enemies.RemoveAt(i);
+                continue;
+            }
+
             MoveEnemy(e);
         }
     }
 
-    //@todo seperate pool for each enemy!
-    public Enemy CreateEnemy(Vector2 location, Angle rotation, EnemyInfo info, PathPoint nextPoint)
+    public Enemy SpawnEnemy(Vector2 location, Angle rotation, GameObject prefab, PathPoint nextPoint)
     {
-        Enemy newEnemy = CreateObject(location, rotation, transform);
-        ModifyEnemy(newEnemy, info);
-
+        Enemy newEnemy = Instantiate(prefab, location, Quaternion.identity, transform).GetComponent<Enemy>();
         newEnemy.targetPoint = nextPoint;
-        newEnemy.Activate();
 
-        activeEnemies.Add(newEnemy);
+        newEnemy.SetBodyRotation(rotation);
+        newEnemy.SetReferences(_mainCamera);
+        newEnemy.EnemyStart();
+
+        Add(newEnemy);
 
         return newEnemy;
     }
 
-    protected override Enemy InstantiateObject(Vector2 location, Angle rotation, Transform parent)
+    /// <summary>
+    /// adds an enemy to the array
+    /// </summary>
+    public void Add(Enemy enemy)
     {
-        // instantiate
-        Enemy newObject = Instantiate(objectPrefab, location, rotation.AsQuaternion(), parent);
-
-        // set references - custom for enemies
-        newObject.SetReferences(_mainCamera);
-
-        // add to list
-        objects.Add(newObject);
-
-        return newObject;
-    }
-
-    public void ModifyEnemy(Enemy e, EnemyInfo newInfo)
-    {
-        e.info = newInfo;
-        e.body.sprite = newInfo.sprite;
-    }
-
-    public void DestroyEnemy(Enemy e)
-    {
-        activeEnemies.Remove(e);
-        DeactivateObject(e);
+        enemies.Add(enemy);
     }
 
     private void MoveEnemy(Enemy e)

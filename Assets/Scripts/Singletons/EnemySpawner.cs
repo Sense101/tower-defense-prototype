@@ -38,10 +38,10 @@ public class EnemySpawner : Singleton<EnemySpawner>
                     Vector2 spawnPos = transform.position;
                     Angle spawnAngle = new Angle(transform.rotation);
 
-                    Enemy newEnemy = _enemyController.CreateEnemy(
+                    Enemy newEnemy = _enemyController.SpawnEnemy(
                         spawnPos,
                         spawnAngle,
-                        group.enemyInfo,
+                        group.enemyPrefab,
                         firstPoint
                     );
 

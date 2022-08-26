@@ -27,7 +27,7 @@ public class PathPoint : MonoBehaviour
         {
             enemy.targetPoint = nextPoint;
             Angle towardsPoint = Angle.Towards(enemy.transform.position, nextPoint.transform.position);
-            enemy.SetRotation(towardsPoint);
+            enemy.SetBodyRotation(towardsPoint);
         }
     }
 }

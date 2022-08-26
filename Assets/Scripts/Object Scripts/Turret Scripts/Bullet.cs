@@ -4,23 +4,23 @@ using UnityEngine.Events;
 public class Bullet : PoolObject
 {
     const string ACTIVATE_TRIGGER = "activate";
-    public enum Type { fake, real }
 
     // set in inspector
     public SpriteRenderer body;
 
     // internal variables
-    public Type type = Type.fake;
     public BulletStatistics stats;
 
     // called when we hit something, passing in the damage
     [HideInInspector] public UnityEvent<int> onHitEvent = new UnityEvent<int>();
 
     Animator _animator;
+    BulletController _bulletController;
 
     public override void SetReferences()
     {
         _animator = GetComponent<Animator>();
+        _bulletController = BulletController.Instance;
     }
 
     public override void Activate()

@@ -25,7 +25,6 @@ public class BulletController : ObjectPoolHandlerSingleton<BulletController, Bul
         // match info
         b.body.sprite = info.sprite;
         b.SetController(info.controller);
-        b.type = info.type;
 
         b.stats = newStatistics;
     }

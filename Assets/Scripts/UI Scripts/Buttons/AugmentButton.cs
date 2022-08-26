@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class AugmentButton : UIButton
 {
-
-    TurretInterface _turretInterface;
-    AugmentInterface _augmentInterface;
-
-    protected override void SetReferences()
+    public override void OnClick()
     {
-        _turretInterface = TurretInterface.Instance;
-        _augmentInterface = AugmentInterface.Instance;
+        TurretInterface.Instance.ChooseAugment();
+        //_augmentInterface.Show();
     }
 
-    protected override void OnClick()
+    public override void OnHoverStart()
     {
-        _turretInterface.ChooseAugment();
-        //_augmentInterface.Show();
+        throw new System.NotImplementedException();
+    }
+
+    public override void OnHoverEnd()
+    {
+        throw new System.NotImplementedException();
     }
 }

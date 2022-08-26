@@ -8,7 +8,7 @@ public class Turret : PoolObject
 {
     // enums
     public enum State { none, lookingForTarget, aiming, locked, firing }
-    public enum TargetType { close, first, strong, weak }
+    public enum TargetType { close, strong, weak, random }
 
     [HideInInspector] public UnityEvent onBulletHitEvent = new UnityEvent();
 
@@ -36,22 +36,19 @@ public class Turret : PoolObject
     public int damageAugmentLevel = 0;
     public int rangeAugmentLevel = 0;
     public int customAugmentLevel = 0;
-    public Augment customAugment;
+    public UpgradeInfo[] upgrades = new UpgradeInfo[3];
 
     [Space(10)]
     // and the actual statistics - this is what augments will modify
     public TurretStatistics stats;
-
-    BulletController _bulletController;
-    EnemyController _enemyController;
 
     public override void SetReferences()
     {
         // inizialize statistics
         stats = new TurretStatistics();
 
-        _bulletController = BulletController.Instance;
-        _enemyController = EnemyController.Instance;
+        //_bulletController = BulletController.Instance;
+        //_enemyController = EnemyController.Instance;
     }
 
 
@@ -149,7 +146,7 @@ public class Turret : PoolObject
                 BulletStatistics newBulletStats = new BulletStatistics(currentTarget, stats.damage, stats.armorPiercing);
                 Vector2 spawnPos = currentGun.transform.position;
                 Angle spawnAngle = new Angle(currentGun.transform.rotation);
-                Bullet newBullet = _bulletController.CreateBullet(info.bulletInfo, newBulletStats, spawnPos, spawnAngle, currentGun.transform);
+                Bullet newBullet = BulletController.Instance.CreateBullet(info.bulletInfo, newBulletStats, spawnPos, spawnAngle, currentGun.transform);
                 newBullet.onHitEvent.AddListener(damage => OnBulletHit(newBullet, damage));
 
                 // wait till firing is complete
@@ -181,14 +178,7 @@ public class Turret : PoolObject
 
         // now destroy the bullet, its done its job
         b.onHitEvent.RemoveAllListeners();
-        _bulletController.DestroyBullet(b);
-
-        // check if the enemy is dead
-        if (currentTarget.currentHealth <= 0)
-        {
-            // destroy it!
-            _enemyController.DestroyEnemy(currentTarget);
-        }
+        BulletController.Instance.DestroyBullet(b);
 
         // now that we've hit, start looking for a new target
         state = State.lookingForTarget;

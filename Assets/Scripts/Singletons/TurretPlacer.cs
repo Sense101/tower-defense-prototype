@@ -2,17 +2,17 @@
 
 public class TurretPlacer : Singleton<TurretPlacer>
 {
-    //@TODO change all these to hsvcolor
-    readonly Color UNBLOCKED_COLOR = new Color(255, 255, 255, 0.4f);
-    readonly Color BLOCKED_COLOR = new Color(255, 0, 0, 0.1f);
-    readonly Color RANGE_UNBLOCKED_COLOR = new Color(150, 150, 150, 0.05f);
-    readonly Color RANGE_BLOCKED_COLOR = new Color(200, 0, 0, 0.05f);
+    [SerializeField] Color unblockedColor;// = new HSVColor(255, 255, 255, 40);
+    [SerializeField] Color blockedColor;// = new HSVColor(255, 0, 0, 10);
+    [SerializeField] Color unblockedRangeColor;// = new HSVColor(150, 150, 150, 5);
+    [SerializeField] Color blockedRangeColor;// = new HSVColor(200, 0, 0, 5);
 
-    public enum State { canPlace, cannotPlace, choosingUpgrade }
+    public enum State { canPlace, cannotPlace, choosingMutation }
 
     // set in inspector
     public SpriteRenderer turretPreview;
     public SpriteRenderer rangePreview;
+    public SpriteRenderer mutationPreview;
 
     // internal variables
     private bool _overUI = false;
@@ -23,7 +23,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
     Map _map;
     TurretController _turretController;
     TurretInterface _turretInterface;
-    UpgradeInterface _upgradeInterface;
+    MutationInterface _mutationInterface;
     EnemyController _enemyController;
 
     private void Start()
@@ -31,7 +31,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         _map = Map.Instance;
         _turretController = TurretController.Instance;
         _turretInterface = TurretInterface.Instance;
-        _upgradeInterface = UpgradeInterface.Instance;
+        _mutationInterface = MutationInterface.Instance;
         _enemyController = EnemyController.Instance;
 
         InputController.mouseMoveEvent.AddListener(OnMouseMoveEvent);
@@ -50,10 +50,10 @@ public class TurretPlacer : Singleton<TurretPlacer>
         else
         {
             // make sure range color is back to normal
-            rangePreview.color = RANGE_UNBLOCKED_COLOR;
+            rangePreview.color = unblockedRangeColor;
         }
 
-        UpdateActivePreviews();
+        UpdatePreviews();
     }
 
     public Turret GetTurretPrefab()
@@ -69,7 +69,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
             return false;
         }
 
-        if (_state == State.choosingUpgrade)
+        if (_state == State.choosingMutation)
         {
             // stop choosing an upgrade
             SetChoosingUpgrade(null);
@@ -93,7 +93,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         }
 
         // create the turret
-        Turret newTurret = _turretController.PlaceTurret(_currentMouseTile * 10);
+        Turret newTurret = _turretController.PlaceTurret(_map.MapToWorldSpace(_currentMouseTile));
 
         // add it to the map
         _map.SetTurret(_currentMouseTile, newTurret);
@@ -118,7 +118,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         // try and deselect the turret
         if (_currentTurretPrefab)
         {
-            if (_state == State.choosingUpgrade)
+            if (_state == State.choosingMutation)
             {
                 // reset back to normal, we are cancelling
                 SetChoosingUpgrade(null);
@@ -141,7 +141,8 @@ public class TurretPlacer : Singleton<TurretPlacer>
         if (newMouseTile != _currentMouseTile)
         {
             _currentMouseTile = newMouseTile;
-            if (_currentTurretPrefab && _state != State.choosingUpgrade)
+
+            if (_currentTurretPrefab && _state != State.choosingMutation)
             {
                 RecalculateCanPlace();
             }
@@ -151,19 +152,23 @@ public class TurretPlacer : Singleton<TurretPlacer>
     private void OnOverUIEvent(bool overUI)
     {
         _overUI = overUI;
-        UpdateActivePreviews();
+
+        if (_state != State.choosingMutation)
+        {
+            UpdatePreviews();
+        }
     }
 
     private void SetChoosingUpgrade(Turret turret)
     {
         if (turret)
         {
-            _upgradeInterface.Show(turret);
-            _state = State.choosingUpgrade;
+            _mutationInterface.Show(turret);
+            _state = State.choosingMutation;
         }
         else
         {
-            _upgradeInterface.Hide();
+            _mutationInterface.Hide();
             RecalculateCanPlace();
         }
     }
@@ -171,8 +176,11 @@ public class TurretPlacer : Singleton<TurretPlacer>
     // recalculates if we can place at the current tile and updates the previews
     private void RecalculateCanPlace()
     {
+        MoveToCurrentTile();
+
         // we are at a new tile, recalculate if we can place
         bool isPlaceable = _map.IsTilePlaceable(_currentMouseTile);
+
         if (isPlaceable)
         {
             _state = State.canPlace;
@@ -182,33 +190,35 @@ public class TurretPlacer : Singleton<TurretPlacer>
             _state = State.cannotPlace;
         }
 
-        // move the previews
-        UpdatePreviewPosition(_currentMouseTile * 10);
 
         // set the color
-        Color newColor = _state == State.canPlace ? UNBLOCKED_COLOR : BLOCKED_COLOR;
+        Color newColor = _state == State.canPlace ? unblockedColor : blockedColor;
         turretPreview.color = newColor;
-        rangePreview.color = _state == State.canPlace ? RANGE_UNBLOCKED_COLOR : RANGE_BLOCKED_COLOR;
+        rangePreview.color = _state == State.canPlace ? unblockedRangeColor : blockedRangeColor;
 
-        UpdateActivePreviews();
+        UpdatePreviews();
+
+    }
+
+    public void MoveToCurrentTile()
+    {
+        transform.position = _map.MapToWorldSpace(_currentMouseTile);
     }
 
     // updates the previews
-    private void UpdateActivePreviews()
+    private void UpdatePreviews()
     {
-        bool hideOverUi = _overUI && !(_state == State.choosingUpgrade);
+        Turret turretUnderneath = _map.GetTurret(_currentMouseTile);
+
+        bool hideOverUi = _overUI && !(_state == State.choosingMutation);
         bool placerActive = _currentTurretPrefab && !hideOverUi;
 
-        turretPreview.gameObject.SetActive(placerActive);
+        turretPreview.gameObject.SetActive(placerActive && !turretUnderneath);
 
         // range preview also shows when there is a turret selected
         rangePreview.gameObject.SetActive(_turretInterface.GetTurret() || placerActive);
-    }
 
-    private void UpdatePreviewPosition(Vector2 position)
-    {
-        turretPreview.transform.position = position;
-        rangePreview.transform.position = position;
+        mutationPreview.gameObject.SetActive(placerActive && turretUnderneath);
     }
 
     public void UpdateRangeScale(Turret turret, bool useInfo = false)
@@ -228,7 +238,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
 
     public void UpgradeTurret(TurretInfo info)
     {
-        Turret turret = _map.GetTurretWorldSpace(Vector2Int.RoundToInt(rangePreview.transform.position));
+        Turret turret = _map.GetTurretWorldSpace(transform.position);
         _turretController.ModifyTurret(turret, info);
     }
 }

@@ -6,12 +6,22 @@ public class HSVColor
     [Range(0, 360)] public int h; // hue
     [Range(0, 100)] public int s; // saturation
     [Range(0, 100)] public int v; // value
+    [Range(0, 100)] public int a; // alphA
 
-    public HSVColor(int h = 0, int s = 0, int v = 100)
+    public HSVColor()
+    {
+        this.h = 0;
+        this.s = 0;
+        this.v = 0;
+        this.a = 0;
+    }
+
+    public HSVColor(int h, int s, int v, int a = 100)
     {
         this.h = h;
         this.s = s;
         this.v = v;
+        this.a = a;
     }
 
     /// <summary>
@@ -19,7 +29,9 @@ public class HSVColor
     /// </summary>
     public Color AsColor()
     {
-        return Color.HSVToRGB((float)h / 360f, (float)s / 100f, (float)v / 100f);
+        Color asColor = Color.HSVToRGB((float)h / 360f, (float)s / 100f, (float)v / 100f);
+        asColor.a = (float)a / 100f;
+        return asColor;
     }
 
     /// <summary>

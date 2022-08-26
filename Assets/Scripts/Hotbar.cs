@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //@todo this is all temp
-public class Hotbar : GroupToggleSelector
+public class Hotbar : UIToggleSelector
 {
     public void DeselectAll()
     {
-        foreach (GroupToggle toggle in childToggles)
+        foreach (UIToggle toggle in childToggles)
         {
 
             toggle.SetIsOn(false, true);

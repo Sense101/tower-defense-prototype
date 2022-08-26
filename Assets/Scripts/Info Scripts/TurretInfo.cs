@@ -57,8 +57,5 @@ public class TurretInfo : ScriptableObject
     public BulletInfo bulletInfo;
 
     [Space(5)]
-    [Header("Upgrade Paths")]
-    public TurretInfo path1;
-    public TurretInfo path2;
-    public TurretInfo path3;
+    public TurretInfo[] mutationPaths;
 }

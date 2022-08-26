@@ -42,7 +42,7 @@ public class Map : Singleton<Map>
     public Vector2 MapToWorldSpace(Vector2Int mapSpace)
     {
         Vector3Int cellSpace = (Vector3Int)mapSpace;
-        return _grid.CellToWorld(cellSpace);
+        return _grid.CellToWorld(cellSpace) + (_grid.cellSize / 2);
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public class Map : Singleton<Map>
     {
         return TryGetTile(mapSpace)?.Turret;
     }
-    public Turret GetTurretWorldSpace(Vector2Int worldSpace)
+    public Turret GetTurretWorldSpace(Vector2 worldSpace)
     {
         return GetTurret(WorldToMapSpace(worldSpace));
     }

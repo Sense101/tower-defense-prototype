@@ -6,5 +6,4 @@ public class BulletInfo
 {
     public Sprite sprite;
     public RuntimeAnimatorController controller;
-    public Bullet.Type type;
 }

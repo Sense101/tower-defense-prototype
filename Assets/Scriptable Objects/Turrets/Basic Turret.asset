@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   _damageModifier: 10
-  _rangeModifier: 25
+  _rangeModifier: 24
   _reloadTimeModifier: 1
   _spinSpeedModifier: 100
   fullSprite: {fileID: 21300000, guid: 16cf81ec93aebc94e85d6155ba470fa5, type: 3}
@@ -31,7 +31,7 @@ MonoBehaviour:
   bulletInfo:
     sprite: {fileID: 21300000, guid: 42c8e04c56b6dfe4dbcb3961b1ed8db8, type: 3}
     controller: {fileID: 9100000, guid: 6563ccc37c20ea549aa2f16dc55e9a37, type: 2}
-    type: 0
-  path1: {fileID: 11400000, guid: b68204ea97f57984795bbad97ce612f0, type: 2}
-  path2: {fileID: 11400000, guid: 5af18dffed60359409220cd48bcc4e52, type: 2}
-  path3: {fileID: 11400000, guid: 2503d050ced2c2f41b5af7751a37f849, type: 2}
+  mutationPaths:
+  - {fileID: 11400000, guid: b68204ea97f57984795bbad97ce612f0, type: 2}
+  - {fileID: 11400000, guid: 5af18dffed60359409220cd48bcc4e52, type: 2}
+  - {fileID: 11400000, guid: 2503d050ced2c2f41b5af7751a37f849, type: 2}

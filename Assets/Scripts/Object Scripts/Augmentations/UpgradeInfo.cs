@@ -1,11 +1,12 @@
 using UnityEngine;
 
 /// <summary>
-/// this is the actual augentation scriptable object
+/// info about a specific turret upgrade
 /// </summary>
 [CreateAssetMenu]
-public class Augment : ScriptableObject
+public class UpgradeInfo : ScriptableObject
 {
+    public string id;
     public enum Type
     {
         damage, range

@@ -24,6 +24,7 @@ public class CanvasFadeGroup : MonoBehaviour
 
     [Header("Position")]
     [SerializeField] bool modifyPosition = false;
+    [SerializeField] bool relativeToStartPosition = false;
     [SerializeField] Vector2 hiddenPosition = Vector2.zero;
     [SerializeField] Vector2 shownPosition = Vector2.zero;
 
@@ -43,6 +44,13 @@ public class CanvasFadeGroup : MonoBehaviour
         if (modifyPosition)
         {
             _cachedhiddenToShownDistance = Vector2.Distance(hiddenPosition, shownPosition);
+
+            if (relativeToStartPosition)
+            {
+                // change positions to be relative
+                hiddenPosition += (Vector2)transform.localPosition;
+                shownPosition += (Vector2)transform.localPosition;
+            }
         }
 
         // update the group immediately to match the state
@@ -117,6 +125,10 @@ public class CanvasFadeGroup : MonoBehaviour
 
     public void Show(bool forceInstant = false)
     {
+        // enable interacting as soon as we start showing
+        _group.interactable = true;
+        _group.blocksRaycasts = true;
+
         if (Hidden || Hiding)
         {
             if (fadeTime <= 0 || forceInstant)

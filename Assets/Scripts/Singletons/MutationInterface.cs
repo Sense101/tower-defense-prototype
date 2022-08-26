@@ -1,12 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UpgradeInterface : Singleton<UpgradeInterface>
+public class MutationInterface : Singleton<MutationInterface>
 {
     // set in inspector
-    [SerializeField] Image path1;
-    [SerializeField] Image path2;
-    [SerializeField] Image path3;
+    [SerializeField] Image[] pathImages;
 
     // internal variables
     private Turret _selectedTurret;
@@ -28,9 +26,23 @@ public class UpgradeInterface : Singleton<UpgradeInterface>
         _selectedTurret = turret;
 
         // update previews - still work @todo here
-        path1.sprite = _selectedTurret.info.path1.fullSprite;
-        path2.sprite = _selectedTurret.info.path2.fullSprite;
-        path3.sprite = _selectedTurret.info.path3.fullSprite;
+        for (int i = 0; i < pathImages.Length; i++)
+        {
+            Image pathImage = pathImages[i];
+
+            if (_selectedTurret.info.mutationPaths.Length > i)
+            {
+                TurretInfo mutationInfo = _selectedTurret.info.mutationPaths[i];
+
+                // enable the path image @todo this is not nice
+                pathImage.transform.parent.gameObject.SetActive(true);
+                pathImage.sprite = mutationInfo.fullSprite;
+            }
+            else
+            {
+                pathImage.transform.parent.gameObject.SetActive(false);
+            }
+        }
 
         _fadeGroup.Show();
     }
@@ -42,25 +54,19 @@ public class UpgradeInterface : Singleton<UpgradeInterface>
     }
 
     // called by upgrade path buttons
-    public void SelectPath1()
+    public void SelectPath(int pathIndex)
     {
-        SelectPathInternal(_selectedTurret.info.path1);
-    }
-    public void SelectPath2()
-    {
-        SelectPathInternal(_selectedTurret.info.path2);
-    }
-    public void SelectPath3()
-    {
-        SelectPathInternal(_selectedTurret.info.path3);
-    }
+        if (!_selectedTurret)
+        {
+            return;
+        }
 
-    private void SelectPathInternal(TurretInfo newInfo)
-    {
         // upgrade the turret
+        TurretInfo newInfo = _selectedTurret.info.mutationPaths[pathIndex];
         _turretController.ModifyTurret(_selectedTurret, newInfo);
 
         // deselect, our job is done
         _turretPlacer.TryDeselectTurret();
+        MainInterface.Instance.hotbar.DeselectAll();
     }
 }

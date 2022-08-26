@@ -2,29 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroupToggleSelector : MonoBehaviour
+public class UIToggleSelector : MonoBehaviour
 {
     // set in inspector
     public bool allowSwitchOff = false;
 
-    public GroupToggle[] childToggles;
+    public UIToggle[] childToggles;
 
     private void Start()
     {
-        childToggles = GetComponentsInChildren<GroupToggle>();
+        childToggles = GetComponentsInChildren<UIToggle>();
 
-        foreach (GroupToggle toggle in childToggles)
+        foreach (UIToggle toggle in childToggles)
         {
             toggle.parentToggleSelector = this;
         }
     }
 
-    public void OnToggleChange(GroupToggle toggle, bool isOn)
+    public void OnToggleChange(UIToggle toggle, bool isOn)
     {
         if (isOn)
         {
             // make sure all other items are off
-            foreach (GroupToggle otherToggle in childToggles)
+            foreach (UIToggle otherToggle in childToggles)
             {
                 if (toggle == otherToggle)
                 {
@@ -40,9 +40,9 @@ public class GroupToggleSelector : MonoBehaviour
         }
     }
 
-    public GroupToggle SelectByIndex(int index)
+    public UIToggle SelectByIndex(int index)
     {
-        GroupToggle toggleByIndex = childToggles[index];
+        UIToggle toggleByIndex = childToggles[index];
         if (!toggleByIndex)
         {
             return null;

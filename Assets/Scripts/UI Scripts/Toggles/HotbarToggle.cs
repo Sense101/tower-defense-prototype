@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class HotbarToggle : GroupToggle
+public class HotbarToggle : UIToggle
 {
     // set in inspector
     [SerializeField] Turret _turretPrefab = null;
@@ -20,9 +21,15 @@ public class HotbarToggle : GroupToggle
         {
             TurretPlacer.Instance.TryDeselectTurret();
         }
+    }
 
-        // notify parent
-        base.OnValueChanged(isOn);
+    protected override void OnHoverStart()
+    {
+        transform.localScale = new Vector2(1.1f, 1.1f);
+    }
+    protected override void OnHoverEnd()
+    {
+        transform.localScale = Vector2.one;
     }
 
 }

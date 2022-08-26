@@ -25,7 +25,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
             {
                 case Turret.State.lookingForTarget:
                     // the turret wants a target, give it one
-                    ChooseNewTarget(t, _enemyController.activeEnemies);
+                    ChooseNewTarget(t, _enemyController.enemies);
                     break;
                 case Turret.State.aiming:
                 case Turret.State.locked:
@@ -245,7 +245,6 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
         switch (t.targetType)
         {
             case Turret.TargetType.close:
-            case Turret.TargetType.first: //@TODO this is temporary, not implemented yet
                 {
                     finalTargets = targetsInRange;
                     break;
@@ -280,6 +279,12 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
                     finalTargets = targetsInRange.FindAll(x => x.currentHealth == leastHealth);
                     break;
                 }
+            case Turret.TargetType.random:
+                {
+                    int randomIndex = Random.Range(0, targetsInRange.Count);
+                    finalTargets.Add(targetsInRange[randomIndex]);
+                    break;
+                }
             default:
                 {
                     Debug.LogError("Unknown turret target type: " + t.targetType);
@@ -287,10 +292,6 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
                 }
         }
 
-        // decide whether we use closest or special
-        // for closest, just do the standard
-        // for strong, find the highest health, and choose closest of all those
-        // for weak, find weakest, and closest
         Enemy newTarget;
         int newGunIndex;
         ChooseClosestTarget(t, finalTargets, out newTarget, out newGunIndex);

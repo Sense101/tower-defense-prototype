@@ -3,7 +3,7 @@
 /// <summary>
 /// Instance of each enemy
 /// </summary>
-public class Enemy : PoolObject
+public class Enemy : MonoBehaviour
 {
 
     // set in inspector
@@ -18,33 +18,15 @@ public class Enemy : PoolObject
     public int previewDamage = 0; // damage that hasn't taken effect yet
     public int currentHealth = 0; // actual health
 
-    //@TODO this only works if there is one entrance for enemies
-    public float distanceWalked = 0;
-
-    public void SetReferences(Camera mainCamera)
+    public virtual void SetReferences(Camera mainCamera)
     {
         healthBar.SetReferences(mainCamera);
     }
 
-    public override void Activate()
+    public virtual void EnemyStart()
     {
         // set health
-        previewDamage = 0;
         currentHealth = info.Health;
-
-        distanceWalked = 0;
-    }
-
-    public override void Deactivate()
-    {
-        body.sprite = null;
-        healthBar.Hide();
-    }
-
-    public override void SetRotation(Angle rotation)
-    {
-        // the enemy itself should never turn around
-        body.transform.rotation = rotation.AsQuaternion();
     }
 
     // does this enemy have room for more pain?
@@ -53,11 +35,16 @@ public class Enemy : PoolObject
         return currentHealth - previewDamage > 0;
     }
 
+    public virtual void SetBodyRotation(Angle rotation)
+    {
+        body.transform.rotation = rotation.AsQuaternion();
+    }
+
     /// <summary>
     /// reduces the enemies health/armor
     /// </summary>
     /// <returns>@todo the reduction of health and armor</returns>
-    public void TakeHit(int damage, int armorPiercing)
+    public virtual void TakeHit(int damage, int armorPiercing)
     {
         //@TODO implement armor
         var armor = Mathf.Max(0, info.Armor - armorPiercing);
@@ -66,5 +53,10 @@ public class Enemy : PoolObject
         currentHealth -= finalDamage;
 
         healthBar.SetFill((float)currentHealth / info.Health);
+
+        if (currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

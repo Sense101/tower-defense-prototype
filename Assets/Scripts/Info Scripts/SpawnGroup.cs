@@ -9,8 +9,8 @@ public class SpawnGroup
     [Tooltip("the amount to spawn")]
     public int spawnAmount = 10;
 
-    [Tooltip("info about the enemy to spawn")]
-    public EnemyInfo enemyInfo;
+    [Tooltip("the enemy to spawn")]
+    public GameObject enemyPrefab;
 
     [Header("Delays")]
     public float delayBeforeSpawn = 1;

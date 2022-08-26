@@ -1,49 +1,27 @@
 using UnityEngine;
 
-public class AugmentController : Singleton<AugmentController>
+public class UpgradeController : Singleton<UpgradeController>
 {
     readonly private HSVColor baseColor = new HSVColor(145, 77, 80);
 
-    public Augment damageAugment;
-    public Augment rangeAugment;
+    public UpgradeInfo damageUpgrade;
+    public UpgradeInfo rangeUpgrade;
 
     // what does this need to do
     // apply augments to a turret
     // hold a reference of all augments
     // 
-    private void Start()
-    {
 
-    }
-
-    private void Update()
-    {
-
-    }
-
-    public Augment ChooseNewAugment(Augment current)
-    {
-        if (current == null)
-        {
-            return damageAugment;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public void ApplyAugment(TurretStatistics stats, Augment.Type type, int tier)
+    public void ApplyUpgrade(TurretStatistics stats, string upgradeId, int tier)
     {
         // branch off into seperate methods for each augment type
-        switch (type)
+        switch (upgradeId)
         {
-            case Augment.Type.damage:
-                ApplyDamageAugment(stats, tier);
+            case "damage":
+                ApplyDamageUpgrade(stats, tier);
                 break;
-            case Augment.Type.range:
-                Debug.Log("ok");
-                ApplyRangeAugment(stats, tier);
+            case "range":
+                ApplyRangeUpgrade(stats, tier);
                 break;
             default:
                 // well tbh I have no idea
@@ -51,7 +29,7 @@ public class AugmentController : Singleton<AugmentController>
         }
     }
 
-    private void ApplyDamageAugment(TurretStatistics stats, int tier)
+    private void ApplyDamageUpgrade(TurretStatistics stats, int tier)
     {
         switch (tier)
         {
@@ -80,7 +58,7 @@ public class AugmentController : Singleton<AugmentController>
                 break;
         }
     }
-    private void ApplyRangeAugment(TurretStatistics stats, int tier)
+    private void ApplyRangeUpgrade(TurretStatistics stats, int tier)
     {
         // do stuff, switch by tier
         //temp
