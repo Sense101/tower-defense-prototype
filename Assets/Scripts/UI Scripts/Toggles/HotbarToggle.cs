@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class HotbarToggle : UIToggle
 {
@@ -8,7 +9,7 @@ public class HotbarToggle : UIToggle
     [SerializeField] Turret _turretPrefab = null;
     [SerializeField] Sprite _turretPreviewSprite = null;
 
-    protected override void OnValueChanged(bool isOn)
+    public override void OnValueChanged(bool isOn)
     {
         if (isOn)
         {
@@ -18,16 +19,28 @@ public class HotbarToggle : UIToggle
         else
         {
             TurretPlacer.Instance.TryDeselectTurret();
+            if (!hovering)
+            {
+                OnHoverEnd();
+            }
         }
     }
 
-    protected override void OnHoverStart()
+    public override void OnSilentValueChanged(bool isOn)
     {
-        transform.localScale = new Vector2(1.1f, 1.1f);
-    }
-    protected override void OnHoverEnd()
-    {
-        transform.localScale = Vector2.one;
+        OnHoverEnd();
     }
 
+    public override void OnHoverStart()
+    {
+        transform.DOScale(new Vector2(1.2f, 1.2f), 0.1f);
+    }
+
+    public override void OnHoverEnd()
+    {
+        if (!isOn)
+        {
+            transform.DOScale(new Vector2(1, 1), 0.1f);
+        }
+    }
 }

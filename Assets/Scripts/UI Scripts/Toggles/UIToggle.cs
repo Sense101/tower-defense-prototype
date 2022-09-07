@@ -57,9 +57,9 @@ public abstract class UIToggle : Toggle
         OnHoverEnd();
     }
 
-    protected abstract void OnValueChanged(bool isOn);
-    protected virtual void OnSilentValueChanged(bool isOn) { }
+    public abstract void OnValueChanged(bool isOn);
+    public virtual void OnSilentValueChanged(bool isOn) { }
 
-    protected abstract void OnHoverStart();
-    protected abstract void OnHoverEnd();
+    public abstract void OnHoverStart();
+    public abstract void OnHoverEnd();
 }

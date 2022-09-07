@@ -10,7 +10,10 @@ public abstract class UIButton : Button
     {
         base.Start();
 
-        SetReferences();
+        if (Application.isPlaying)
+        {
+            SetReferences();
+        }
 
         onClick.AddListener(OnClickInternal);
     }

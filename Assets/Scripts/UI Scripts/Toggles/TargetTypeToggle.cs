@@ -8,7 +8,7 @@ public class TargetTypeToggle : UIToggle
     //set in inspector
     [SerializeField] Turret.TargetType _targetType;
 
-    protected override void OnValueChanged(bool isOn)
+    public override void OnValueChanged(bool isOn)
     {
         if (isOn)
         {
@@ -21,16 +21,16 @@ public class TargetTypeToggle : UIToggle
         }
     }
 
-    protected override void OnSilentValueChanged(bool isOn)
+    public override void OnSilentValueChanged(bool isOn)
     {
         OnHoverEnd();
     }
 
-    protected override void OnHoverStart()
+    public override void OnHoverStart()
     {
         transform.DOScale(new Vector2(1.1f, 1.1f), 0.1f);
     }
-    protected override void OnHoverEnd()
+    public override void OnHoverEnd()
     {
         if (!isOn)
         {

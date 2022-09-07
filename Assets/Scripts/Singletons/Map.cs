@@ -73,7 +73,7 @@ public class Map : Singleton<Map>
     {
         TileInfo tileInfo = TryGetTile(mapSpace);
 
-        if (tileInfo != null && tileInfo.Placeable)
+        if (tileInfo != null && tileInfo.Placeable && !tileInfo.Turret)
         {
             return true;
         }

@@ -35,7 +35,7 @@ public class TurretInterface : Singleton<TurretInterface>
     UpgradeController _upgradeController;
     Map _map;
 
-    Camera _previewCamera;
+    GameObject _previewCamera;
 
     private void Start()
     {
@@ -44,7 +44,7 @@ public class TurretInterface : Singleton<TurretInterface>
         _turretController = TurretController.Instance;
         _upgradeController = UpgradeController.Instance;
         _map = Map.Instance;
-        _previewCamera = GameObject.FindWithTag("PreviewCamera").GetComponent<Camera>();
+        _previewCamera = GameObject.FindWithTag("PreviewCamera");
 
         _fadeGroup = GetComponent<CanvasFadeGroup>();
 
@@ -170,6 +170,9 @@ public class TurretInterface : Singleton<TurretInterface>
             turret.onBulletHitEvent.AddListener(OnTurretHit);
 
             UpdateInterface();
+
+            // move things to the right position
+            _previewCamera.transform.position = turret.transform.position;
             _turretPlacer.MoveToCurrentTile();
         }
         else
