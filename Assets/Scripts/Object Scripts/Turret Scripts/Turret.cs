@@ -32,10 +32,6 @@ public class Turret : PoolObject
     private Coroutine _firingRoutine = null;
 
     [Space(10)]
-    // info about the augments
-    public int damageAugmentLevel = 0;
-    public int rangeAugmentLevel = 0;
-    public int customAugmentLevel = 0;
     public UpgradeInfo[] upgrades = new UpgradeInfo[3];
 
     [Space(10)]

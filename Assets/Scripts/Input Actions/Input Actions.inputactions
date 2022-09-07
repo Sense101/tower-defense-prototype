@@ -11,7 +11,8 @@
                     "id": "481c773f-f498-423b-bc82-f35c19023e01",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Right Button",
@@ -19,15 +20,8 @@
                     "id": "30326b04-49a0-40eb-a3c4-49d39b3ba8f5",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Mouse Pos",
-                    "type": "Value",
-                    "id": "f4517747-17e1-437a-983a-4d99171efafc",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -50,17 +44,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Right Button",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2013c903-4466-4658-8d84-5c8a9e2bce47",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Mouse Pos",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

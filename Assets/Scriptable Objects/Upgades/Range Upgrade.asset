@@ -10,14 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5141a75821413943a2b7d35296baed8, type: 3}
-  m_Name: DamageAugmentation
+  m_Name: Range Upgrade
   m_EditorClassIdentifier: 
-  type: 0
-  title: DamageTemp
-  color: {r: 0.8, g: 0, b: 0, a: 1}
-  tierDescriptions:
-  - 
-  - 
-  - 
-  - 
-  - 
+  id: range
+  title: RangeTemp
+  description: 
+  color: {r: 0, g: 0.59158367, b: 0.8, a: 1}

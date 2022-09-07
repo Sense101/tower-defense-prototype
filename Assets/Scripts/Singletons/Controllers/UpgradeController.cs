@@ -2,66 +2,40 @@ using UnityEngine;
 
 public class UpgradeController : Singleton<UpgradeController>
 {
-    readonly private HSVColor baseColor = new HSVColor(145, 77, 80);
 
-    public UpgradeInfo damageUpgrade;
-    public UpgradeInfo rangeUpgrade;
+    public UpgradeInfo[] upgrades;
 
-    // what does this need to do
-    // apply augments to a turret
-    // hold a reference of all augments
-    // 
-
-    public void ApplyUpgrade(TurretStatistics stats, string upgradeId, int tier)
+    public void ApplyUpgrade(TurretStatistics stats, string upgradeId)
     {
         // branch off into seperate methods for each augment type
         switch (upgradeId)
         {
             case "damage":
-                ApplyDamageUpgrade(stats, tier);
+                ApplyDamageUpgrade(stats);
                 break;
             case "range":
-                ApplyRangeUpgrade(stats, tier);
+                ApplyRangeUpgrade(stats);
+                break;
+            case "spin_speed":
+                ApplySpinSpeedUpgrade(stats);
                 break;
             default:
-                // well tbh I have no idea
+                Debug.LogError($"Invalid upgrade id '{upgradeId}', please make sure your id is valid");
                 break;
         }
     }
 
-    private void ApplyDamageUpgrade(TurretStatistics stats, int tier)
+    private void ApplyDamageUpgrade(TurretStatistics stats)
     {
-        switch (tier)
-        {
-            case 1:
-                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
-                break;
-            case 2:
-                // do a thing
-                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
-                break;
-            case 3:
-                // do a thing
-                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
-                break;
-            case 4:
-                // do a thing
-                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
-                break;
-            case 5:
-                // do a thing
-                stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
-                break;
-            default:
-                // you expect me to apply a nonexistent tier?? no.
-                Debug.LogError($"Tried to apply nonexistent augment tier {tier}");
-                break;
-        }
+        stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
     }
-    private void ApplyRangeUpgrade(TurretStatistics stats, int tier)
+
+    private void ApplyRangeUpgrade(TurretStatistics stats)
     {
-        // do stuff, switch by tier
-        //temp
         stats.range *= 1.2f;
+    }
+    private void ApplySpinSpeedUpgrade(TurretStatistics stats)
+    {
+        stats.spinSpeed = Mathf.RoundToInt(stats.spinSpeed * 1.5f);
     }
 }

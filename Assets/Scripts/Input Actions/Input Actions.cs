@@ -44,15 +44,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Mouse Pos"",
-                    ""type"": ""Value"",
-                    ""id"": ""f4517747-17e1-437a-983a-4d99171efafc"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -77,17 +68,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Right Button"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2013c903-4466-4658-8d84-5c8a9e2bce47"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Mouse Pos"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -98,7 +78,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_LeftButton = m_Mouse.FindAction("Left Button", throwIfNotFound: true);
         m_Mouse_RightButton = m_Mouse.FindAction("Right Button", throwIfNotFound: true);
-        m_Mouse_MousePos = m_Mouse.FindAction("Mouse Pos", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -160,14 +139,12 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private IMouseActions m_MouseActionsCallbackInterface;
     private readonly InputAction m_Mouse_LeftButton;
     private readonly InputAction m_Mouse_RightButton;
-    private readonly InputAction m_Mouse_MousePos;
     public struct MouseActions
     {
         private @InputActions m_Wrapper;
         public MouseActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @LeftButton => m_Wrapper.m_Mouse_LeftButton;
         public InputAction @RightButton => m_Wrapper.m_Mouse_RightButton;
-        public InputAction @MousePos => m_Wrapper.m_Mouse_MousePos;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -183,9 +160,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @RightButton.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnRightButton;
                 @RightButton.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnRightButton;
                 @RightButton.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnRightButton;
-                @MousePos.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePos;
-                @MousePos.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePos;
-                @MousePos.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePos;
             }
             m_Wrapper.m_MouseActionsCallbackInterface = instance;
             if (instance != null)
@@ -196,9 +170,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @RightButton.started += instance.OnRightButton;
                 @RightButton.performed += instance.OnRightButton;
                 @RightButton.canceled += instance.OnRightButton;
-                @MousePos.started += instance.OnMousePos;
-                @MousePos.performed += instance.OnMousePos;
-                @MousePos.canceled += instance.OnMousePos;
             }
         }
     }
@@ -207,6 +178,5 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     {
         void OnLeftButton(InputAction.CallbackContext context);
         void OnRightButton(InputAction.CallbackContext context);
-        void OnMousePos(InputAction.CallbackContext context);
     }
 }

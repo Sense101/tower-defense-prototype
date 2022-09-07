@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MainInterface : Singleton<MainInterface>
 {
+    //@todo this is not nice
     //set in inspector
     public Hotbar hotbar;
+    public CanvasFadeGroup overlayFilter;
 }

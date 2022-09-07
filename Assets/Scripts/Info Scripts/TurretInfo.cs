@@ -9,38 +9,22 @@ public class TurretInfo : ScriptableObject
 
     public Type type = Type.multiplier;
 
-    // Damage
+    public string title = "";
+    [TextArea(3, 10)] public string description = "";
+
+    [Space(5)]
+
     [Tooltip("the damage the turret does")]
-    [SerializeField] float _damageModifier = 1;
-    public float DamageModifier
-    {
-        get => _damageModifier;
-    }
+    public float damageModifier = 1;
 
-
-    // Range
     [Tooltip("the range of the turret in tiles")]
-    [SerializeField] float _rangeModifier = 1;
-    public float RangeModifier
-    {
-        get => _rangeModifier;
-    }
+    public float rangeModifier = 1;
 
-    // Reload Time
     [Tooltip("the time it takes for a gun to reload in seconds")]
-    [SerializeField] float _reloadTimeModifier = 1;
-    public float ReloadTimeModifier
-    {
-        get => _reloadTimeModifier;
-    }
+    public float reloadTimeModifier = 1;
 
-    // Spin Speed
     [Tooltip("spin speed in degrees per second")]
-    [SerializeField] float _spinSpeedModifier = 1;
-    public float SpinSpeedModifier
-    {
-        get => _spinSpeedModifier;
-    }
+    public float spinSpeedModifier = 1;
 
     [Space(5)]
     [Header("Sprites")]
@@ -51,10 +35,10 @@ public class TurretInfo : ScriptableObject
     public Sprite gunMountSprite = default; // just the gun mount
 
     [Space(5)]
-    public GunInfo[] guns;
+    public GunInfo[] guns; // @todo replace gun system with instantiating new guns for more freedom?
 
     [Space(5)]
-    public BulletInfo bulletInfo;
+    public BulletInfo bulletInfo; // if the above is done no need to have this here!
 
     [Space(5)]
     public TurretInfo[] mutationPaths;

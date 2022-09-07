@@ -13,6 +13,9 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     public static Vector2 mousePos { get; private set; }
     public static bool mouseOverUI { get; private set; }
 
+    // input overlays - prevent inputs till closed
+    [SerializeField] private List<UIOverlay> _inputOverlays = new List<UIOverlay>(); // @todo serialized for debug purposes
+
     // prevents any inputs until start
     private bool _active = false;
 
@@ -21,7 +24,6 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     Camera _mainCamera;
     TurretPlacer _turretPlacer;
     TurretInterface _turretInterface;
-    AugmentInterface _augmentInterface;
     Map _map;
 
 
@@ -43,9 +45,43 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         _mainCamera = Camera.main;
         _turretPlacer = TurretPlacer.Instance;
         _turretInterface = TurretInterface.Instance;
-        _augmentInterface = AugmentInterface.Instance;
         _map = Map.Instance;
         _active = true;
+    }
+    public void AddInputOverlay(UIOverlay overlay)
+    {
+        _inputOverlays.Add(overlay);
+        MainInterface.Instance.overlayFilter.Show();
+    }
+    public void RemoveInputOverlay(UIOverlay overlay)
+    {
+        _inputOverlays.Remove(overlay);
+        if (_inputOverlays.Count <= 0)
+        {
+            MainInterface.Instance.overlayFilter.Hide();
+        }
+    }
+
+    private void Update()
+    {
+        if (!_active || Mouse.current == null)
+        {
+            return;
+        }
+
+        // check for changes to over UI state
+        Vector2 screenPos = Mouse.current.position.ReadValue();
+        Vector2 worldPos = _mainCamera.ScreenToWorldPoint(screenPos);
+        mousePos = worldPos;
+
+        bool newMouseOverUI = IsMouseOverUI();
+        if (newMouseOverUI != mouseOverUI)
+        {
+            // it's changed, send an event
+            overUIEvent.Invoke(newMouseOverUI);
+            mouseOverUI = newMouseOverUI;
+        }
+        mouseMoveEvent.Invoke(worldPos);
     }
 
 
@@ -53,7 +89,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
 
     public void OnLeftButton(InputAction.CallbackContext context)
     {
-        if (!context.performed || !_active)
+        if (!context.canceled || !_active)
         {
             return;
         }
@@ -64,10 +100,10 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
             return;
         }
 
-        //@TODO check if we have any overlays open, and if so close them first
-        if (_augmentInterface.fadeGroup.Showing || _augmentInterface.fadeGroup.Shown)
+        // if there is an overlay open, close it and ignore this input
+        if (_inputOverlays.Count > 0)
         {
-            _augmentInterface.Hide();
+            _inputOverlays[0].Close();
             return;
         }
 
@@ -88,8 +124,15 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
 
     public void OnRightButton(InputAction.CallbackContext context)
     {
-        if (!context.performed || !_active)
+        if (!context.canceled || !_active)
         {
+            return;
+        }
+
+        // if there is an overlay open, close it and ignore this input
+        if (_inputOverlays.Count > 0)
+        {
+            _inputOverlays[0].Close();
             return;
         }
 
@@ -106,27 +149,6 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
             _turretInterface.SetTurret(null);
             return;
         }
-    }
-
-    public void OnMousePos(InputAction.CallbackContext context)
-    {
-        if (!_active)
-        {
-            return;
-        }
-
-        Vector2 screenPos = context.ReadValue<Vector2>();
-        Vector2 worldPos = _mainCamera.ScreenToWorldPoint(screenPos);
-        mousePos = worldPos;
-
-        bool newMouseOverUI = IsMouseOverUI();
-        if (newMouseOverUI != mouseOverUI)
-        {
-            // it's changed, send an event
-            overUIEvent.Invoke(newMouseOverUI);
-            mouseOverUI = newMouseOverUI;
-        }
-        mouseMoveEvent.Invoke(worldPos);
     }
 
     private bool IsMouseOverUI()

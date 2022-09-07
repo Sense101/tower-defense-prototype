@@ -27,11 +27,12 @@ public class TurretInterface : Singleton<TurretInterface>
     private Turret _selectedTurret = null;
     private CanvasFadeGroup _fadeGroup;
 
+    private UpgradeSlot[] _upgradeSlots;
+
     // references
     TurretPlacer _turretPlacer;
     TurretController _turretController;
     UpgradeController _upgradeController;
-    AugmentInterface _augmentInterface;
     Map _map;
 
     Camera _previewCamera;
@@ -42,11 +43,21 @@ public class TurretInterface : Singleton<TurretInterface>
         _turretPlacer = TurretPlacer.Instance;
         _turretController = TurretController.Instance;
         _upgradeController = UpgradeController.Instance;
-        _augmentInterface = AugmentInterface.Instance;
         _map = Map.Instance;
         _previewCamera = GameObject.FindWithTag("PreviewCamera").GetComponent<Camera>();
 
         _fadeGroup = GetComponent<CanvasFadeGroup>();
+
+        ConnectUpgradeSlots();
+    }
+
+    private void ConnectUpgradeSlots()
+    {
+        _upgradeSlots = GetComponentsInChildren<UpgradeSlot>();
+        for (int i = 0; i < _upgradeSlots.Length; i++)
+        {
+            _upgradeSlots[i].SetSlotIndex(i);
+        }
     }
 
     // bunch of scripts called by the buttons within the interface
@@ -84,39 +95,44 @@ public class TurretInterface : Singleton<TurretInterface>
     // called by buttons
     public void ApplyUpgrade(int index)
     {
-        if (!_selectedTurret)
-        {
-            // no turret selected, do nothing
-            return;
-        }
-
-        UpgradeInfo upgrade;
-        int tier;
-        if (index == 0)
-        {
-            upgrade = _upgradeController.damageUpgrade;
-            _selectedTurret.damageAugmentLevel++;
-            tier = _selectedTurret.damageAugmentLevel;
-            damageText.text = $"damage upgrade ({tier}/5)";
-        }
-        else
-        {
-            upgrade = _upgradeController.rangeUpgrade;
-            tier = _selectedTurret.rangeAugmentLevel++;
-            rangeText.text = $"range upgrade ({tier}/5)";
-        }
-
-        _upgradeController.ApplyUpgrade(_selectedTurret.stats, upgrade.id, tier);
-        //@TODO
-        _turretPlacer.UpdateRangeScale(_selectedTurret);
-    }
-    public void ChooseAugment()
+        // @todo this all needs remaking
+        //if (!_selectedTurret)
+        //{
+        //    // no turret selected, do nothing
+        //    return;
+        //}
+        //
+        //UpgradeInfo upgrade;
+        //int tier;
+        //if (index == 0)
+        //{
+        //    upgrade = _upgradeController.damageUpgrade;
+        //    _selectedTurret.damageAugmentLevel++;
+        //    tier = _selectedTurret.damageAugmentLevel;
+        //    damageText.text = $"damage upgrade ({tier}/5)";
+        //}
+        //else
+        //{
+        //    upgrade = _upgradeController.rangeUpgrade;
+        //    //tier = _selectedTurret.rangeAugmentLevel++;
+        //    //rangeText.text = $"range upgrade ({tier}/5)";
+        //}
+        //
+        //_upgradeController.ApplyUpgrade(_selectedTurret.stats, upgrade.id, tier);
+        ////@TODO
+        //_turretPlacer.UpdateRangeScale(_selectedTurret);
+    }//
+    public void MutateTurret()
     {
-        _augmentInterface.Show();
+        MutationInterface.Instance.Open();
     }
 
-    // IMPORTANT: this cannot be called till after start
-    // selects the turret
+    public void ChooseUpgrade(int index)
+    {
+        UpgradeInterface.Instance.currentSlotIndex = index;
+        UpgradeInterface.Instance.Open();
+    }
+
     public void SetTurret(Turret turret)
     {
         if (_selectedTurret == turret)
@@ -125,12 +141,17 @@ public class TurretInterface : Singleton<TurretInterface>
             return;
         }
 
-        bool wasSelecting = false;
-        if (_selectedTurret)
+        if (!_turretPlacer)
+        {
+            Debug.LogError("SetTurret cannot be called till after start!");
+            return;
+        }
+
+        bool newTurret = _selectedTurret;
+        if (newTurret)
         {
             // we are changing, remove the event link from the old turret
             _selectedTurret.onBulletHitEvent.RemoveListener(OnTurretHit);
-            wasSelecting = true;
         }
 
         // actually update the reference
@@ -148,15 +169,7 @@ public class TurretInterface : Singleton<TurretInterface>
             // add a hit event listener so we can update as the new turret changes
             turret.onBulletHitEvent.AddListener(OnTurretHit);
 
-            // update stuff within the interface - @TODO
-            _previewCamera.transform.position = turret.transform.position;
-
-            turretName.text = turret.gameObject.name;
-            targetTypeSelector.SelectByIndex((int)turret.targetType);
-            UpdateXpBar(turret.stats.xp, !wasSelecting);
-
-            // update the range preview
-            _turretPlacer.UpdateRangeScale(turret);
+            UpdateInterface();
             _turretPlacer.MoveToCurrentTile();
         }
         else
@@ -170,6 +183,43 @@ public class TurretInterface : Singleton<TurretInterface>
         return _selectedTurret;
     }
 
+    public void UpdateInterface()
+    {
+        if (!_selectedTurret)
+        {
+            Debug.LogError("Can't update the turret interface without a turret selected!");
+            return;
+        }
+
+        UpdateXpBar(_selectedTurret.stats.xp, true);
+        turretName.text = _selectedTurret.info.title;
+        targetTypeSelector.SelectByIndex((int)_selectedTurret.targetType);
+
+        // update the upgrade slots
+        for (int i = 0; i < _upgradeSlots.Length; i++)
+        {
+            UpgradeSlot slot = _upgradeSlots[i];
+            UpgradeInfo upgrade = _selectedTurret.upgrades[i];
+
+            slot.button.interactable = !upgrade;
+            if (upgrade)
+            {
+                slot.backgroundImage.color = upgrade.color;
+                //slot.icon = @todo
+                slot.titleText.text = upgrade.title;
+            }
+            else
+            {
+                // reset to default
+                slot.backgroundImage.color = Color.white; // temp
+                slot.titleText.text = "Empty Upgrade Slot";
+            }
+        }
+
+        // update the range preview
+        _turretPlacer.UpdateRangeScale(_selectedTurret);
+    }
+
     // called when the current turret hits an enemy
     private void OnTurretHit()
     {
@@ -178,7 +228,7 @@ public class TurretInterface : Singleton<TurretInterface>
 
     private void UpdateXpBar(int xp, bool instant = false)
     {
-        if (xp >= 200)
+        if (true || xp >= 200)
         {
             xpBarButton.interactable = true;
 

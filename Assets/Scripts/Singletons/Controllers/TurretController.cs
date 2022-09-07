@@ -142,19 +142,19 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     private void ModifyTurretStatsMultiplier(TurretStatistics stats, TurretInfo newInfo)
     {
         // multiply all basic stats by modifier
-        stats.damage = Mathf.RoundToInt(stats.damage * newInfo.DamageModifier);
-        stats.range *= newInfo.RangeModifier;
-        stats.reloadTime *= newInfo.ReloadTimeModifier;
-        stats.spinSpeed = Mathf.RoundToInt(stats.spinSpeed * newInfo.SpinSpeedModifier);
+        stats.damage = Mathf.RoundToInt(stats.damage * newInfo.damageModifier);
+        stats.range *= newInfo.rangeModifier;
+        stats.reloadTime *= newInfo.reloadTimeModifier;
+        stats.spinSpeed = Mathf.RoundToInt(stats.spinSpeed * newInfo.spinSpeedModifier);
     }
     private void ModifyTurretStatsBasic(TurretStatistics stats, TurretInfo newInfo)
     {
         // force sets stats to whatever the modifiers are, NEGATING any augments that were applied.
         // as such, should only be used for the basic turret, before any augments.
-        stats.damage = Mathf.RoundToInt(newInfo.DamageModifier);
-        stats.range = newInfo.RangeModifier;
-        stats.reloadTime = newInfo.ReloadTimeModifier;
-        stats.spinSpeed = Mathf.RoundToInt(newInfo.SpinSpeedModifier);
+        stats.damage = Mathf.RoundToInt(newInfo.damageModifier);
+        stats.range = newInfo.rangeModifier;
+        stats.reloadTime = newInfo.reloadTimeModifier;
+        stats.spinSpeed = Mathf.RoundToInt(newInfo.spinSpeedModifier);
     }
 
     // --------------------------------

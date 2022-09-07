@@ -10,8 +10,12 @@ public abstract class UIButton : Button
     {
         base.Start();
 
+        SetReferences();
+
         onClick.AddListener(OnClickInternal);
     }
+
+    protected virtual void SetReferences() { }
 
     private void OnClickInternal()
     {

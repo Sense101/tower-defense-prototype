@@ -163,12 +163,12 @@ public class TurretPlacer : Singleton<TurretPlacer>
     {
         if (turret)
         {
-            _mutationInterface.Show(turret);
+            _mutationInterface.Open();
             _state = State.choosingMutation;
         }
         else
         {
-            _mutationInterface.Hide();
+            _mutationInterface.Open();
             RecalculateCanPlace();
         }
     }
@@ -226,7 +226,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         float rangeScale;
         if (useInfo)
         {
-            rangeScale = turret.info.RangeModifier * 2;
+            rangeScale = turret.info.rangeModifier * 2;
         }
         else
         {

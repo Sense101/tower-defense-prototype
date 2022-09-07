@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Basic Turret
   m_EditorClassIdentifier: 
   type: 1
-  _damageModifier: 10
-  _rangeModifier: 24
-  _reloadTimeModifier: 1
-  _spinSpeedModifier: 100
+  title: Basic Turret
+  description: A turret. With a gun. You can't get more simple than that.
+  damageModifier: 10
+  rangeModifier: 20
+  reloadTimeModifier: 1
+  spinSpeedModifier: 100
   fullSprite: {fileID: 21300000, guid: 16cf81ec93aebc94e85d6155ba470fa5, type: 3}
   previewSprite: {fileID: 21300000, guid: c9d93f68dac38d842b2559cf3bd865b5, type: 3}
   turretBaseSprite: {fileID: 21300000, guid: a8abc1281d2a16c418af9d337745d78b, type: 3}
