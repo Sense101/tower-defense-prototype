@@ -32,7 +32,7 @@ public class UpgradeController : Singleton<UpgradeController>
 
     private void ApplyRangeUpgrade(TurretStatistics stats)
     {
-        stats.range *= 1.2f;
+        stats.range *= 1.5f;
     }
     private void ApplySpinSpeedUpgrade(TurretStatistics stats)
     {

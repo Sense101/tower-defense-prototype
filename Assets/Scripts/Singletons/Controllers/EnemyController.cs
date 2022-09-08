@@ -59,7 +59,7 @@ public class EnemyController : Singleton<EnemyController>
 
     private void MoveEnemy(Enemy e)
     {
-        float moveSpeedDelta = e.info.MoveSpeed * Time.deltaTime;
+        float moveSpeedDelta = e.info.moveSpeed * Time.deltaTime;
         Vector2 target = e.targetPoint.cachedWorldPos;
 
         e.transform.position = Vector2.MoveTowards(e.transform.position, target, moveSpeedDelta);

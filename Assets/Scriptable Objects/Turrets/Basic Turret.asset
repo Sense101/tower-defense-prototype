@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Basic Turret
   m_EditorClassIdentifier: 
   type: 1
+  cost: 50
   title: Basic Turret
   description: A turret. With a gun. You can't get more simple than that.
   damageModifier: 10

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Spin Speed Upgrade
   m_EditorClassIdentifier: 
   id: spin_speed
-  title: SpinSpeedTemp
-  description: 
+  title: Pivot
+  shortDescription: Spin Speed x 150%
+  longDescription: Multiplies spin speed by 150%
+  cost: 30
   color: {r: 0.78851193, g: 0.8, b: 0, a: 1}

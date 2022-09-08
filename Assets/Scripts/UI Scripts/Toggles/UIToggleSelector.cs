@@ -51,4 +51,16 @@ public class UIToggleSelector : MonoBehaviour
         toggleByIndex.SetIsOn(true);
         return toggleByIndex;
     }
+
+    public void DeselectAll()
+    {
+        if (allowSwitchOff)
+        {
+            foreach (UIToggle toggle in childToggles)
+            {
+
+                toggle.SetIsOn(false, true);
+            }
+        }
+    }
 }

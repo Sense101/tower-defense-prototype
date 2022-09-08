@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
     public virtual void EnemyStart()
     {
         // set health
-        currentHealth = info.Health;
+        currentHealth = info.health;
     }
 
     // does this enemy have room for more pain?
@@ -47,16 +47,18 @@ public class Enemy : MonoBehaviour
     public virtual void TakeHit(int damage, int armorPiercing)
     {
         //@TODO implement armor
-        var armor = Mathf.Max(0, info.Armor - armorPiercing);
+        var armor = Mathf.Max(0, info.armor - armorPiercing);
         var finalDamage = damage - armor;
 
         currentHealth -= finalDamage;
 
-        healthBar.SetFill((float)currentHealth / info.Health);
+        healthBar.SetFill((float)currentHealth / info.health);
 
         if (currentHealth <= 0)
         {
+            // we are dead, let us die
             Destroy(gameObject);
+            CoinController.Instance.AddCoins(info.killReward);
         }
     }
 }

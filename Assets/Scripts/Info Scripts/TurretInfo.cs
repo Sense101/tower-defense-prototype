@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Infos/TurretInfo")]
 public class TurretInfo : ScriptableObject
 {
     // the turret type, controls what it does to the turret stats
     public enum Type { multiplier, basic }
 
     public Type type = Type.multiplier;
+
+    public int cost = 0;
 
     public string title = "";
     [TextArea(3, 10)] public string description = "";

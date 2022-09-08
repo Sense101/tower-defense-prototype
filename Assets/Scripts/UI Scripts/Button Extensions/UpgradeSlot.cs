@@ -12,10 +12,6 @@ public class UpgradeSlot : ButtonExtension
     public Image icon;
     public TextMeshProUGUI titleText;
 
-    private void Start()
-    {
-    }
-
     public void SetSlotIndex(int index)
     {
         (button as UpgradeSlotButton).slotIndex = index;

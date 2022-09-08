@@ -8,26 +8,30 @@ public class UpgradeInterface : UIOverlaySingleton<UpgradeInterface>
     // variables
     public int currentSlotIndex = 0;
 
-    private UpgradeSelection[] _upgradeSelections;
+    // internal variables
+    UpgradeSelection[] _upgradeSelections;
 
     // references
     CanvasFadeGroup _fadeGroup;
     UpgradeController _upgradeController;
     TurretInterface _turretInterface;
+    CoinController _coinController;
+    ConfigController _configs;
+
     private void Start()
     {
         // set references
         _fadeGroup = GetComponent<CanvasFadeGroup>();
         _upgradeController = UpgradeController.Instance;
         _turretInterface = TurretInterface.Instance;
+        _coinController = CoinController.Instance;
+        _configs = ConfigController.Instance;
 
         // set upgrade selections and apply onclick
         _upgradeSelections = GetComponentsInChildren<UpgradeSelection>();
-        Debug.Log(_upgradeSelections.Length);
         for (int i = 0; i < _upgradeSelections.Length; i++)
         {
             UpgradeSelection selection = _upgradeSelections[i];
-            Debug.Log(i);
 
             // seperate out to a new variable for the lambda to capture
             int index = i;
@@ -39,7 +43,6 @@ public class UpgradeInterface : UIOverlaySingleton<UpgradeInterface>
     {
         UpgradeInfo[] upgrades = _upgradeController.upgrades;
 
-        // update previews - still work @todo here
         for (int i = 0; i < _upgradeSelections.Length; i++)
         {
             UpgradeSelection selection = _upgradeSelections[i];
@@ -55,6 +58,21 @@ public class UpgradeInterface : UIOverlaySingleton<UpgradeInterface>
                 selection.backgroundImage.color = upgradeInfo.color;
                 //selection.icon = @todo
                 selection.titleText.text = upgradeInfo.title;
+                selection.descText.text = upgradeInfo.shortDescription;
+                selection.descText.color = upgradeInfo.color;
+                selection.costText.text = upgradeInfo.cost.ToString();
+
+                // check if we can afford the upgrade
+                if (_configs.debug.noCoinCost || _coinController.CanAfford(upgradeInfo.cost))
+                {
+                    selection.costText.color = _configs.color.canAffordColor;
+                    selection.button.interactable = true;
+                }
+                else
+                {
+                    selection.costText.color = _configs.color.cannotAffordColor;
+                    selection.button.interactable = false;
+                }
             }
             else
             {
@@ -83,10 +101,23 @@ public class UpgradeInterface : UIOverlaySingleton<UpgradeInterface>
 
         UpgradeInfo chosenUpgrade = _upgradeController.upgrades[index];
 
+        // deduct coins
+        if (!_configs.debug.noCoinCost)
+        {
+            if (!_coinController.TrySpendCoins(chosenUpgrade.cost))
+            {
+                Debug.LogError("Tried to apply upgrade without enough coins, this should not be possible!");
+                return;
+            }
+        }
+
+        // add the upgrade to the turret and apply
         currentTurret.upgrades[currentSlotIndex] = chosenUpgrade;
         _upgradeController.ApplyUpgrade(currentTurret.stats, chosenUpgrade.id);
+
+        // update the interface to visualise changes
         _turretInterface.UpdateInterface();
-        // @todo now we need to visualise the change in the turret interface
+
 
         // done, now we close
         Close();

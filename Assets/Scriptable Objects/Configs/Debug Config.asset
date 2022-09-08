@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5141a75821413943a2b7d35296baed8, type: 3}
-  m_Name: Range Upgrade
+  m_Script: {fileID: 11500000, guid: 291b79592977a98478521572b5dec492, type: 3}
+  m_Name: Debug Config
   m_EditorClassIdentifier: 
-  id: range
-  title: Vision
-  shortDescription: Range x 150%
-  longDescription: Multiplies range by 150%
-  cost: 30
-  color: {r: 0, g: 0.59158367, b: 0.8, a: 1}
+  noCoinCost: 1

@@ -1,25 +1,48 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CoinController : Singleton<CoinController>
 {
-    private int _coins = 0;
+    // set in inspector
+
+    public UnityEvent<int> onCoinsChanged = new UnityEvent<int>();
+
+    [SerializeField] private int _coins = 0; // serialized for debugging purposes
+
+    // references
+    MainInterface _mainInterface;
+
     private void Start()
     {
-
+        _mainInterface = MainInterface.Instance;
+        UpdateCoinText(_coins);
+        onCoinsChanged.AddListener(UpdateCoinText);
     }
 
-    private void Update()
+    public int GetCoins()
     {
-
+        return _coins;
     }
 
     public void AddCoins(int amount)
     {
         _coins += amount;
+        onCoinsChanged.Invoke(_coins);
     }
 
-    public void TrySpendCoins(int amount)
+    public bool CanAfford(int amount)
     {
+        return _coins >= amount;
+    }
 
+    public bool TrySpendCoins(int amount)
+    {
+        return false; // temp
+        // make sure to call oncoinschanged here
+    }
+
+    private void UpdateCoinText(int coins)
+    {
+        _mainInterface.coinText.text = coins.ToString();
     }
 }

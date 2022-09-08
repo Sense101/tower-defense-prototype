@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 234f1c4f9fd69f14c8c77a6afd8a7a79, type: 3}
-  m_Name: Strong Turret
+  m_Name: Power Turret
   m_EditorClassIdentifier: 
   type: 0
-  _damageModifier: 3
-  _rangeModifier: 0.8
-  _reloadTimeModifier: 2
-  _spinSpeedModifier: 1
+  cost: 50
+  title: Power Turret
+  description: 
+  damageModifier: 1
+  rangeModifier: 1
+  reloadTimeModifier: 1
+  spinSpeedModifier: 1
   fullSprite: {fileID: 21300000, guid: 1ee940c5913666f41b976a9e8d47bfd8, type: 3}
   previewSprite: {fileID: 21300000, guid: 8da8c247fcf82bb4fb6cc87c2c215ffa, type: 3}
   turretBaseSprite: {fileID: 21300000, guid: b11a896cabcd1f247a09d33b95bb50f3, type: 3}
@@ -31,7 +34,4 @@ MonoBehaviour:
   bulletInfo:
     sprite: {fileID: 21300000, guid: 42c8e04c56b6dfe4dbcb3961b1ed8db8, type: 3}
     controller: {fileID: 9100000, guid: 6563ccc37c20ea549aa2f16dc55e9a37, type: 2}
-    type: 0
-  path1: {fileID: 0}
-  path2: {fileID: 0}
-  path3: {fileID: 0}
+  mutationPaths: []

@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class HotbarToggle : UIToggle
+public class HotbarItemToggle : UIToggle
 {
-    // set in inspector
-    [SerializeField] Turret _turretPrefab = null;
-    [SerializeField] Sprite _turretPreviewSprite = null;
+    // set by toggle extension
+    public Turret turret;
 
     public override void OnValueChanged(bool isOn)
     {
         if (isOn)
         {
-            TurretPlacer.Instance.SetTurretPrefab(_turretPrefab);
-            TurretPlacer.Instance.turretPreview.sprite = _turretPreviewSprite;
+            TurretPlacer.Instance.SetTurretPrefab(turret);
+            TurretPlacer.Instance.turretPreview.sprite = turret.info.fullSprite;
         }
         else
         {
-            TurretPlacer.Instance.TryDeselectTurret();
+            TurretPlacer.Instance.DeselectTurret();
             if (!hovering)
             {
                 OnHoverEnd();

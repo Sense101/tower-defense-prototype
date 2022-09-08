@@ -2,12 +2,7 @@
 
 public class TurretPlacer : Singleton<TurretPlacer>
 {
-    [SerializeField] Color unblockedColor;
-    [SerializeField] Color blockedColor;
-    [SerializeField] Color unblockedRangeColor;
-    [SerializeField] Color blockedRangeColor;
-
-    public bool _canPlace = false;
+    public bool canPlace = false;
 
     // set in inspector
     public SpriteRenderer turretPreview;
@@ -21,14 +16,14 @@ public class TurretPlacer : Singleton<TurretPlacer>
     Map _map;
     TurretController _turretController;
     TurretInterface _turretInterface;
-    EnemyController _enemyController;
+    ConfigController _configs;
 
     private void Start()
     {
         _map = Map.Instance;
         _turretController = TurretController.Instance;
         _turretInterface = TurretInterface.Instance;
-        _enemyController = EnemyController.Instance;
+        _configs = ConfigController.Instance;
 
         InputController.mouseMoveEvent.AddListener(OnMouseMoveEvent);
         InputController.overUIEvent.AddListener(OnOverUIEvent);
@@ -46,7 +41,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         else
         {
             // make sure range color is back to normal
-            rangePreview.color = unblockedRangeColor;
+            rangePreview.color = _configs.color.unblockedRangeColor;
         }
 
         UpdatePreviews();
@@ -65,7 +60,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
             return false;
         }
 
-        if (!_canPlace)
+        if (!canPlace)
         {
             // can't place a turret at the current location
             return false;
@@ -78,7 +73,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         _map.SetTurret(_currentMouseTile, newTurret);
 
         // deselect, temp @todo this is really badly done
-        MainInterface.Instance.hotbar.DeselectAll();
+        MainInterface.Instance.hotbarSelector.DeselectAll();
         SetTurretPrefab(null);
 
         // connect interface to new turret
@@ -92,19 +87,13 @@ public class TurretPlacer : Singleton<TurretPlacer>
         return true;
     }
 
-    public bool TryDeselectTurret()
+    public void DeselectTurret()
     {
-        // try and deselect the turret
         if (_currentTurretPrefab)
         {
             // deselect the turret
             SetTurretPrefab(null);
-
-            return true;
         }
-
-        // none selected
-        return false;
     }
 
     private void OnMouseMoveEvent(Vector2 mousePos)
@@ -134,12 +123,12 @@ public class TurretPlacer : Singleton<TurretPlacer>
         MoveToCurrentTile();
 
         // we are at a new tile, recalculate if we can place
-        _canPlace = _map.IsTilePlaceable(_currentMouseTile);
+        canPlace = _map.IsTilePlaceable(_currentMouseTile);
 
         // set the color
-        Color newColor = _canPlace ? unblockedColor : blockedColor;
+        Color newColor = canPlace ? _configs.color.unblockedPlacementColor : _configs.color.blockedPlacementColor;
         turretPreview.color = newColor;
-        rangePreview.color = _canPlace ? unblockedRangeColor : blockedRangeColor;
+        rangePreview.color = canPlace ? _configs.color.unblockedRangeColor : _configs.color.blockedRangeColor;
 
         UpdatePreviews();
     }

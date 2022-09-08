@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace UnityEngine.Tilemaps
 {
     [Serializable]
-    [CreateAssetMenu]
+    [CreateAssetMenu(menuName = "Tiles/RuleTile")]
     public class RuleTile : MapTile
     {
         public Sprite m_DefaultSprite;

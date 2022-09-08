@@ -136,10 +136,11 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
             return;
         }
 
-        // stop placing
-        if (_turretPlacer.TryDeselectTurret())
+        // if there is a prefab selected to place, stop placing
+        if (_turretPlacer.GetTurretPrefab())
         {
-            MainInterface.Instance.hotbar.DeselectAll();
+            _turretPlacer.DeselectTurret();
+            MainInterface.Instance.hotbarSelector.DeselectAll();
             return;
         }
 
