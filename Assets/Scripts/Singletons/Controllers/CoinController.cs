@@ -37,8 +37,15 @@ public class CoinController : Singleton<CoinController>
 
     public bool TrySpendCoins(int amount)
     {
-        return false; // temp
-        // make sure to call oncoinschanged here
+        if (CanAfford(amount))
+        {
+            _coins -= amount;
+            onCoinsChanged.Invoke(_coins);
+
+            return true;
+        }
+
+        return false;
     }
 
     private void UpdateCoinText(int coins)

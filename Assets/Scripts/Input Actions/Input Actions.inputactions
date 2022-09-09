@@ -48,6 +48,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Modifiers",
+            "id": "d9d2ef96-53b7-4ad2-ab65-96e04224ec5a",
+            "actions": [
+                {
+                    "name": "Multiplace",
+                    "type": "Button",
+                    "id": "15d80091-a383-409d-b568-19e121eff270",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "04f689a7-5198-4731-8824-dbc116d0f5af",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Multiplace",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

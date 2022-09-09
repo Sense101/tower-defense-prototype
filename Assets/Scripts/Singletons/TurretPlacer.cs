@@ -10,18 +10,20 @@ public class TurretPlacer : Singleton<TurretPlacer>
 
     // internal variables
     private bool _overUI = false;
-    private Turret _currentTurretPrefab = null;
+    private Turret _currentTurret = null;
     private Vector2Int _currentMouseTile = Vector2Int.zero;
 
     Map _map;
-    TurretController _turretController;
+    InputController _inputController;
+    CoinController _coinController;
     TurretInterface _turretInterface;
     ConfigController _configs;
 
     private void Start()
     {
         _map = Map.Instance;
-        _turretController = TurretController.Instance;
+        _inputController = InputController.Instance;
+        _coinController = CoinController.Instance;
         _turretInterface = TurretInterface.Instance;
         _configs = ConfigController.Instance;
 
@@ -29,13 +31,13 @@ public class TurretPlacer : Singleton<TurretPlacer>
         InputController.overUIEvent.AddListener(OnOverUIEvent);
     }
 
-    public void SetTurretPrefab(Turret turretPrefab)
+    public void SetTurret(Turret turret)
     {
-        _currentTurretPrefab = turretPrefab;
-        if (turretPrefab)
+        _currentTurret = turret;
+        if (turret)
         {
             _turretInterface.SetTurret(null);
-            UpdateRangeScale(turretPrefab, true);
+            UpdateRangeScale(turret, true);
             RecalculateCanPlace();
         }
         else
@@ -47,16 +49,16 @@ public class TurretPlacer : Singleton<TurretPlacer>
         UpdatePreviews();
     }
 
-    public Turret GetTurretPrefab()
+    public Turret GetTurret()
     {
-        return _currentTurretPrefab;
+        return _currentTurret;
     }
 
     public bool TryPlaceTurret()
     {
-        if (!_currentTurretPrefab)
+        if (!_currentTurret)
         {
-            Debug.Log("No turret to place");
+            Debug.LogError("Tried to place turret with none selected!");
             return false;
         }
 
@@ -66,21 +68,32 @@ public class TurretPlacer : Singleton<TurretPlacer>
             return false;
         }
 
+        // NOTE: if we succesfully place but then cannot afford another, the hotbar item will deselect for us
+        if (!_configs.debug.noCoinCost && !_coinController.TrySpendCoins(_currentTurret.info.cost))
+        {
+            Debug.LogError("Can not afford turret to place - It should not have been selected!");
+            return false;
+        }
+
         // create the turret
-        Turret newTurret = _turretController.PlaceTurret(_map.MapToWorldSpace(_currentMouseTile));
+        Turret newTurret = TurretController.Instance.PlaceTurret(_map.MapToWorldSpace(_currentMouseTile));
 
         // add it to the map
         _map.SetTurret(_currentMouseTile, newTurret);
 
-        // deselect, temp @todo this is really badly done
-        MainInterface.Instance.hotbarSelector.DeselectAll();
-        SetTurretPrefab(null);
-
         // connect interface to new turret
         _turretInterface.SetTurret(newTurret);
 
-        if (_currentTurretPrefab)
+        if (!_inputController.input.Modifiers.Multiplace.IsPressed())
         {
+            // deselect, we are not multiplacing
+            MainInterface.Instance.hotbarSelector.DeselectAll();
+            SetTurret(null);
+        }
+
+        if (_currentTurret)
+        {
+            // if we still have a turret selected recalculate
             RecalculateCanPlace();
         }
 
@@ -89,10 +102,10 @@ public class TurretPlacer : Singleton<TurretPlacer>
 
     public void DeselectTurret()
     {
-        if (_currentTurretPrefab)
+        if (_currentTurret)
         {
             // deselect the turret
-            SetTurretPrefab(null);
+            SetTurret(null);
         }
     }
 
@@ -104,7 +117,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
         {
             _currentMouseTile = newMouseTile;
 
-            if (_currentTurretPrefab)
+            if (_currentTurret)
             {
                 RecalculateCanPlace();
             }
@@ -141,7 +154,7 @@ public class TurretPlacer : Singleton<TurretPlacer>
     // updates the previews
     private void UpdatePreviews()
     {
-        bool placerActive = _currentTurretPrefab && !_overUI;
+        bool placerActive = _currentTurret && !_overUI;
 
         turretPreview.gameObject.SetActive(placerActive);
 

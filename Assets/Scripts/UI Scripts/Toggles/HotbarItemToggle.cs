@@ -12,7 +12,7 @@ public class HotbarItemToggle : UIToggle
     {
         if (isOn)
         {
-            TurretPlacer.Instance.SetTurretPrefab(turret);
+            TurretPlacer.Instance.SetTurret(turret);
             TurretPlacer.Instance.turretPreview.sprite = turret.info.fullSprite;
         }
         else

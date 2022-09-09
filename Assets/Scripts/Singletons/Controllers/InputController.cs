@@ -13,6 +13,9 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     public static Vector2 mousePos { get; private set; }
     public static bool mouseOverUI { get; private set; }
 
+    // the input actions - for every script to use to check inputs
+    public InputActions input;
+
     // input overlays - prevent inputs till closed
     [SerializeField] private List<UIOverlay> _inputOverlays = new List<UIOverlay>(); // @todo serialized for debug purposes
 
@@ -20,7 +23,6 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     private bool _active = false;
 
     // references
-    InputActions _inputActions;
     Camera _mainCamera;
     TurretPlacer _turretPlacer;
     TurretInterface _turretInterface;
@@ -31,13 +33,13 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     private void OnEnable()
     {
         //initialize input actions
-        _inputActions = new InputActions();
-        _inputActions.Mouse.SetCallbacks(this);
-        _inputActions.Enable();
+        input = new InputActions();
+        input.Mouse.SetCallbacks(this);
+        input.Enable();
     }
     private void OnDisable()
     {
-        _inputActions.Disable();
+        input.Disable();
     }
     private void Start()
     {
@@ -108,7 +110,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         }
 
         // then place turret if we have one selected
-        if (_turretPlacer.GetTurretPrefab())
+        if (_turretPlacer.GetTurret())
         {
             _turretPlacer.TryPlaceTurret();
             return;
@@ -137,7 +139,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         }
 
         // if there is a prefab selected to place, stop placing
-        if (_turretPlacer.GetTurretPrefab())
+        if (_turretPlacer.GetTurret())
         {
             _turretPlacer.DeselectTurret();
             MainInterface.Instance.hotbarSelector.DeselectAll();

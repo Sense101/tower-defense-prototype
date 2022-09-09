@@ -3654,7 +3654,7 @@ MonoBehaviour:
   onCoinsChanged:
     m_PersistentCalls:
       m_Calls: []
-  _coins: 0
+  _coins: 295
 --- !u!1 &580306242
 GameObject:
   m_ObjectHideFlags: 0

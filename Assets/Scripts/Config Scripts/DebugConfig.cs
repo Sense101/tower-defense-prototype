@@ -8,4 +8,5 @@ public class DebugConfig : ScriptableObject
     // eventually add in any config I might need
 
     public bool noCoinCost = false;
+    public bool instantMutations = false;
 }

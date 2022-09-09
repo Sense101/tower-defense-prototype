@@ -31,8 +31,7 @@ public class TurretInterface : Singleton<TurretInterface>
 
     // references
     TurretPlacer _turretPlacer;
-    TurretController _turretController;
-    UpgradeController _upgradeController;
+    ConfigController _configs;
     Map _map;
 
     GameObject _previewCamera;
@@ -41,8 +40,7 @@ public class TurretInterface : Singleton<TurretInterface>
     {
         // set references
         _turretPlacer = TurretPlacer.Instance;
-        _turretController = TurretController.Instance;
-        _upgradeController = UpgradeController.Instance;
+        _configs = ConfigController.Instance;
         _map = Map.Instance;
         _previewCamera = GameObject.FindWithTag("PreviewCamera");
 
@@ -72,7 +70,7 @@ public class TurretInterface : Singleton<TurretInterface>
 
         Debug.Log("selling turret");
         // sell the turret
-        _turretController.SellTurret(_selectedTurret);
+        TurretController.Instance.SellTurret(_selectedTurret);
 
         // set the tile to not be holding a turret
         _map.SetTurretWorldSpace(Vector2Int.RoundToInt(_selectedTurret.transform.position), null);
@@ -92,36 +90,6 @@ public class TurretInterface : Singleton<TurretInterface>
         _selectedTurret.targetType = targetType;
     }
 
-    // called by buttons
-    public void ApplyUpgrade(int index)
-    {
-        // @todo this all needs remaking
-        //if (!_selectedTurret)
-        //{
-        //    // no turret selected, do nothing
-        //    return;
-        //}
-        //
-        //UpgradeInfo upgrade;
-        //int tier;
-        //if (index == 0)
-        //{
-        //    upgrade = _upgradeController.damageUpgrade;
-        //    _selectedTurret.damageAugmentLevel++;
-        //    tier = _selectedTurret.damageAugmentLevel;
-        //    damageText.text = $"damage upgrade ({tier}/5)";
-        //}
-        //else
-        //{
-        //    upgrade = _upgradeController.rangeUpgrade;
-        //    //tier = _selectedTurret.rangeAugmentLevel++;
-        //    //rangeText.text = $"range upgrade ({tier}/5)";
-        //}
-        //
-        //_upgradeController.ApplyUpgrade(_selectedTurret.stats, upgrade.id, tier);
-        ////@TODO
-        //_turretPlacer.UpdateRangeScale(_selectedTurret);
-    }//
     public void MutateTurret()
     {
         MutationInterface.Instance.Open();
@@ -231,7 +199,7 @@ public class TurretInterface : Singleton<TurretInterface>
 
     private void UpdateXpBar(int xp, bool instant = false)
     {
-        if (true || xp >= 200)
+        if (_configs.debug.instantMutations || xp >= 200)
         {
             xpBarButton.interactable = true;
 

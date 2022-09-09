@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Toggle))]
+[RequireComponent(typeof(UIToggle))]
 public class ToggleExtension : MonoBehaviour
 {
-    [HideInInspector] public Toggle toggle;
+    [HideInInspector] public UIToggle toggle;
 
     private void Awake()
     {
-        toggle = GetComponent<Toggle>();
+        toggle = GetComponent<UIToggle>();
     }
 }
