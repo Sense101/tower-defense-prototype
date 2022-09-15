@@ -82,7 +82,7 @@ public class Map : Singleton<Map>
     /// <summary>
     /// checks if a turret can be placed at a given tile, in world space
     /// </summary>
-    public bool IsTilePlaceableWorldSpace(Vector2Int worldSpace)
+    public bool IsTilePlaceableWorldSpace(Vector2 worldSpace)
     {
         Vector2Int mapSpace = WorldToMapSpace(worldSpace);
         return IsTilePlaceable(mapSpace);
@@ -93,7 +93,7 @@ public class Map : Singleton<Map>
     {
         _tiles[mapSpace].Turret = turret;
     }
-    public void SetTurretWorldSpace(Vector2Int worldSpace, Turret turret)
+    public void SetTurretWorldSpace(Vector2 worldSpace, Turret turret)
     {
         SetTurret(WorldToMapSpace(worldSpace), turret);
     }

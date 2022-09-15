@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unblockedPlacementColor: {r: 1, g: 1, b: 1, a: 0.4}
   blockedPlacementColor: {r: 1, g: 0, b: 0, a: 0.101960786}
-  unblockedRangeColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 0.14901961}
+  unblockedRangeColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 0.12156863}
   blockedRangeColor: {r: 0.7490196, g: 0, b: 0, a: 0.05882353}
-  canAffordColor: {r: 0.7830189, g: 0.6770207, b: 0, a: 1}
-  cannotAffordColor: {r: 0.6509434, g: 0.08904416, b: 0.08904416, a: 1}
+  canAffordColor: {r: 1, g: 0.865, b: 0, a: 1}
+  cannotAffordColor: {r: 1, g: 0, b: 0, a: 1}
+  outerHealthBarColor: {r: 0, g: 0, b: 0, a: 0}
+  healthBarColor: {r: 0.754717, g: 0, b: 0, a: 1}
+  armorBarColor: {r: 0.9245283, g: 0.6671106, b: 0, a: 1}

@@ -17,4 +17,4 @@ MonoBehaviour:
   shortDescription: Range x 150%
   longDescription: Multiplies range by 150%
   cost: 30
-  color: {r: 0, g: 0.59158367, b: 0.8, a: 1}
+  color: {r: 0, g: 0.74019575, b: 1, a: 1}

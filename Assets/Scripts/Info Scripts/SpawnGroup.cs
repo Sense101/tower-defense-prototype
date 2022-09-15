@@ -6,13 +6,15 @@
 [System.Serializable]
 public class SpawnGroup
 {
+    public float startingDelay = 0;
+
     [Tooltip("the amount to spawn")]
-    public int spawnAmount = 10;
+    public int spawnAmount = 0;
 
     [Tooltip("the enemy to spawn")]
     public GameObject enemyPrefab;
 
-    [Header("Delays")]
-    public float delayBeforeSpawn = 1;
+    //@TODO which spawner as well
+
     public float delayBetweenSpawns = 1;
 }

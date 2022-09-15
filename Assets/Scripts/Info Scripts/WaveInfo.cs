@@ -11,6 +11,4 @@ public class WaveInfo
 
     [Tooltip("the different groups of enemies to spawn in the wave")]
     public List<SpawnGroup> spawnGroups = new List<SpawnGroup>();
-
-    public float timeToNextWave = 5;
 }

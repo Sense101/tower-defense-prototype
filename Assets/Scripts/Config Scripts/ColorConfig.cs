@@ -14,4 +14,9 @@ public class ColorConfig : ScriptableObject
     [Header("Coins")]
     public Color canAffordColor;
     public Color cannotAffordColor;
+
+    [Header("Health Bars")]
+    public Color outerHealthBarColor;
+    public Color healthBarColor;
+    public Color armorBarColor;
 }

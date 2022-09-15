@@ -11,7 +11,7 @@ public class Bullet : PoolObject
     // internal variables
     public BulletStatistics stats;
 
-    // called when we hit something, passing in the damage
+    // called when we hit something, passing in the damage done
     [HideInInspector] public UnityEvent<int> onHitEvent = new UnityEvent<int>();
 
     Animator _animator;
@@ -49,9 +49,9 @@ public class Bullet : PoolObject
         if (e)
         {
             e.previewDamage -= stats.damage;
-            e.TakeHit(stats.damage, stats.armorPiercing);
 
-            onHitEvent.Invoke(stats.damage);
+
+            onHitEvent.Invoke(e.TakeHit(stats.damage, stats.armorPiercing));
         }
         else
         {

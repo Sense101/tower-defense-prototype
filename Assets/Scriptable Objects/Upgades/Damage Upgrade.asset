@@ -17,4 +17,4 @@ MonoBehaviour:
   shortDescription: Damage x 150%
   longDescription: Multiplies damage per hit by 150%
   cost: 30
-  color: {r: 0.8, g: 0, b: 0, a: 1}
+  color: {r: 1, g: 0, b: 0, a: 1}

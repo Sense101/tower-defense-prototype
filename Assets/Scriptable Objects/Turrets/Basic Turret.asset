@@ -15,9 +15,10 @@ MonoBehaviour:
   type: 1
   cost: 100
   title: Basic Turret
+  tierDescription: Tier I
   description: A turret. With a gun. You can't get more simple than that.
   damageModifier: 10
-  rangeModifier: 20
+  rangeModifier: 25
   reloadTimeModifier: 1
   spinSpeedModifier: 100
   fullSprite: {fileID: 21300000, guid: 16cf81ec93aebc94e85d6155ba470fa5, type: 3}

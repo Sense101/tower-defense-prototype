@@ -12,6 +12,7 @@ public class TurretInfo : ScriptableObject
     public int cost = 0;
 
     public string title = "";
+    public string tierDescription = "";
     [TextArea(3, 10)] public string description = "";
 
     [Space(5)]

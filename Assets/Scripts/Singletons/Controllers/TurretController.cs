@@ -142,10 +142,10 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     private void ModifyTurretStatsMultiplier(TurretStatistics stats, TurretInfo newInfo)
     {
         // multiply all basic stats by modifier
-        stats.damage = Mathf.RoundToInt(stats.damage * newInfo.damageModifier);
+        stats.damage = Mathf.RoundToInt(newInfo.damageModifier * stats.damage);
         stats.range *= newInfo.rangeModifier;
         stats.reloadTime *= newInfo.reloadTimeModifier;
-        stats.spinSpeed = Mathf.RoundToInt(stats.spinSpeed * newInfo.spinSpeedModifier);
+        stats.spinSpeed = Mathf.RoundToInt(newInfo.spinSpeedModifier * stats.spinSpeed);
     }
     private void ModifyTurretStatsBasic(TurretStatistics stats, TurretInfo newInfo)
     {
@@ -174,7 +174,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
         if (!firing)
         {
             // since we are not already firing, stop targeting enemies that go out of range
-            Vector2 targetPos = t.currentTarget.body.transform.position;
+            Vector2 targetPos = t.currentTarget.body.position;
             float targetDistance = Vector2.Distance(t.transform.position, targetPos);
             if (targetDistance > t.stats.range)
             {
@@ -208,7 +208,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
 
     private Angle FindAngleToTarget(Turret t)
     {
-        Vector2 targetPos = t.currentTarget.body.transform.position;
+        Vector2 targetPos = t.currentTarget.body.position;
         Gun currentGun = t.guns[t.currentGunIndex];
         float localGunRotation = currentGun.transform.localEulerAngles.z;
 
@@ -231,7 +231,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     {
         // find all the targets in range
         List<Enemy> targetsInRange = enemies.FindAll(x => {
-            return Vector2.Distance(t.transform.position, x.body.transform.position) <= t.stats.range;
+            return Vector2.Distance(t.transform.position, x.body.position) <= t.stats.range;
         });
 
         if (targetsInRange.Count < 1)
@@ -341,7 +341,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
                     continue;
                 }
 
-                float targetDistance = Vector2.Distance(gun.transform.position, target.body.transform.position);
+                float targetDistance = Vector2.Distance(gun.transform.position, target.body.position);
                 if (distanceToGun == 0 || targetDistance < distanceToGun)
                 {
                     // it's closer, set it as the gun

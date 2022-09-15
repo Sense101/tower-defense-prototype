@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Debug Config
   m_EditorClassIdentifier: 
   noCoinCost: 0
+  instantMutations: 0

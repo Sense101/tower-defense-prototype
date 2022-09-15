@@ -13,7 +13,7 @@ public class TargetTypeToggle : UIToggle
         if (isOn)
         {
             TurretInterface.Instance.SetTurretTargetType(_targetType);
-            OnHoverStart();
+            transform.DOScale(new Vector2(1.1f, 1.1f), 0.1f);
         }
         else if (!hovering)
         {
@@ -28,7 +28,10 @@ public class TargetTypeToggle : UIToggle
 
     public override void OnHoverStart()
     {
-        transform.DOScale(new Vector2(1.1f, 1.1f), 0.1f);
+        if (!isOn)
+        {
+            transform.DOScale(new Vector2(0.9f, 0.9f), 0.1f);
+        }
     }
     public override void OnHoverEnd()
     {

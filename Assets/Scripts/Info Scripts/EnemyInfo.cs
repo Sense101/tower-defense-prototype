@@ -9,13 +9,16 @@
 public class EnemyInfo : ScriptableObject
 {
     [Tooltip("move speed in tiles/sec")]
-    public float moveSpeed = 1.5f;
+    [Min(0)] public float moveSpeed = 1.5f;
 
     [Tooltip("health in ???")]
-    public int health = 30;
+    [Min(0)] public int health = 30;
 
-    [Tooltip("@todo set up armor system")]
-    public int armor = 0;
+    [Tooltip("How much armor the enemy has")]
+    [Min(0)] public int armor = 0;
 
-    public int killReward = 0;
+    [Tooltip("How much damage the armor reduces")]
+    [Min(0)] public int armorStrength = 0;
+
+    [Min(0)] public int killReward = 0;
 }

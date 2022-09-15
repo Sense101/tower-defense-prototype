@@ -81,11 +81,11 @@ public class TurretPlacer : Singleton<TurretPlacer>
         // add it to the map
         _map.SetTurret(_currentMouseTile, newTurret);
 
-        // connect interface to new turret
-        _turretInterface.SetTurret(newTurret);
-
         if (!_inputController.input.Modifiers.Multiplace.IsPressed())
         {
+            // only connect interface to new turret if we are not multiplacing
+            _turretInterface.SetTurret(newTurret);
+
             // deselect, we are not multiplacing
             MainInterface.Instance.hotbarSelector.DeselectAll();
             SetTurret(null);

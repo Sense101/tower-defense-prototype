@@ -43,14 +43,14 @@ public class CanvasFadeGroup : MonoBehaviour
         }
         if (modifyPosition)
         {
-            _cachedhiddenToShownDistance = Vector2.Distance(hiddenPosition, shownPosition);
-
             if (relativeToStartPosition)
             {
                 // change positions to be relative
                 hiddenPosition += (Vector2)transform.localPosition;
                 shownPosition += (Vector2)transform.localPosition;
             }
+
+            _cachedhiddenToShownDistance = Vector2.Distance(hiddenPosition, shownPosition);
         }
 
         // update the group immediately to match the state

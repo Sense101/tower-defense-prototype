@@ -8,31 +8,40 @@ public class Enemy : MonoBehaviour
 
     // set in inspector
     public EnemyInfo info;
-    public SpriteRenderer body;
+    public Transform body;
+    public SpriteRenderer[] renderers;
+
+    // set upon creation
     public HealthBar healthBar;
 
     // where we are headed
     public PathPoint targetPoint;
+    public Vector2 targetPosition;
+    public float offset;
 
     // health
-    public int previewDamage = 0; // damage that hasn't taken effect yet
-    public int currentHealth = 0; // actual health
-
-    public virtual void SetReferences(Camera mainCamera)
-    {
-        healthBar.SetReferences(mainCamera);
-    }
+    public int previewDamage = 0; // incoming damage that hasn't taken effect yet
+    public int currentHealth = 0;
+    public int currentArmor = 0;
 
     public virtual void EnemyStart()
     {
-        // set health
+        // set stats
         currentHealth = info.health;
+        currentArmor = info.armor;
+
+        foreach (SpriteRenderer renderer in renderers)
+        {
+            // make sure the faster enemies are on top
+            renderer.sortingOrder = Mathf.RoundToInt(info.moveSpeed);
+        }
     }
 
     // does this enemy have room for more pain?
     public bool IsSpaceForDamage()
     {
-        return currentHealth - previewDamage > 0;
+        int effectiveArmor = currentArmor * (1 + info.armorStrength);
+        return (currentHealth + effectiveArmor) - previewDamage > 0;
     }
 
     public virtual void SetBodyRotation(Angle rotation)
@@ -43,16 +52,27 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// reduces the enemies health/armor
     /// </summary>
-    /// <returns>@todo the reduction of health and armor</returns>
-    public virtual void TakeHit(int damage, int armorPiercing)
+    /// <returns>the xp that the turret gets</returns>
+    public virtual int TakeHit(int damage, int armorPiercing)
     {
-        //@TODO implement armor
-        var armor = Mathf.Max(0, info.armor - armorPiercing);
-        var finalDamage = damage - armor;
+        // check to seei f we have armor first
+        if (currentArmor > 0)
+        {
+            // damage armor
+            int damageReduction = Mathf.Max(0, info.armorStrength - armorPiercing);
+            int finalDamage = Mathf.Max(0, damage - damageReduction);
 
-        currentHealth -= finalDamage;
+            currentArmor = Mathf.Max(0, currentArmor - finalDamage);
 
-        healthBar.SetFill((float)currentHealth / info.health);
+            // set the health bar fill
+            healthBar.SetFill(1, (float)currentArmor / info.armor);
+
+            // turrets get no xp for destroying armor
+            return 0;
+        }
+
+        currentHealth -= damage;
+        int extraDamage = Mathf.Max(0, -currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -60,5 +80,13 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
             CoinController.Instance.AddCoins(info.killReward);
         }
+
+        // set the health bar fill
+        healthBar.SetFill((float)currentHealth / info.health, 0);
+
+        return damage - extraDamage;
+
+
+
     }
 }

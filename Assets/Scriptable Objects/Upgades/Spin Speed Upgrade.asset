@@ -17,4 +17,4 @@ MonoBehaviour:
   shortDescription: Spin Speed x 150%
   longDescription: Multiplies spin speed by 150%
   cost: 30
-  color: {r: 0.78851193, g: 0.8, b: 0, a: 1}
+  color: {r: 0.9852941, g: 1, b: 0, a: 1}

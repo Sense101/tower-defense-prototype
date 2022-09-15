@@ -86,14 +86,28 @@ public class MutationInterface : UIOverlaySingleton<MutationInterface>
             return;
         }
 
-        // upgrade the turret
         TurretInfo newInfo = currentTurret.info.mutationPaths[pathIndex];
+
+        // deduct the coins for the mutation
+        if (!_configs.debug.noCoinCost && !_coinController.TrySpendCoins(newInfo.cost))
+        {
+            Debug.LogError("Can not afford mutation- it should not be clickable!");
+        }
+
+        // upgrade the turret
         TurretController.Instance.ModifyTurret(currentTurret, newInfo);
+
+        // reset the turret xp
+        currentTurret.stats.xp = 0;
+
+        // update the interface to match our changes
         _turretInterface.UpdateInterface();
 
+
+
         // deselect, our job is done
-        TurretPlacer.Instance.DeselectTurret();
-        MainInterface.Instance.hotbarSelector.DeselectAll();
+        //TurretPlacer.Instance.DeselectTurret();
+        //MainInterface.Instance.hotbarSelector.DeselectAll();
 
         Close();
     }

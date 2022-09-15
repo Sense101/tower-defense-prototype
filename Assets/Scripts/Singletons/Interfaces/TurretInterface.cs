@@ -11,21 +11,21 @@ public class TurretInterface : Singleton<TurretInterface>
 {
     // set in inspector - the different parts of the interface
 
+    [SerializeField] CanvasFadeGroup fadeGroup;
+
     [Header("XP Bar")]
     [SerializeField] Image xpBarFillImage;
     [SerializeField] UIButton xpBarButton;
     [SerializeField] TextMeshProUGUI xpBarText;
 
-    [Header("@TODO")]
-    [SerializeField] TextMeshProUGUI turretName;
+    [Header("Turret Info")]
+    [SerializeField] TextMeshProUGUI turretTitle;
+    [SerializeField] TextMeshProUGUI tierDescription;
     [SerializeField] UIToggleSelector targetTypeSelector;
-    [SerializeField] TextMeshProUGUI damageText;
-    [SerializeField] TextMeshProUGUI rangeText;
 
 
     // internal variables
     private Turret _selectedTurret = null;
-    private CanvasFadeGroup _fadeGroup;
 
     private UpgradeSlot[] _upgradeSlots;
 
@@ -33,7 +33,6 @@ public class TurretInterface : Singleton<TurretInterface>
     TurretPlacer _turretPlacer;
     ConfigController _configs;
     Map _map;
-
     GameObject _previewCamera;
 
     private void Start()
@@ -43,8 +42,6 @@ public class TurretInterface : Singleton<TurretInterface>
         _configs = ConfigController.Instance;
         _map = Map.Instance;
         _previewCamera = GameObject.FindWithTag("PreviewCamera");
-
-        _fadeGroup = GetComponent<CanvasFadeGroup>();
 
         ConnectUpgradeSlots();
     }
@@ -73,7 +70,7 @@ public class TurretInterface : Singleton<TurretInterface>
         TurretController.Instance.SellTurret(_selectedTurret);
 
         // set the tile to not be holding a turret
-        _map.SetTurretWorldSpace(Vector2Int.RoundToInt(_selectedTurret.transform.position), null);
+        _map.SetTurretWorldSpace(_selectedTurret.transform.position, null);
 
         // hide interface
         SetTurret(null);
@@ -132,7 +129,7 @@ public class TurretInterface : Singleton<TurretInterface>
         if (turret)
         {
             // we've selected a turret, show the main interface
-            _fadeGroup.Show();
+            fadeGroup.Show();
 
             // add a hit event listener so we can update as the new turret changes
             turret.onBulletHitEvent.AddListener(OnTurretHit);
@@ -145,7 +142,7 @@ public class TurretInterface : Singleton<TurretInterface>
         }
         else
         {
-            _fadeGroup.Hide();
+            fadeGroup.Hide();
         }
     }
 
@@ -163,7 +160,16 @@ public class TurretInterface : Singleton<TurretInterface>
         }
 
         UpdateXpBar(_selectedTurret.stats.xp, true);
-        turretName.text = _selectedTurret.info.title;
+
+        // set turret title
+
+        // check if we have more than two of an upgrade @todo
+        // then add in that name in the middle, and add on turret at the end
+        turretTitle.text = _selectedTurret.info.title;
+
+
+        tierDescription.text = _selectedTurret.info.tierDescription;
+
         targetTypeSelector.SelectByIndex((int)_selectedTurret.targetType);
 
         // update the upgrade slots
@@ -208,7 +214,8 @@ public class TurretInterface : Singleton<TurretInterface>
                 xpBarButton.OnHoverStart();
             }
 
-            xpBarText.text = "Mutation Ready!";
+            xpBarText.text = "Click to mutate!";
+            //xpBarText.text = xp.ToString() + " / 200";
         }
         else
         {

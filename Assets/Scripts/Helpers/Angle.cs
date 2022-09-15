@@ -47,13 +47,17 @@ public class Angle
     public Angle Rotate(float rotDegrees)
     {
         degrees = ClampDegrees(degrees + rotDegrees);
-        //Debug.Log("new angle before clamp: " + (degrees + rotDegrees) + ". After clamp: " + degrees);
         return this;
     }
 
     public Angle Clone()
     {
         return new Angle(degrees);
+    }
+
+    public Angle CloneRotate(float rotDegrees)
+    {
+        return new Angle(ClampDegrees(degrees + rotDegrees));
     }
 
     /*
@@ -63,7 +67,7 @@ public class Angle
     /// <summary>
     /// returns the angle as a Vector3
     /// </summary>
-    public Vector3 AsVector3()
+    public Vector3 WithinVector3()
     {
         return new Vector3(0, 0, degrees);
     }
@@ -79,7 +83,7 @@ public class Angle
     /// <summary>
     /// converts the angle to a vector and returns it
     /// </summary>
-    public Vector2 ToVector()
+    public Vector2 AsVector()
     {
         return AngleToVector(degrees);
     }

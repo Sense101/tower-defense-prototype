@@ -6,6 +6,9 @@ using UnityEngine;
 /// </summary>
 public class EnemyController : Singleton<EnemyController>
 {
+    // set in inspector
+    public GameObject healthBarPrefab;
+
     public List<Enemy> enemies = new List<Enemy>();
 
 
@@ -35,13 +38,16 @@ public class EnemyController : Singleton<EnemyController>
         }
     }
 
-    public Enemy SpawnEnemy(Vector2 location, Angle rotation, GameObject prefab, PathPoint nextPoint)
+    public Enemy SpawnEnemy(Vector2 location, Angle rotation, GameObject prefab, PathPoint nextPoint, Vector2 targetPosition, float offset)
     {
         Enemy newEnemy = Instantiate(prefab, location, Quaternion.identity, transform).GetComponent<Enemy>();
         newEnemy.targetPoint = nextPoint;
+        newEnemy.targetPosition = targetPosition;
+        newEnemy.offset = offset;
+
+        newEnemy.healthBar = Instantiate(healthBarPrefab, location, Quaternion.identity, newEnemy.transform).GetComponent<HealthBar>();
 
         newEnemy.SetBodyRotation(rotation);
-        newEnemy.SetReferences(_mainCamera);
         newEnemy.EnemyStart();
 
         Add(newEnemy);
@@ -60,12 +66,11 @@ public class EnemyController : Singleton<EnemyController>
     private void MoveEnemy(Enemy e)
     {
         float moveSpeedDelta = e.info.moveSpeed * Time.deltaTime;
-        Vector2 target = e.targetPoint.cachedWorldPos;
 
-        e.transform.position = Vector2.MoveTowards(e.transform.position, target, moveSpeedDelta);
+        e.transform.position = Vector2.MoveTowards(e.transform.position, e.targetPosition, moveSpeedDelta);
 
         // now check to see if we need to change path point
-        if ((Vector2)e.transform.position == target)
+        if ((Vector2)e.transform.position == e.targetPosition)
         {
             e.targetPoint.OnEnemyArrive(e);
         }

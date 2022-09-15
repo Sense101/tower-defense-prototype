@@ -6,9 +6,8 @@ using UnityEngine;
 [System.Serializable]
 public class TurretStatistics
 {
-    // these three are set upon initialization
     [Min(0)] public int damage;
-    [Min(0)] public float range;
+    [Min(0)] public float range; // tiles
     [Min(0)] public int spinSpeed; // degrees/sec
     [Min(0)] public float reloadTime;
 
