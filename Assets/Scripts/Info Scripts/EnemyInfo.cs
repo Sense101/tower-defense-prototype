@@ -21,4 +21,6 @@ public class EnemyInfo : ScriptableObject
     [Min(0)] public int armorStrength = 0;
 
     [Min(0)] public int killReward = 0;
+
+    public Sprite previewSprite;
 }

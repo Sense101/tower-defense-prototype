@@ -1,37 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using DG.Tweening;
 using TMPro;
+using UnityEngine;
 
 public class WaveInterface : Singleton<WaveInterface>
 {
     // set in inspector
-    [SerializeField] StartWave startWave;
-    public Transform waveScroller;
+    [SerializeField] StartWaveButton startWaveButton;
+    [SerializeField] TextMeshProUGUI startWaveText;
+    [SerializeField] RectTransform innerContainer;
+
+    // internal variables
+    public List<WaveContainer> containers;
 
     // references
-    WaveController _waveController;
 
     private void Start()
     {
-        _waveController = WaveController.Instance;
-        _waveController.onSpawningChange.AddListener(OnSpawningChange);
-
-        startWave.button.onClick.AddListener(OnStartWaveClick);
+        containers = new List<WaveContainer>(GetComponentsInChildren<WaveContainer>());
     }
 
-    private void OnStartWaveClick()
+    public async void ScrollToNextWave()
     {
-        _waveController.SpawnNextWave();
+        // start moving the second container into place
+        containers[1].transform.DOMoveX(innerContainer.position.x, 2);
+
+        // move the first container away
+        await containers[0].transform.DOMoveX(innerContainer.position.x - innerContainer.sizeDelta.x, 2).AsyncWaitForCompletion();
+
+        // now move the first container to the back of the line
+        // @todo and update it to match the next wave
+        containers[0].transform.DOMoveX(innerContainer.position.x + innerContainer.sizeDelta.x, 0);
+        containers.Add(containers[0]);
+        containers.RemoveAt(0);
     }
 
-    private void OnSpawningChange(bool spawning)
+    private async void ResetOldWaveContainer(System.Threading.Tasks.Task movementTask)
     {
-        startWave.button.interactable = !spawning;
-        if (spawning)
-        {
-            startWave.button.OnHoverEnd();
-        }
+        await movementTask;
+        containers[0].transform.position += new Vector3(88, 0);
+        containers.Add(containers[0]);
+        containers.RemoveAt(0);
+    }
+
+    public void EnableStartWaveButton()
+    {
+        startWaveButton.interactable = true;
     }
 }

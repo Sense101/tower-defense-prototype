@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Runtime;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 // this is the script that will handle all the turret interface parts
 public class TurretInterface : Singleton<TurretInterface>

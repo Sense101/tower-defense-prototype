@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using DG.Tweening;
 
 public class WaveController : Singleton<WaveController>
 {
@@ -16,11 +15,13 @@ public class WaveController : Singleton<WaveController>
     public UnityEvent<bool> onSpawningChange = new UnityEvent<bool>();
 
     EnemyController _enemyController;
+    WaveInterface _waveInterface;
 
     // Start is called before the first frame update
     void Start()
     {
         _enemyController = EnemyController.Instance;
+        _waveInterface = WaveInterface.Instance;
     }
 
     public void SpawnNextWave()
@@ -43,7 +44,6 @@ public class WaveController : Singleton<WaveController>
         }
 
         spawning = true;
-        onSpawningChange.Invoke(spawning);
         WaveInfo wave = waves[waveIndex];
 
         for (int g = 0; g < wave.spawnGroups.Count; g++)
@@ -71,16 +71,14 @@ public class WaveController : Singleton<WaveController>
                     offset
                 );
 
-                WaveInterface.Instance.waveScroller.DOMoveX(WaveInterface.Instance.waveScroller.position.x - 2, group.delayBetweenSpawns);
                 yield return new WaitForSeconds(group.delayBetweenSpawns);
             }
         }
 
         // we have finished spawning, allow starting next wave
         spawning = false;
-        onSpawningChange.Invoke(spawning);
+        _waveInterface.EnableStartWaveButton();
         currentWaveIndex++;
-        //@todo grey out starting button when spawning?
     }
 
     private float ChooseRandomOffset()
