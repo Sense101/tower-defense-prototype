@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 291b79592977a98478521572b5dec492, type: 3}
   m_Name: Debug Config
   m_EditorClassIdentifier: 
-  noCoinCost: 0
-  instantMutations: 0
+  noCoinCost: 1
+  instantMutations: 1
+  playSpeedMultiplier: 1

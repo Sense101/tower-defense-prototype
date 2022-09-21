@@ -17,12 +17,11 @@ MonoBehaviour:
   title: Double Turret
   tierDescription: Tier II
   description: 
-  damageModifier: 0.7
+  damageModifier: 0.8
   rangeModifier: 1
   reloadTimeModifier: 1
   spinSpeedModifier: 1
   fullSprite: {fileID: 21300000, guid: ae1affea503af2045925c85b810c6bdc, type: 3}
-  previewSprite: {fileID: 21300000, guid: 25a4f5e3c75e9bd44a0caca41d147835, type: 3}
   turretBaseSprite: {fileID: 21300000, guid: 1b830caac141ee349ba67edd59b0bc21, type: 3}
   bodySprite: {fileID: 21300000, guid: f00d5fd30ceb9f647ac391ca42b98147, type: 3}
   gunMountSprite: {fileID: 21300000, guid: b58ca1b7e2e1d8642a76966748b3c5b0, type: 3}

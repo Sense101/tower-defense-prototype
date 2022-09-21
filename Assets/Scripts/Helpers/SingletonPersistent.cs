@@ -43,6 +43,4 @@ public class SingletonPersistent<T> : MonoBehaviour where T : Component
             instance = null;
         }
     }
-
-
 }

@@ -96,17 +96,14 @@ public class MutationInterface : UIOverlaySingleton<MutationInterface>
         // upgrade the turret
         TurretController.Instance.ModifyTurret(currentTurret, newInfo);
 
+        // add to the sell amount
+        currentTurret.stats.sellAmount += newInfo.cost / 2;
+
         // reset the turret xp
         currentTurret.stats.xp = 0;
 
         // update the interface to match our changes
         _turretInterface.UpdateInterface();
-
-
-
-        // deselect, our job is done
-        //TurretPlacer.Instance.DeselectTurret();
-        //MainInterface.Instance.hotbarSelector.DeselectAll();
 
         Close();
     }

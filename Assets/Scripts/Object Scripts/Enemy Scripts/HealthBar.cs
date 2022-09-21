@@ -44,29 +44,4 @@ public class HealthBar : MonoBehaviour
         healthBar.fillAmount = healthFill;
         armorBar.fillAmount = armorFill;
     }
-
-    private IEnumerator Show()
-    {
-        Color outerBarColor = new Color(1, 1, 1, 0);
-        Color healthBarColor = ConfigController.Instance.color.healthBarColor;
-        Color armorBarColor = ConfigController.Instance.color.armorBarColor;
-        healthBarColor.a = 0;
-        armorBarColor.a = 0;
-
-        while (outerBarColor.a < 1)
-        {
-            float fadeInAmount = Time.deltaTime * FADE_IN_SPEED;
-
-            outerBarColor.a += fadeInAmount;
-            healthBarColor.a += fadeInAmount;
-            armorBarColor.a += fadeInAmount;
-
-            // set visiblities
-            outerBar.color = outerBarColor;
-            healthBar.color = healthBarColor;
-            armorBar.color = armorBarColor;
-
-            yield return null;
-        }
-    }
 }

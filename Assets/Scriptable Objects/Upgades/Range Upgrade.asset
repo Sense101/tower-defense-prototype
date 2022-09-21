@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: range
   title: Vision
-  shortDescription: Range x 150%
-  longDescription: Multiplies range by 150%
+  shortDescription: Range x 135%
+  longDescription: Multiplies range by 135%
   cost: 30
   color: {r: 0, g: 0.74019575, b: 1, a: 1}

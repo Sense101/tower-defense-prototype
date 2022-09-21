@@ -17,12 +17,11 @@ MonoBehaviour:
   title: Rearguard Turret
   tierDescription: Tier II
   description: 
-  damageModifier: 0.9
+  damageModifier: 1
   rangeModifier: 1
   reloadTimeModifier: 1
-  spinSpeedModifier: 2
+  spinSpeedModifier: 2.5
   fullSprite: {fileID: 21300000, guid: 198b372766a46954f8801784dafcf72a, type: 3}
-  previewSprite: {fileID: 21300000, guid: 198b372766a46954f8801784dafcf72a, type: 3}
   turretBaseSprite: {fileID: 21300000, guid: 1b830caac141ee349ba67edd59b0bc21, type: 3}
   bodySprite: {fileID: 21300000, guid: 5c7969b3bfe4c4e4da0ee2e02fe489f7, type: 3}
   gunMountSprite: {fileID: 21300000, guid: c29861b7c97d29a478a7b5cfe8734558, type: 3}

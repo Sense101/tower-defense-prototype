@@ -9,4 +9,5 @@ public class DebugConfig : ScriptableObject
 
     public bool noCoinCost = false;
     public bool instantMutations = false;
+    [Min(0)] public float playSpeedMultiplier = 1;
 }

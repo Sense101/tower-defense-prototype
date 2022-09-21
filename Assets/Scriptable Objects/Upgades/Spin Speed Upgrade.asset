@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: spin_speed
   title: Pivot
-  shortDescription: Spin Speed x 150%
-  longDescription: Multiplies spin speed by 150%
+  shortDescription: Spin Speed x 140%
+  longDescription: Multiplies spin speed by 140%
   cost: 30
   color: {r: 0.9852941, g: 1, b: 0, a: 1}

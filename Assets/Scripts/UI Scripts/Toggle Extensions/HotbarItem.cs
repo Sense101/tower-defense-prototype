@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 [RequireComponent(typeof(HotbarItemToggle))]
 public class HotbarItem : ToggleExtension
@@ -24,7 +24,7 @@ public class HotbarItem : ToggleExtension
         (toggle as HotbarItemToggle).turret = _turret;
 
         icon.sprite = _turret.info.fullSprite;
-        costText.text = _turret.info.cost.ToString();
+        costText.text = "<sprite name='Coin'> " + _turret.info.cost.ToString();
 
         CoinController.Instance.onCoinsChanged.AddListener(UpdateItem);
         UpdateItem(CoinController.Instance.GetCoins());

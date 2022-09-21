@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6874577422874171366}
   - component: {fileID: 1476774887862648100}
   m_Layer: 0
-  m_Name: Sneak
+  m_Name: Automaton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,12 +130,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe5639b668ff864bb9051f3989dc8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  info: {fileID: 11400000, guid: 20802374fa3b805449e03f42c4636471, type: 2}
+  info: {fileID: 11400000, guid: 37c784f1274c733408ee29077b2b865d, type: 2}
   body: {fileID: 6874577423168914979}
   renderers:
   - {fileID: 8290932749795347392}
   healthBar: {fileID: 0}
   targetPoint: {fileID: 0}
+  targetPosition: {x: 0, y: 0}
+  offset: 0
   previewDamage: 0
   currentHealth: 0
   currentArmor: 0

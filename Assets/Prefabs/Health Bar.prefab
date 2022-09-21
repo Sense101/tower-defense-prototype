@@ -232,6 +232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 2
   fadeTime: 0.2
+  useUnscaledTime: 0
   modifyScale: 1
   hiddenScale: 0.85
   shownScale: 1

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 /// <summary>
@@ -46,6 +47,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
         Turret newTurret = CreateObject(location, Angle.zero, transform);
         ModifyTurret(newTurret, newTurret.info);
 
+        newTurret.stats.sellAmount = newTurret.info.cost / 2;
         newTurret.Activate();
 
         return newTurret;
@@ -53,13 +55,16 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
 
     public void SellTurret(Turret t)
     {
+        // give half of the gold back
+        CoinController.Instance.AddCoins(t.stats.sellAmount);
+
         // first deactivate the guns
         while (t.guns.Count > 0)
         {
             _gunController.DeactivateGun(t.guns[0]);
         }
 
-        // then deactivate the turret
+        // then deactivate (sell) the turret
         DeactivateObject(t);
 
         // set the info back to basic
@@ -231,7 +236,7 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
     {
         // find all the targets in range
         List<Enemy> targetsInRange = enemies.FindAll(x => {
-            return Vector2.Distance(t.transform.position, x.body.position) <= t.stats.range;
+            return !x.body || Vector2.Distance(t.transform.position, x.body.position) <= t.stats.range;
         });
 
         if (targetsInRange.Count < 1)
@@ -244,6 +249,26 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
 
         switch (t.targetType)
         {
+            case Turret.TargetType.first:
+                {
+                    // filter by the closest to the end
+                    // @todo needs to take offset into account
+                    float leastDistance = -1;
+                    Enemy finalTarget = null;
+                    foreach (Enemy target in targetsInRange)
+                    {
+                        float distanceToNextPoint = Vector2.Distance(target.transform.position, target.targetPosition);
+                        float distanceToEnd = distanceToNextPoint + target.targetPoint.cachedDistanceToEnd;
+                        if (leastDistance < 0 || distanceToEnd < leastDistance)
+                        {
+                            leastDistance = distanceToEnd;
+                            finalTarget = target;
+                        }
+                    }
+
+                    finalTargets.Add(finalTarget);
+                    break;
+                }
             case Turret.TargetType.close:
                 {
                     finalTargets = targetsInRange;
@@ -251,21 +276,33 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
                 }
             case Turret.TargetType.strong:
                 {
-                    // filter by the most health
+                    // filter by the most health and armor
                     int mostHealth = 0;
+                    int mostArmor = 0;
                     foreach (Enemy target in targetsInRange)
                     {
-                        if (target.currentHealth > mostHealth)
+                        if (target.currentArmor > mostArmor)
+                        {
+                            mostArmor = target.currentArmor;
+                        }
+                        else if (target.currentHealth > mostHealth)
                         {
                             mostHealth = target.currentHealth;
                         }
                     }
-
-                    finalTargets = targetsInRange.FindAll(x => x.currentHealth == mostHealth);
+                    if (mostArmor > 0)
+                    {
+                        finalTargets = targetsInRange.FindAll(x => x.currentArmor == mostArmor);
+                    }
+                    else
+                    {
+                        finalTargets = targetsInRange.FindAll(x => x.currentHealth == mostHealth);
+                    }
                     break;
                 }
             case Turret.TargetType.weak:
                 {
+                    // @todo weak needs to smartly decide about armor
                     // filter by the least health
                     int leastHealth = 100;
                     foreach (Enemy target in targetsInRange)
@@ -277,12 +314,6 @@ public class TurretController : ObjectPoolHandlerSingleton<TurretController, Tur
                     }
 
                     finalTargets = targetsInRange.FindAll(x => x.currentHealth == leastHealth);
-                    break;
-                }
-            case Turret.TargetType.random:
-                {
-                    int randomIndex = Random.Range(0, targetsInRange.Count);
-                    finalTargets.Add(targetsInRange[randomIndex]);
                     break;
                 }
             default:

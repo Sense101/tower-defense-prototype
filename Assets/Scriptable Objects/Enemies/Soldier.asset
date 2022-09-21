@@ -16,4 +16,5 @@ MonoBehaviour:
   health: 30
   armor: 0
   armorStrength: 0
-  killReward: 10
+  killReward: 5
+  previewSprite: {fileID: 21300000, guid: 5711576f7e4d351489e534d2e997bb96, type: 3}

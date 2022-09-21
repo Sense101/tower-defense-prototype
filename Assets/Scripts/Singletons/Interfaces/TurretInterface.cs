@@ -18,6 +18,9 @@ public class TurretInterface : Singleton<TurretInterface>
     [Header("Turret Info")]
     [SerializeField] TextMeshProUGUI turretTitle;
     [SerializeField] TextMeshProUGUI tierDescription;
+    [SerializeField] TextMeshProUGUI sellAmountText;
+
+    // @todo
     [SerializeField] UIToggleSelector targetTypeSelector;
 
 
@@ -166,6 +169,8 @@ public class TurretInterface : Singleton<TurretInterface>
 
 
         tierDescription.text = _selectedTurret.info.tierDescription;
+
+        sellAmountText.text = _selectedTurret.stats.sellAmount.ToString();
 
         targetTypeSelector.SelectByIndex((int)_selectedTurret.targetType);
 

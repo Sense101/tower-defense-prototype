@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: damage
   title: Destruction
-  shortDescription: Damage x 150%
-  longDescription: Multiplies damage per hit by 150%
+  shortDescription: Damage x 125%
+  longDescription: Multiplies damage per hit by 125%
   cost: 30
   color: {r: 1, g: 0, b: 0, a: 1}

@@ -8,7 +8,7 @@ public class Turret : PoolObject
 {
     // enums
     public enum State { none, lookingForTarget, aiming, locked, firing }
-    public enum TargetType { close, strong, weak, random }
+    public enum TargetType { first, close, strong, weak }
 
     [HideInInspector] public UnityEvent onBulletHitEvent = new UnityEvent();
 
@@ -58,7 +58,7 @@ public class Turret : PoolObject
 
         // show everything
         turretBase.color = Color.white;
-        body.color = new HSVColor(147, 77, 80).AsColor(); //@TODO should this be on the controller?
+        body.color = Color.white; //@TODO should this be on the controller?
         gunMount.color = Color.white;
     }
 
@@ -141,7 +141,15 @@ public class Turret : PoolObject
                 // spawn bullet
                 BulletStatistics newBulletStats = new BulletStatistics(currentTarget, stats.damage, stats.armorPiercing);
                 Vector2 spawnPos = currentGun.transform.position;
+
                 Angle spawnAngle = new Angle(currentGun.transform.rotation);
+
+                // @todo temp
+                if (info.title == "Basic Turret")
+                {
+                    spawnPos = (Vector2)currentGun.transform.position + (spawnAngle.AsVector() * 3);
+                }
+
                 Bullet newBullet = BulletController.Instance.CreateBullet(info.bulletInfo, newBulletStats, spawnPos, spawnAngle, currentGun.transform);
                 newBullet.onHitEvent.AddListener(damage => OnBulletHit(newBullet, damage));
 

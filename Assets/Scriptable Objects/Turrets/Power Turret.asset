@@ -19,10 +19,9 @@ MonoBehaviour:
   description: 
   damageModifier: 2
   rangeModifier: 1
-  reloadTimeModifier: 1.25
+  reloadTimeModifier: 1.35
   spinSpeedModifier: 1
   fullSprite: {fileID: 21300000, guid: 8da8c247fcf82bb4fb6cc87c2c215ffa, type: 3}
-  previewSprite: {fileID: 21300000, guid: 8da8c247fcf82bb4fb6cc87c2c215ffa, type: 3}
   turretBaseSprite: {fileID: 21300000, guid: 1b830caac141ee349ba67edd59b0bc21, type: 3}
   bodySprite: {fileID: 21300000, guid: b0a9d8d709aa56b409d885864580b55a, type: 3}
   gunMountSprite: {fileID: 21300000, guid: 3f537b3db0716ac4aa63a25957d8fd9c, type: 3}

@@ -111,6 +111,9 @@ public class UpgradeInterface : UIOverlaySingleton<UpgradeInterface>
             }
         }
 
+        // add to the sell amount
+        currentTurret.stats.sellAmount += chosenUpgrade.cost / 2;
+
         // add the upgrade to the turret and apply
         currentTurret.upgrades[currentSlotIndex] = chosenUpgrade;
         _upgradeController.ApplyUpgrade(currentTurret.stats, chosenUpgrade.id);

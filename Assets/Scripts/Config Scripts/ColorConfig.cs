@@ -19,4 +19,8 @@ public class ColorConfig : ScriptableObject
     public Color outerHealthBarColor;
     public Color healthBarColor;
     public Color armorBarColor;
+
+    [Header("Target Type Selection")]
+    public Color targetTypeSelectedColor;
+    public Color targetTypeDefaultColor;
 }

@@ -6,12 +6,15 @@ using UnityEngine;
 [System.Serializable]
 public class TurretStatistics
 {
+    // applies to every turret
     [Min(0)] public int damage;
     [Min(0)] public float range; // tiles
     [Min(0)] public int spinSpeed; // degrees/sec
     [Min(0)] public float reloadTime;
 
+    // not determined by muutations
     [Min(0)] public int xp;
+    [Min(0)] public int sellAmount;
     [Min(0)] public int armorPiercing;
 
     public Chance critChance;
@@ -43,6 +46,7 @@ public class TurretStatistics
         reloadTime = 0;
 
         xp = 0;
+        sellAmount = 0;
 
         armorPiercing = 0;
         critChance = new Chance(0);

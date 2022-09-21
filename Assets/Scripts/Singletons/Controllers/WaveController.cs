@@ -11,14 +11,14 @@ public class WaveController : Singleton<WaveController>
 
     // variables
     public bool spawning = false;
+    public bool safeGapToSpawn = true;
     public int currentWaveIndex = 0;
-    public UnityEvent<bool> onSpawningChange = new UnityEvent<bool>();
 
     EnemyController _enemyController;
     WaveInterface _waveInterface;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _enemyController = EnemyController.Instance;
         _waveInterface = WaveInterface.Instance;
@@ -50,6 +50,9 @@ public class WaveController : Singleton<WaveController>
         {
             var group = wave.spawnGroups[g];
 
+            // wait until there is a safe gap to spawn
+            yield return new WaitUntil(() => safeGapToSpawn);
+
             // wait spawning delay
             yield return new WaitForSeconds(group.startingDelay);
 
@@ -65,20 +68,43 @@ public class WaveController : Singleton<WaveController>
                 Enemy newEnemy = _enemyController.SpawnEnemy(
                     spawnPos,
                     angleToNextPoint,
-                    group.enemyPrefab,
+                    group.enemyPrefab.gameObject,
                     firstPoint.nextPoint,
                     firstPoint.GetNextPosition(offset),
                     offset
                 );
 
-                yield return new WaitForSeconds(group.delayBetweenSpawns);
+                if (i + 1 < group.spawnAmount)
+                {
+                    yield return new WaitForSeconds(group.delayBetweenSpawns);
+                }
+                else
+                {
+                    safeGapToSpawn = false;
+                    StartCoroutine(CreateSafeSpawningGap(group.delayBetweenSpawns));
+                }
             }
         }
 
+        // wait for one second before allowing next wave to spawn
+        yield return new WaitForSeconds(1f);
+
         // we have finished spawning, allow starting next wave
         spawning = false;
-        _waveInterface.EnableStartWaveButton();
+
+        // only re-enable button if there are more waves
         currentWaveIndex++;
+        if (currentWaveIndex < waves.Count)
+        {
+            _waveInterface.EnableStartWaveButton();
+        }
+    }
+
+    // this exists so the player can press start wave as soon as this waves enemies have spawned
+    private IEnumerator CreateSafeSpawningGap(float time)
+    {
+        yield return new WaitForSeconds(time);
+        safeGapToSpawn = true;
     }
 
     private float ChooseRandomOffset()

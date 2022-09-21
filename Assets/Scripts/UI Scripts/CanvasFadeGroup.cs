@@ -16,6 +16,7 @@ public class CanvasFadeGroup : MonoBehaviour
     public bool Shown { get => state == FadeState.shown; }
 
     [SerializeField] float fadeTime = 1;
+    [SerializeField] bool useUnscaledTime = true;
 
     [Header("Scaling")]
     [SerializeField] bool modifyScale = false;
@@ -66,13 +67,15 @@ public class CanvasFadeGroup : MonoBehaviour
 
     private void Update()
     {
+        float deltaTime = useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+
         // do stuff with canvas group depending on state
         if (Hiding)
         {
             // slowly hide
             if (_group.alpha > 0)
             {
-                _group.alpha -= (1 / fadeTime) * Time.deltaTime;
+                _group.alpha -= (1 / fadeTime) * deltaTime;
 
                 ModifyScale(_group.alpha);
                 ModifyPosition(_group.alpha);
@@ -88,7 +91,7 @@ public class CanvasFadeGroup : MonoBehaviour
             // slowly show
             if (_group.alpha < 1)
             {
-                _group.alpha += (1 / fadeTime) * Time.deltaTime;
+                _group.alpha += (1 / fadeTime) * deltaTime;
 
                 ModifyScale(_group.alpha);
                 ModifyPosition(_group.alpha);

@@ -27,15 +27,15 @@ public class UpgradeController : Singleton<UpgradeController>
 
     private void ApplyDamageUpgrade(TurretStatistics stats)
     {
-        stats.damage = Mathf.RoundToInt(stats.damage * 1.5f);
+        stats.damage = Mathf.RoundToInt(stats.damage * 1.25f);
     }
 
     private void ApplyRangeUpgrade(TurretStatistics stats)
     {
-        stats.range *= 1.5f;
+        stats.range *= 1.35f;
     }
     private void ApplySpinSpeedUpgrade(TurretStatistics stats)
     {
-        stats.spinSpeed = Mathf.RoundToInt(stats.spinSpeed * 1.5f);
+        stats.spinSpeed = Mathf.RoundToInt(stats.spinSpeed * 1.4f);
     }
 }

@@ -32,7 +32,6 @@ public class TurretInfo : ScriptableObject
     [Space(5)]
     [Header("Sprites")]
     public Sprite fullSprite = default; // the full sprite, including the base
-    public Sprite previewSprite = default; // without the base
     public Sprite turretBaseSprite = default; // just the base
     public Sprite bodySprite = default; // the body
     public Sprite gunMountSprite = default; // just the gun mount

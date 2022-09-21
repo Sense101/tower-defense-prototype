@@ -12,7 +12,7 @@ public class SpawnGroup
     public int spawnAmount = 0;
 
     [Tooltip("the enemy to spawn")]
-    public GameObject enemyPrefab;
+    public Enemy enemyPrefab;
 
     //@TODO which spawner as well
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.EventSystems;
 
 public class InputController : Singleton<InputController>, InputActions.IMouseActions
 {
@@ -54,6 +54,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
     {
         _inputOverlays.Add(overlay);
         MainInterface.Instance.overlayFilter.Show();
+        TimeController.Instance.Pause();
     }
     public void RemoveInputOverlay(UIOverlay overlay)
     {
@@ -61,6 +62,7 @@ public class InputController : Singleton<InputController>, InputActions.IMouseAc
         if (_inputOverlays.Count <= 0)
         {
             MainInterface.Instance.overlayFilter.Hide();
+            TimeController.Instance.Unpause();
         }
     }
 

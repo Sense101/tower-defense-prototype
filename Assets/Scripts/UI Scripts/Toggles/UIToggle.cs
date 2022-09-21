@@ -15,11 +15,15 @@ public abstract class UIToggle : Toggle
     {
         base.Start();
 
+        SetReferences();
+
         if (Application.isPlaying)
         {
             onValueChanged.AddListener(OnValueChangedInternal);
         }
     }
+
+    public virtual void SetReferences() { }
 
     public void SetIsOn(bool isOn, bool silent = false)
     {

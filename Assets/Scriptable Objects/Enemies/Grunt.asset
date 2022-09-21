@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7845ae887eaba8b48bf8d454b95898f2, type: 3}
   m_Name: Grunt
   m_EditorClassIdentifier: 
-  moveSpeed: 15
-  health: 30
-  armor: 30
-  armorStrength: 8
-  killReward: 5
+  moveSpeed: 12
+  health: 20
+  armor: 20
+  armorStrength: 5
+  killReward: 10
+  previewSprite: {fileID: 21300000, guid: 36ae86821c24b714197997b64634ab63, type: 3}
