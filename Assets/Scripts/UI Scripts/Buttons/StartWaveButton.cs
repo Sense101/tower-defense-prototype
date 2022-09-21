@@ -13,10 +13,10 @@ public class StartWaveButton : UIButton
 
     public override void OnClick()
     {
+        interactable = false;
         WaveController.Instance.SpawnNextWave();
         WaveInterface.Instance.ScrollToNextWave();
 
-        interactable = false;
         OnHoverEnd();
     }
 
