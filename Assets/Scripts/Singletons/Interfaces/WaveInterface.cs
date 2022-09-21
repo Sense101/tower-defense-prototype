@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class WaveInterface : Singleton<WaveInterface>
 {
-    const float ANIMATION_TIME = 2;
+    public const float ANIMATION_TIME = 2;
     // set in inspector
     [SerializeField] StartWaveButton startWaveButton;
     [SerializeField] TextMeshProUGUI startWaveText;
@@ -78,10 +78,10 @@ public class WaveInterface : Singleton<WaveInterface>
 
     public void EnableStartWaveButton()
     {
-        startWaveButton.interactable = true;
         if (startWaveButton.hovering)
         {
             startWaveButton.OnHoverStart();
         }
+        startWaveButton.interactable = true;
     }
 }

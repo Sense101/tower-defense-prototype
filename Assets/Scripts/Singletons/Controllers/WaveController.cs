@@ -11,7 +11,6 @@ public class WaveController : Singleton<WaveController>
 
     // variables
     public bool spawning = false;
-    public bool safeGapToSpawn = true;
     public int currentWaveIndex = 0;
 
     EnemyController _enemyController;
@@ -50,9 +49,6 @@ public class WaveController : Singleton<WaveController>
         {
             var group = wave.spawnGroups[g];
 
-            // wait until there is a safe gap to spawn
-            yield return new WaitUntil(() => safeGapToSpawn);
-
             // wait spawning delay
             yield return new WaitForSeconds(group.startingDelay);
 
@@ -78,16 +74,11 @@ public class WaveController : Singleton<WaveController>
                 {
                     yield return new WaitForSeconds(group.delayBetweenSpawns);
                 }
-                else
-                {
-                    safeGapToSpawn = false;
-                    StartCoroutine(CreateSafeSpawningGap(group.delayBetweenSpawns));
-                }
             }
         }
 
-        // wait for one second before allowing next wave to spawn
-        yield return new WaitForSeconds(1f);
+        // make sure the interface animation has had time to complete
+        yield return new WaitForSeconds(WaveInterface.ANIMATION_TIME);
 
         // we have finished spawning, allow starting next wave
         spawning = false;
@@ -98,13 +89,6 @@ public class WaveController : Singleton<WaveController>
         {
             _waveInterface.EnableStartWaveButton();
         }
-    }
-
-    // this exists so the player can press start wave as soon as this waves enemies have spawned
-    private IEnumerator CreateSafeSpawningGap(float time)
-    {
-        yield return new WaitForSeconds(time);
-        safeGapToSpawn = true;
     }
 
     private float ChooseRandomOffset()
